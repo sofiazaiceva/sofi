@@ -374,7 +374,7 @@ html {
         left: 10px;
     }
     .section-number2 {
-        bottom: 80px;
+        bottom: 120px;
         left: 20px;
         right: 20px;
         font-size: 10px;
@@ -405,7 +405,7 @@ html {
         
     }
     .mixcloud-player {
-        margin-top: 200px;
+        margin-top: 220px;
         left: 20px;
         right: 20px;
     }
@@ -424,7 +424,7 @@ html {
     .section-name,
     .scroll-indicator {
         font-size: 3vmin; /* Slightly larger for readability on small screens */
-        bottom: 5vh; /* Higher position on mobile */
+        bottom: 10vh; /* Higher position on mobile */
     }
 
     .section-number {
@@ -447,7 +447,7 @@ html {
         top: 60px;
     }
     .section-number2 {
-        bottom: 120px;
+        bottom: 160px;
         left: 30px;
         right: 30px;
         font-size: 13px;
@@ -495,7 +495,7 @@ html {
     .section-name,
     .scroll-indicator {
         font-size: 2.5vmin;
-        bottom: 4vh;
+        bottom: vh;
     }
 
     .section-number {
@@ -810,7 +810,8 @@ html {
     </div>
 
     <script>
-document.addEventListener('DOMContentLoaded', (event) => {
+    
+    document.addEventListener('DOMContentLoaded', (event) => {
     const container = document.querySelector('.container');
     const sections = document.querySelectorAll('.section');
     let currentIndex = 0;
@@ -900,25 +901,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Initialize first section
     setActiveSection(0);
-
-    // iOS viewport fix
-    function handleWindowResize() {
-        let vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-    }
-
-    window.addEventListener('resize', handleWindowResize);
-    window.addEventListener('orientationchange', handleWindowResize);
-
-    // Initial call
-    handleWindowResize();
-
-    // Fix for iOS address bar not hiding
-    window.addEventListener('load', function() {
-        setTimeout(function() {
-            window.scrollTo(0, 1);
-        }, 0);
-    });
 });
 
 function showEvents(year) {
@@ -929,6 +911,8 @@ function showEvents(year) {
     });
     document.querySelector(`.events-menu button[onclick="showEvents('${year}')"]`).classList.add('active');
 }
-</script>
+
+
+    </script>
 </body>
 </html>
