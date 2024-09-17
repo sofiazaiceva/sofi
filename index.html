@@ -88,13 +88,34 @@ body {
             letter-spacing: 0.3em;
             text-transform: lowercase;
         }
-        .section-number {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            letter-spacing: 0.3em;
-        }
-        .section-number2 {
+.section-number,
+.section-name,
+.scroll-indicator {
+    position: absolute;
+    font-size: 2vmin; /* Responsive font size */
+    letter-spacing: 0.3em;
+}
+
+.section-number {
+    left: 5vw;
+    bottom: 3vh;
+}
+
+.section-name {
+    left: 50%;
+    bottom: 3vh;
+    transform: translateX(-50%);
+    text-transform: lowercase;
+    letter-spacing: 0.2em;
+}
+
+.scroll-indicator {
+    right: 5vw;
+    bottom: 3vh;
+}
+        
+
+     .section-number2 {
             position: absolute;
             bottom: 150px;
             left: 40px;
@@ -106,22 +127,6 @@ body {
             font-weight: normal;
             text-transform: lowercase;
             text-align: justify;
-        }
-
-    
-        .section-name {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-transform: lowercase;
-            letter-spacing: 0.2em;
-        }
-        .scroll-indicator {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            letter-spacing: 0.3em;
         }
        
     .events-container {
@@ -392,7 +397,7 @@ body {
         
     }
     .mixcloud-player {
-        margin-top: 220px;
+        margin-top: 200px;
         left: 20px;
         right: 20px;
     }
@@ -404,7 +409,22 @@ body {
         transform: translateY(-50%);
         display: flex;
         flex-direction: column;
-    
+        
+    }
+
+    .section-number,
+    .section-name,
+    .scroll-indicator {
+        font-size: 3vmin; /* Slightly larger for readability on small screens */
+        bottom: 5vh; /* Higher position on mobile */
+    }
+
+    .section-number {
+        left: 3vw;
+    }
+
+    .scroll-indicator {
+        right: 3vw;
     }
 }
 
@@ -445,7 +465,7 @@ body {
 
     }
     .mixcloud-player {
-        margin-top: 260px;
+        margin-top: 240px;
         left: 30px;
         right: 30px;
     }
@@ -461,15 +481,30 @@ body {
         transform: translateY(-50%);
         display: flex;
         flex-direction: column;
-    
     }
+
+    .section-number,
+    .section-name,
+    .scroll-indicator {
+        font-size: 2.5vmin;
+        bottom: 4vh;
+    }
+
+    .section-number {
+        left: 4vw;
+    }
+
+    .scroll-indicator {
+        right: 4vw;
+    }
+
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 769px) and (max-width: 992px) {
 
     .mixcloud-player {
-        margin-top: 280px;
+        margin-top: 260px;
     }
 }
 
@@ -868,6 +903,11 @@ function showEvents(year) {
     });
     document.querySelector(`.events-menu button[onclick="showEvents('${year}')"]`).classList.add('active');
 }
+
+
+    </script>
+</body>
+</html>
 
 
     </script>
