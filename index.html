@@ -36,6 +36,14 @@ body {
     height: 100%;
 }
 
+body {
+   min-height: 100vh;
+   min-height: -webkit-fill-available;
+}
+html {
+   height: -webkit-fill-available;
+}
+
 @supports (background-image: url('media/animationsquiggle.png')) {
     body {
         background-image: url('media/animationsquiggle.png');
@@ -802,8 +810,7 @@ body {
     </div>
 
     <script>
-    
-    document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', (event) => {
     const container = document.querySelector('.container');
     const sections = document.querySelectorAll('.section');
     let currentIndex = 0;
@@ -893,6 +900,25 @@ body {
 
     // Initialize first section
     setActiveSection(0);
+
+    // iOS viewport fix
+    function handleWindowResize() {
+        let vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+
+    window.addEventListener('resize', handleWindowResize);
+    window.addEventListener('orientationchange', handleWindowResize);
+
+    // Initial call
+    handleWindowResize();
+
+    // Fix for iOS address bar not hiding
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            window.scrollTo(0, 1);
+        }, 0);
+    });
 });
 
 function showEvents(year) {
@@ -903,13 +929,6 @@ function showEvents(year) {
     });
     document.querySelector(`.events-menu button[onclick="showEvents('${year}')"]`).classList.add('active');
 }
-
-
-    </script>
-</body>
-</html>
-
-
-    </script>
+</script>
 </body>
 </html>
