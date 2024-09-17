@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sofi</title>
+    <style>
+/*
+        @font-face {
+    font-family: 'Colortube';
+    src: url('ColorTube/Commercial/OTF/ColorTube-Regular.otf') format('woff2'),
+         url('ColorTube/Commercial/OTF/ColorTube-Regular.otf') format('woff');
+    font-weight: normal;
+    font-style: normal;
+} */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    overflow: hidden;
+}
+body {
+    background-color: rgb(255, 255, 255); /* Fallback color */
+    background-image: url('media/squiggle.gif'); /* Fallback image */
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    position: relative;
+}
+
+@supports (background-image: url('media/animationsquiggle.png')) {
+    body {
+        background-image: url('media/animationsquiggle.png');
+    }
+}
+
+
+
+        
+        .container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+        .section {
+            height: 100vh;
+            position: relative;
+            scroll-snap-align: start;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+        .section.active {
+            opacity: 1;
+        }
+        .header {
+            position: absolute;
+            top: 80px;
+            right: 20px;
+            font-size: 26px;
+            font-stretch: narrower;
+            line-height: 10%;
+            font-weight: normal;
+            text-transform: lowercase;
+            letter-spacing: 0.4em;
+            transform: skew(-20deg);
+            font-style: italic;
+        }
+        .social-links {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        .social-links a {
+            margin-right: 10px;
+            text-decoration: none;
+            color: #000;
+            letter-spacing: 0.3em;
+            text-transform: lowercase;
+        }
+        .section-number {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            letter-spacing: 0.3em;
+        }
+        .section-number2 {
+            position: absolute;
+            bottom: 150px;
+            left: 40px;
+            right: 40px;
+            letter-spacing: 0.3em;
+            font-size: 14px;
+            font-stretch: narrower;
+            line-height: 100%;
+            font-weight: normal;
+            text-transform: lowercase;
+            text-align: justify;
+        }
+
+    
+        .section-name {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-transform: lowercase;
+            letter-spacing: 0.2em;
+        }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            letter-spacing: 0.3em;
+        }
+       
+    .events-container {
+        padding: 10px;
+        max-height: 80vh;
+        overflow-y: auto;
+        font-size: 10px;
+        width: 90%;
+        line-height: 80%;
+        
+        
+       
+ 
+    }
+    .event {
+        margin-bottom: 10px;
+        padding: 15px;
+        border: 0.5px solid #000;
+        transition: all 0.3s ease;
+        border-radius: 25%;
+        background-color: rgb(255, 255, 255, 0.5);
+        
+       
+    }
+    .event:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+        transform: translateY(-5px);
+        
+    }
+    .event-date {
+        font-weight: bold;
+        margin-bottom: 0px;
+        text-align: left;
+        margin-left: 20px;
+    }
+    .event-title {
+        font-size: 1.1em;
+        margin-bottom: 0px;
+        text-align: center;
+    }
+    .event-location {
+        font-style: italic;
+        margin-bottom: 0px;
+        text-align: right;
+        margin-right: 20px;
+    }
+    .event-type {
+        font-style: italic;
+        margin-bottom: 0px;
+        text-align: left;
+        margin-right: 20px;
+    }
+    
+
+    .event a {
+        color: #000;
+        text-decoration: none;
+        text-align: left;
+        margin-left: 20px;
+    }
+    .event a:hover {
+        text-decoration: underline;
+    }
+    .events-menu {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+    }
+    .events-menu button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 14px;
+        margin-bottom: 10px;
+        text-align: left;
+        letter-spacing: 0.2em;
+        transition: transform 0.3s ease;
+    }
+    .events-menu button:hover {
+        transform: translateX(5px);
+    }
+    .events-menu button.active {
+        font-weight: bold;
+    }
+
+
+/* Works Section Styles */
+
+.section#works {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.works-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 1200px;
+}
+
+
+.works-container {
+    display: none;
+    flex-wrap: wrap;
+    overflow-x: auto;
+    padding: 20px;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.works-container-text {
+
+    
+    position: absolute;
+    left: 480px;
+    right: 200px;
+    letter-spacing: 0.3em;
+    font-size: 14px;
+    font-stretch: narrower;
+    line-height: 100%;
+    font-weight: normal;
+    text-transform: lowercase;
+    text-align: justify;
+    background-color: rgb(255, 255, 255, 0.5);
+}
+
+.works-container.active {
+    display: flex;
+    opacity: 1;
+}
+
+.album-container {
+    flex: 0 0 auto;
+    width: 200px;
+    margin-right: 20px;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+}
+
+
+.album-artwork {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 0px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.album-container:hover .album-artwork {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.album-name {
+    margin-top: 10px;
+    font-size: 14px;
+    /*font-weight: bold;*/
+}
+
+/* Scrollbar styles for works-container */
+.works-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.works-container::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.works-container::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+}
+
+.works-container::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+    
+
+
+/* Email Section Styles */
+
+
+    .email-link {
+  color: #000;
+  text-decoration: none;
+  transition: text-shadow 0.3s ease;
+}
+
+.email-link:hover {
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Players Section Styles */
+
+.mixcloud-player {
+  margin: 20px 0;
+  margin-top: 280px;
+  max-width: 100%;
+  overflow: hidden;
+  position: absolute;
+  left: 40px;
+  right: 40px;
+}
+
+
+
+/* Original CSS remains unchanged */
+
+/* Media Queries for Responsive Design */
+
+/* Small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    body {
+        font-size: 14px;
+    }
+    .header {
+        font-size: 20px;
+        top: 40px;
+        right: 10px;
+    }
+    .social-links {
+        top: 10px;
+        left: 10px;
+    }
+    .section-number2 {
+        bottom: 100px;
+        left: 20px;
+        right: 20px;
+        font-size: 12px;
+    }
+    .events-container {
+        width: 95%;
+        font-size: 6px;
+        margin-top : 30px;
+    }
+    .works-content {
+        width: 95%;
+        position: relative;
+        padding-bottom: 150px; /* Significantly increased to make more room for the text */
+    }
+    .works-container {
+        flex-direction: row;
+        align-items: flex-start;
+        padding: 20px;
+        margin-top: 80px;
+        
+    }
+    .album-container {
+        width: 120px;
+        margin-right: 0;
+        margin-bottom: 20px;
+        padding: 20px;
+        padding-bottom: 5px;
+        
+    }
+    .mixcloud-player {
+        margin-top: 200px;
+        left: 20px;
+        right: 20px;
+    }
+
+    .events-menu {
+        position: absolute;
+        right: 20px;
+        top: 80%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+
+/* Medium devices (tablets, 768px and up) */
+@media only screen and (min-width: 601px) and (max-width: 768px) {
+    body {
+        font-size: 15px;
+    }
+    .header {
+        font-size: 22px;
+        top: 60px;
+    }
+    .section-number2 {
+        bottom: 120px;
+        left: 30px;
+        right: 30px;
+        font-size: 13px;
+    }
+    .works-content {
+        width: 95%;
+        position: relative;
+        padding-bottom: 280px; /* Significantly increased to make more room for the text */
+    }
+    .works-container {
+        flex-direction: row;
+        align-items: flex-start;
+        margin-top: 90px;
+        
+        
+    }
+    .album-container {
+        width: 140px;
+        margin-right: 0;
+        margin-bottom: 25px;
+        padding: 30px;
+        padding-bottom: 10px;
+
+    }
+    .mixcloud-player {
+        margin-top: 240px;
+        left: 30px;
+        right: 30px;
+    }
+    .events-container {
+        width: 95%;
+        font-size: 10px;
+        margin-top : 30px;
+    }
+    .events-menu {
+        position: absolute;
+        right: 46%;
+        top: 90%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 769px) and (max-width: 992px) {
+
+    .mixcloud-player {
+        margin-top: 260px;
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 993px) {
+    /* Your original styles for large screens remain unchanged */
+}
+
+    </style>
+</head>
+<body>
+
+    <div class="container"> 
+        <div class="section active" id="home">
+            <h1 class="header">sofi</h1>
+          <!--  <img style="float:ontop; position: absolute; top: 0;  width: 57%; height: 100%; object-fit: cover; z-index: 0; " src="media/flowerpower.png"  >-->
+            <div class="social-links">
+                <a href="https://www.instagram.com/sofizaiceva/" target="_blank">instagram</a>
+                <a href="https://soundcloud.com/sofiazaiceva" target="_blank">soundcloud</a>
+                <a href="https://sofi.bandcamp.com" target="_blank">bandcamp</a>
+            </div>
+            <div class="section-number">1/5</div>
+            <div class="section-name">home</div>
+            <div class="scroll-indicator">scroll</div>
+        </div>
+
+        <div class="section" id="about">
+            <h1 class="header">sofi</h1>
+            <div class="social-links">
+              <a href="https://www.instagram.com/sofizaiceva/" target="_blank">instagram</a>
+              <a href="https://soundcloud.com/sofiazaiceva" target="_blank">soundcloud</a>
+              <a href="https://sofi.bandcamp.com" target="_blank">bandcamp</a>
+            </div>
+
+            <!-- Mixcloud Player -->
+
+      <div class="mixcloud-player">
+      <iframe width="100%" height="70" src="https://player-widget.mixcloud.com/widget/iframe/?hide_cover=1&mini=1&light=1&feed=%2Frelativa%2Fshape-sofi-02082024%2F" frameborder="0"></iframe>
+      </div>
+
+            
+            <h1 style= " background-color: rgb(255, 255, 255, 0.6) ;"class="section-number2">sofi (sofia zaiceva) is a multidisciplinary sound artist and performer who actively uses modern music technologies such as creative audio coding, ambisonics, live improvisation with modular synthesizers and code, and DIY electronics. With a classical background in piano performance and electroacoustic composition, she is currently engaged in artistic research, pursuing a Master's degree in Music Technology at the Sibelius Academy of Music in Helsinki, Finland. Sofi focuses on creating performances inspired by deep listening as well as exploring the narrative of triggers, noise, and randomness throughout intensive listening sessions. Her artistic vision revolves around utilising sound as a malleable entity to evoke associations and alter perception. Sofi also performs as a DJ and as a part of experimental electronic music duo "flowerpower". Sofi has been actively engaged in artistic community within Baltic scene, as well as participating in such esteemed festivals as "Skaņu Mežs" in Riga, Latvia, "Ule Heli ", "COMMUTE" and "The Dark Side of The Moon" in Talinn, Estonia, "Sola" festival in Helsinki, Finland, "ABOUT BLANK" club in Berlin, Germany etc..
+            sofi is is an artist of the SHAPE+ platform for innovative music and interdisciplinary art, co-funded by the European Union and Pro Helvetia.</h1>
+            <div class="section-number">2/5</div>
+            <div class="section-name">about</div>
+            <div class="scroll-indicator">scroll</div>
+           </div>
+
+          <div id="works" class="section">
+ <h1 class="header">sofi</h1>
+ <div class="social-links">
+  <a href="https://www.instagram.com/sofizaiceva/" target="_blank">instagram</a>
+  <a href="https://soundcloud.com/sofiazaiceva" target="_blank">soundcloud</a>
+  <a href="https://sofi.bandcamp.com" target="_blank">bandcamp</a>
+ </div>
+ <div class="works-content">
+  <div class="works-container active" id="works-discography">
+
+    <a href="https://sofi.bandcamp.com/album/naked-eye" target="_blank" class="album-container">
+    <img src="media/nakedeye.png" alt="Album 2" class="album-artwork">
+    <p class="album-name"> naked eye </p>
+    </a>
+
+   <a href="https://sofi.bandcamp.com/track/objects-in-mirror-installation-at-soundmanor360" target="_blank" class="album-container">
+    <img src="media/mirrorcover.png" alt="Album 1" class="album-artwork">
+    <p class="album-name">objects in mirror</p>
+   </a>
+
+   <a href="https://flowerpower333.bandcamp.com/track/live-at-ska-u-me-s" target="_blank" class="album-container">
+    <img src="media/SM.jpg" alt="Album 3" class="album-artwork">
+    <p class="album-name">live at Skaņ​u Me​ž​s <br> by flowerpower </p>
+   </a>
+   <a href="https://flowerpower333.bandcamp.com/album/margery-the-medium" target="_blank" class="album-container">
+      <img src="media/flowerpower333.jpg" alt="Album 4" class="album-artwork">
+      <p class="album-name">Margery the Medium <br> by flowerpower</p>
+     </a>
+   <!-- Add more album containers as needed -->
+
+</div>
+
+ </div>
+
+ <div class="section-number">3/5</div>
+ <div class="section-name">works</div>
+ <div class="scroll-indicator">scroll</div>
+</div>
+
+        <div class="section" id="events">
+            <h1 class="header">sofi</h1>
+            <div class="social-links">
+                <a href="https://www.instagram.com/sofizaiceva/" target="_blank">instagram</a>
+                <a href="https://soundcloud.com/sofiazaiceva" target="_blank">soundcloud</a>
+                <a href="https://sofi.bandcamp.com" target="_blank">bandcamp</a>
+            </div> 
+        
+            <div class="events-menu">
+                <button onclick="showEvents('2024')" class="active">2024</button>
+                <button onclick="showEvents('2023')">2023</button>
+            </div>
+            <br>  <br>  <br> <br> <br>
+            <div class="events-container" id="events-2024">
+
+                <div class="event">
+                    <div class="event-date">28/11/2024</div>
+                    <div class="event-title">
+                        <a href="" target="_blank">
+                            TBA
+                        </a>
+                    </div>
+                    <div class="event-location">BERLIN, GERMANY</div>
+                    <div class="event-type">LIVE </div>
+                </div>
+
+                <div class="event">
+                    <div class="event-date">03/10/2024</div>
+                    <div class="event-title">
+                        <a href="https://musikprotokoll.orf.at/en/2024/project/periphery-oneness" target="_blank">
+                            MUSIKPROTOKOLL FESTIVAL
+                        </a>
+                    </div>
+                    <div class="event-location">GRAZ, AUSTRIA</div>
+                    <div class="event-type">LIVE AMBISONICS </div>
+                </div>
+        
+                <div class="event">
+                    <div class="event-date">28/08/2024</div>
+                    <div class="event-title">
+                        <a href="https://shapeplatform.eu/events/event/shape-prague-artist-meetup-event/" target="_blank">
+                            SHAPE+ MEETUP EVENT
+                        </a>
+                    </div>
+                    <div class="event-location">PRAGUE, CZECH REPUBLIC</div>
+                    <div class="event-type">LIVE </div>
+                </div>
+
+                <div class="event">
+                    <div class="event-date">28/06/2024</div>
+                    <div class="event-title">
+                        <a href="https://tartu2024.ee/programm/valga-glow/?event=83614" target="_blank">
+                            VALGA GLOW FESTIVAL
+                        </a>
+                    </div>
+                    <div class="event-location">VALGA, ESTONIA</div>
+                    <div class="event-type">DJ </div>
+                </div>
+
+                <div class="event">
+                    <div class="event-date">11/05/2024</div>
+                    <div class="event-title">
+                        <a href="https://elektron.art/projects/ruum/kristall" target="_blank">
+                            KRISTALLOFOONIA Vol 4 @ ELEKTRON.ART
+                        </a>
+                    </div>
+                    <div class="event-location">TALLINN, ESTONIA</div>
+                    <div class="event-type">LIVE AMBISONICS </div>
+                </div>
+        
+                <div class="event">
+                    <div class="event-date">05/04/2024</div>
+                    <div class="event-title">
+                        <a href="https://tmw.ee/events/ule-heli-kristallofonia" target="_blank">
+                            TALLINN MUSIC WEEK @ ÜLE HELI STAGE
+                        </a>
+                    </div>
+                    <div class="event-location">TALLINN, ESTONIA</div>
+                    <div class="event-type">LIVE AMBISONICS </div>
+                </div>
+
+                <div class="event">
+                    <div class="event-date">21/01/2024</div>
+                    <div class="event-title">
+                        <a href="https://ra.co/events/1826020" target="_blank">
+                            MOREVI & COPPI WINTERGARTEN @ABOUT BLANK 
+                        </a>
+                    </div>
+                    <div class="event-location">BERLIN, GERMANY</div>
+                    <div class="event-type">DJ </div>
+                </div>
+
+
+                <!-- Add more 2024 events here -->
+            </div>
+
+             
+        
+            <div class="events-container" id="events-2023" style="display: none;">
+                <div class="event">
+                    <div class="event-date">08/12/2023</div>
+                    <div class="event-title">
+                        <a href="https://www.uniarts.fi/tapahtumat/nyky-ensemble-morphing-musicianship/" target="_blank">
+                            NYKY ENSEMBLE: MORPHING MUSICIANSHIP
+                        </a>
+                    </div>
+                    <div class="event-location">HELSINKI, FINLAND</div>
+                    <div class="event-type">PERFORMANCE</div>
+                </div>
+
+                    <div class="event">
+                        <div class="event-date">18/11/2023</div>
+                        <div class="event-title">
+                            <a href="https://fb.me/e/1F8aVcdW7" target="_blank">
+                                S-27 SPINNITRE @MUOVITEHDAS
+                            </a>
+                        </div>
+                        <div class="event-location">TAMPERE, FINLAND</div>
+                        <div class="event-type">DJ </div>
+                    </div>
+               
+            
+                    <div class="event">
+                        <div class="event-date">17/11/2023</div>
+                        <div class="event-title">
+                            <a href=" https://fb.me/e/38DXdFEGF" target="_blank">
+                                SONIC IMPACT @HALL TECHNO CLUB
+                            </a>
+                        </div>
+                        <div class="event-location">TALLINN, ESTONIA</div>
+                        <div class="event-type">DJ </div>
+                    </div>
+
+                    
+                    <div class="event">
+                        <div class="event-date">03/11/2023</div>
+                        <div class="event-title">
+                            <a href=" https://fb.me/e/38DXdFEGF " target="_blank">
+                                SOLA FESTIVAL @WHS TEATTERI UNION
+                            </a>
+                        </div>
+                        <div class="event-location">HELSINKI, FINLAND</div>
+                        <div class="event-type">LIVE </div>
+                    </div>
+
+
+
+                    <div class="event">
+                        <div class="event-date">20/10/2023</div>
+                        <div class="event-title">
+                            <a href=" https://www.facebook.com/events/3637270673227719/?acontext=%7B%22ref%22%3A%2252%22%2C%22action_history%22%3A%22%5B%7B%5C%22surface%5C%22%3A%5C%22share_link%5C%22%2C%5C%22mechanism%5C%22%3A%5C%22share_link%5C%22%2C%5C%22extra_data%5C%22%3A%7B%5C%22invite_link_id%5C%22%3A637532365202260%7D%7D%5D%22%7D " target="_blank">
+                                ÜLE HELI FESTIVAL 
+                            </a>
+                        </div>
+                        <div class="event-location">TALLINN, ESTONIA </div>
+                        <div class="event-type">FIXED PIECE</div>
+                    </div>
+
+
+                    <div class="event">
+                        <div class="event-date">06/10/2023</div>
+                        <div class="event-title">
+                            <a href="https://fb.me/e/1m0Nys8ep" target="_blank">
+                                SKAŅU MEŽS FESTIVAL @TU JAU ZINI KUR
+                            </a>
+                        </div>
+                        <div class="event-location">RIGA, LATVIA </div>
+                        <div class="event-type">LIVE </div>
+                    </div>
+
+                    <div class="event">
+                        <div class="event-date">16/04/2023</div>
+                        <div class="event-title">
+                            <a href="https://fb.me/e/1m0Nys8ep" target="_blank">
+                                COMMUTE#5 FESTIVAL @EAMT BLACKBOX
+                            </a>
+                        </div>
+                        <div class="event-location">RIGA, LATVIA </div>
+                        <div class="event-type">LIVE </div>
+                    </div>
+                
+                <!-- Add more 2023 events here -->
+            </div>
+        
+            <div class="section-number">4/5</div>
+            <div class="section-name">events</div>
+            <div class="scroll-indicator">scroll</div>
+        </div>
+        
+              
+
+        <div id="contact" class="section">
+            <h1 id="sofi-4" class="header">sofi</h1>
+            <div class="social-links">
+              <a href="https://www.instagram.com/sofizaiceva/" target="_blank">instagram</a>
+              <a href="https://soundcloud.com/sofiazaiceva" target="_blank">soundcloud</a>
+              <a href="https://sofi.bandcamp.com" target="_blank">bandcamp</a>
+
+            </div>
+           
+            <h1 style="color: #000;" class="section-number2">
+              contact: <a href="mailto:sofijazaiceva7@gmail.com" class="email-link">sofijazaiceva7@gmail.com</a>
+            </h1>
+            <div class="section-number">5/5</div>
+            <div class="section-name">contact</div>
+            <div class="scroll-indicator">scroll</div>
+           </div>
+    </div>
+
+    <script>
+    
+    document.addEventListener('DOMContentLoaded', (event) => {
+    const container = document.querySelector('.container');
+    const sections = document.querySelectorAll('.section');
+    let currentIndex = 0;
+    let isScrolling = false;
+    const scrollCooldown = 1500; // 1 second cooldown
+    const scrollThreshold = 21; // Adjust this value to change scroll sensitivity
+    let lastScrollTime = 0;
+
+    function setActiveSection(index) {
+        sections.forEach((section, i) => {
+            section.classList.toggle('active', i === index);
+        });
+    }
+
+    function scrollToSection(index) {
+        if (isScrolling) return;
+        isScrolling = true;
+        sections[index].scrollIntoView({ behavior: 'smooth' });
+        setActiveSection(index);
+        currentIndex = index;
+        setTimeout(() => { isScrolling = false; }, scrollCooldown);
+    }
+
+    function handleScroll(delta) {
+        const currentTime = new Date().getTime();
+        if (currentTime - lastScrollTime <= scrollCooldown) return;
+
+        let newIndex = currentIndex;
+        if (delta > 0 && currentIndex < sections.length - 1) {
+            newIndex++;
+        } else if (delta < 0 && currentIndex > 0) {
+            newIndex--;
+        } else if (delta > 0 && currentIndex === sections.length - 1) {
+            newIndex = 0;
+        } else if (delta < 0 && currentIndex === 0) {
+            newIndex = sections.length - 1;
+        }
+
+        if (newIndex !== currentIndex) {
+            scrollToSection(newIndex);
+            lastScrollTime = currentTime;
+        }
+    }
+
+    // Wheel event listener
+    window.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        handleScroll(e.deltaY);
+    }, { passive: false });
+
+    // Touch support for mobile devices
+    let touchStartY = 0;
+    window.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+        const touchEndY = e.touches[0].clientY;
+        const delta = touchStartY - touchEndY;
+        if (Math.abs(delta) > 50) {
+            e.preventDefault();
+            handleScroll(delta);
+            touchStartY = touchEndY;
+        }
+    }, { passive: false });
+
+    // Keyboard navigation
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            handleScroll(e.key === 'ArrowDown' ? 1 : -1);
+        }
+    });
+
+    // Initialize first section
+    setActiveSection(0);
+});
+
+
+
+function showEvents(year) {
+    document.getElementById('events-2024').style.display = year === '2024' ? 'block' : 'none';
+    document.getElementById('events-2023').style.display = year === '2023' ? 'block' : 'none';
+    
+    document.querySelectorAll('.events-menu button').forEach(button => {
+        button.classList.remove('active');
+    });
+    document.querySelector(`.events-menu button[onclick="showEvents('${year}')"]`).classList.add('active');
+}
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>
