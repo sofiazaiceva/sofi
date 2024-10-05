@@ -397,7 +397,6 @@ html {
 
 
 /* Original CSS remains unchanged */
-
 .events-container {
     position: absolute;
     top: 120px;
@@ -409,8 +408,8 @@ html {
     line-height: 80%;
     -webkit-overflow-scrolling: touch;
     padding: 20px 0;
-    mask-image: linear-gradient(to bottom, transparent, black 20px, black calc(100% - 20px), transparent);
-    -webkit-mask-image: linear-gradient(to bottom, transparent, black 20px, black calc(100% - 20px), transparent);
+    mask-image: linear-gradient(to bottom, transparent, black 10px, black calc(100% - 10px), transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 10px, black calc(100% - 10px), transparent);
 }
 
 .events-container::before,
@@ -419,9 +418,9 @@ html {
     position: absolute;
     left: 0;
     right: 0;
-    height: 20px;
-    z-index: 1;
+    height: 10px;
     pointer-events: none;
+    z-index: 2;
 }
 
 .events-container::before {
@@ -432,6 +431,17 @@ html {
 .events-container::after {
     bottom: 0;
     background: linear-gradient(to top, rgba(255,255,255,1), rgba(255,255,255,0));
+}
+
+.event {
+    margin-bottom: 10px;
+    padding: 15px;
+    border: 0.5px solid #000;
+    transition: all 0.3s ease;
+    border-radius: 25%;
+    background-color: rgb(255, 255, 255, 0.5);
+    position: relative;
+    z-index: 1;
 }
 
 .event {
