@@ -445,6 +445,8 @@ html {
     z-index: 0;
 }
 
+/* Original CSS remains unchanged */
+
 /* Media Queries for Responsive Design */
 
 /* Small devices (phones, 600px and down) */
@@ -470,11 +472,12 @@ html {
         font-size: 10px;
     }
     .events-container {
-        top: 100px;
-        bottom: 80px;
+        width: 95%;
+        font-size: 6px;
+        top: 100px; /* Adjusted to fit below the header on mobile */
+        bottom: 80px; /* Adjusted to leave space for bottom elements */
         left: 10px;
         right: 10px;
-        font-size: 6px;
         padding: 10px 0;
         mask-image: linear-gradient(to bottom, transparent, black 10px, black calc(100% - 10px), transparent);
         -webkit-mask-image: linear-gradient(to bottom, transparent, black 10px, black calc(100% - 10px), transparent);
@@ -486,7 +489,49 @@ html {
     .event {
         padding: 10px;
     }
-    /* ... other small device styles ... */
+    .works-content {
+        width: 95%;
+        position: relative;
+        padding-bottom: 200px; /* Significantly increased to make more room for the text */
+    }
+    .works-container {
+        flex-direction: row;
+        align-items: flex-start;
+        padding: 20px;
+        margin-top: 120px;
+        font-size: 4px;
+        margin-bottom: 40px;
+    }
+    .album-container {
+        width: 120px;
+        margin-right: 0;
+        margin-bottom: 10px;
+        padding-right: 20px;
+        padding-left: 20px;
+        padding-bottom: 0px;
+    }
+    .album-name {
+        font-size: 8px;
+    }
+    .mixcloud-player {
+        margin-top: 140px; /* Adjusted to prevent overlap */
+        left: 20px;
+        right: 20px;
+    }
+    .events-menu {
+        position: absolute;
+        left: 50%;
+        bottom: 3vh;
+        transform: translateX(-50%);
+        text-transform: lowercase;
+        letter-spacing: 0.2em;
+    }
+    .section-number {
+        left: 3vw;
+    }
+    .scroll-indicator {
+        right: 3vw;
+    }
 }
 
 /* Medium devices (tablets, 768px and up) */
@@ -504,12 +549,33 @@ html {
         right: 30px;
         font-size: 13px;
     }
-    .events-container {
-        top: 110px;
-        bottom: 20px;
+    .works-content {
+        width: 95%;
+        position: relative;
+        padding-bottom: 280px; /* Significantly increased to make more room for the text */
+    }
+    .works-container {
+        flex-direction: row;
+        align-items: flex-start;
+        margin-top: 90px;
+    }
+    .album-container {
+        width: 140px;
+        margin-right: 0;
+        margin-bottom: 25px;
+        padding: 30px;
+        padding-bottom: 10px;
+    }
+    .mixcloud-player {
+        margin-top: 240px;
         left: 30px;
         right: 30px;
+    }
+    .events-container {
+        width: 95%;
         font-size: 10px;
+        margin-top: 30px;
+        bottom: 20px;
         padding: 15px 0;
         mask-image: linear-gradient(to bottom, transparent, black 15px, black calc(100% - 15px), transparent);
         -webkit-mask-image: linear-gradient(to bottom, transparent, black 15px, black calc(100% - 15px), transparent);
@@ -518,7 +584,25 @@ html {
     .events-container::after {
         height: 15px;
     }
-    /* ... other medium device styles ... */
+    .events-menu {
+        position: sticky;
+        top: 0;
+        right: 46%;
+        display: flex;
+        flex-direction: column;
+    }
+    .section-number,
+    .section-name,
+    .scroll-indicator {
+        font-size: 2.5vmin;
+        bottom: vh;
+    }
+    .section-number {
+        left: 4vw;
+    }
+    .scroll-indicator {
+        right: 4vw;
+    }
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
@@ -526,12 +610,47 @@ html {
     .mixcloud-player {
         margin-top: 260px;
     }
-    /* Keep the default events-container styles for this size */
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 993px) {
     /* Your original styles for large screens remain unchanged */
+}
+
+/* Add these styles outside of media queries for all screen sizes */
+.events-container {
+    position: absolute;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 20px 0;
+    mask-image: linear-gradient(to bottom, transparent, black 20px, black calc(100% - 20px), transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 20px, black calc(100% - 20px), transparent);
+}
+
+.events-container::before,
+.events-container::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 20px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.events-container::before {
+    top: 0;
+    background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0));
+}
+
+.events-container::after {
+    bottom: 0;
+    background: linear-gradient(to top, rgba(255,255,255,1), rgba(255,255,255,0));
+}
+
+.event {
+    position: relative;
+    z-index: 0;
 }
     </style>
 </head>
