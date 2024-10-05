@@ -884,11 +884,11 @@ html {
             const sections = document.querySelectorAll('.section');
             let currentIndex = 0;
             let isScrolling = false;
-            const scrollCooldown = 1000; // Reduced from 1500ms to 1000ms for more responsive feel
-            const scrollThreshold = 50; // Increased from 20 to 50 for better control
+            const scrollCooldown = 1000;
+            const scrollThreshold = 50;
             let lastScrollTime = 0;
             let touchStartY = 0;
-            let touchStartX = 0; // Added to detect horizontal scrolling
+            let touchStartX = 0;
     
             function updateScrollIndicators() {
                 const currentSection = document.querySelector('.section.active');
@@ -958,12 +958,13 @@ html {
             }, { passive: true });
     
             window.addEventListener('touchmove', (e) => {
+                if (e.target.closest('.events-container')) return;
+    
                 const touchEndY = e.touches[0].clientY;
                 const touchEndX = e.touches[0].clientX;
                 const deltaY = touchStartY - touchEndY;
                 const deltaX = touchStartX - touchEndX;
     
-                // Check if the scroll is more vertical than horizontal
                 if (Math.abs(deltaY) > Math.abs(deltaX)) {
                     e.preventDefault();
                     if (Math.abs(deltaY) > scrollThreshold) {
@@ -973,7 +974,7 @@ html {
                 }
             }, { passive: false });
     
-            // Keyboard navigation (unchanged)
+            // Keyboard navigation
             window.addEventListener('keydown', (e) => {
                 if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
                     e.preventDefault();
@@ -988,8 +989,43 @@ html {
             const eventsContainers = document.querySelectorAll('.events-container');
             
             eventsContainers.forEach(container => {
-                let isScrolling = false;
-                let startY;
+                let startY, startTopScroll;
+                let touchStarted = false;
+    
+                container.addEventListener('touchstart', function(e) {
+                    touchStarted = true;
+                    startY = e.touches[0].clientY;
+                    startTopScroll = container.scrollTop;
+    
+                    if (startTopScroll <= 0)
+                        container.scrollTop = 1;
+    
+                    if (startTopScroll + container.offsetHeight >= container.scrollHeight)
+                        container.scrollTop = container.scrollHeight - container.offsetHeight - 1;
+    
+                }, { passive: true });
+    
+                container.addEventListener('touchmove', function(e) {
+                    if (!touchStarted) {
+                        return;
+                    }
+    
+                    const y = e.touches[0].clientY;
+                    const scrollTop = startTopScroll + startY - y;
+    
+                    if (scrollTop > 0 && scrollTop < container.scrollHeight - container.offsetHeight) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        container.scrollTop = scrollTop;
+                    }
+                    else {
+                        container.scrollTop = scrollTop;
+                    }
+                }, { passive: false });
+    
+                container.addEventListener('touchend', function() {
+                    touchStarted = false;
+                });
     
                 // Mouse-based scrolling for web version
                 container.addEventListener('mousemove', function(e) {
@@ -1001,37 +1037,14 @@ html {
                     const scrollPosition = (mouseY / containerHeight) * (scrollHeight - containerHeight);
                     container.scrollTop = scrollPosition;
                 });
-    
-                // Touch-based scrolling for mobile
-                container.addEventListener('touchstart', function(e) {
-                    isScrolling = true;
-                    startY = e.touches[0].clientY;
-                }, { passive: false });
-    
-                container.addEventListener('touchmove', function(e) {
-                    if (!isScrolling) return;
-                    
-                    const touch = e.touches[0];
-                    const y = touch.clientY;
-                    const scrollBy = startY - y;
-                    
-                    const isAtTop = container.scrollTop <= 0;
-                    const isAtBottom = container.scrollTop + container.clientHeight >= container.scrollHeight;
-    
-                    if ((scrollBy > 0 && !isAtBottom) || (scrollBy < 0 && !isAtTop)) {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        container.scrollTop += scrollBy;
-                        startY = y;
-                    } else if ((scrollBy > 0 && isAtBottom) || (scrollBy < 0 && isAtTop)) {
-                        e.preventDefault();
-                    }
-                }, { passive: false });
-    
-                container.addEventListener('touchend', function() {
-                    isScrolling = false;
-                });
             });
+    
+            // Prevent default touchmove behavior on the main container
+            container.addEventListener('touchmove', function(e) {
+                if (!e.target.closest('.events-container')) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
         });
     
         function showEvents(year) {
