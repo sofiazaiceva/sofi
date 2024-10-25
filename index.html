@@ -1020,6 +1020,11 @@ html {
             let lastScrollTime = 0;
             let touchStartY = 0;
             let touchStartX = 0;
+
+             // Add the Firefox detection function here
+        function isFirefox() {
+        return typeof InstallTrigger !== 'undefined';
+    }
     
             function updateScrollIndicators() {
                 const currentSection = document.querySelector('.section.active');
@@ -1042,9 +1047,16 @@ html {
             }
     
             function scrollToSection(index) {
-                if (isScrolling) return;
-                isScrolling = true;
-                sections[index].scrollIntoView({ behavior: 'smooth' });
+    if (isScrolling) return;
+    isScrolling = true;
+    
+    if (isFirefox()) {
+        // Firefox-specific scrolling
+        sections[index].scrollIntoView({ behavior: 'auto' });
+    } else {
+        // Standard smooth scrolling for other browsers
+        sections[index].scrollIntoView({ behavior: 'smooth' });
+    }
                 setActiveSection(index);
                 currentIndex = index;
                 setTimeout(() => { isScrolling = false; }, scrollCooldown);
