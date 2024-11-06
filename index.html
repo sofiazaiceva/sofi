@@ -458,9 +458,123 @@ html {
 /* Original CSS remains unchanged */
 
 /* Media Queries for Responsive Design */
+/* Extra Small devices (small phones, 375px and down) */
+@media only screen and (max-width: 375px) {
+    body {
+        font-size: 10px;
+        background-size: cover;
+        background-position: center center;
+    }
+    
+    .header {
+        font-size: 16px;
+        top: 30px;
+        right: 8px;
+        letter-spacing: 0.3em;
+    }
+    
+    .social-links {
+        top: 8px;
+        left: 8px;
+    }
+    
+    .social-links a {
+        margin-right: 6px;
+        letter-spacing: 0.2em;
+        font-size: 10px;
+    }
+    
+    .section-number2 {
+        bottom: 100px;
+        left: 15px;
+        right: 15px;
+        font-size: 8px;
+        line-height: 120%;
+    }
+    
+    .events-container {
+        width: 92%;
+        font-size: 5px;
+        top: 80px;
+        bottom: 60px;
+        left: 8px;
+        right: 8px;
+        padding: 8px 0;
+    }
+    
+    .event {
+        padding: 8px;
+        margin-bottom: 8px;
+        border-radius: 20%;
+    }
+    
+    .event-date {
+        margin-left: 12px;
+    }
+    
+    .event-location {
+        margin-right: 12px;
+    }
+    
+    .works-content {
+        width: 92%;
+        padding-bottom: 160px;
+    }
+    
+    .works-container {
+        margin-top: 100px;
+        padding: 15px;
+        font-size: 3px;
+        margin-bottom: 30px;
+    }
+    
+    .album-container {
+        width: 100px;
+        margin-right: 0;
+        padding-right: 15px;
+        padding-left: 15px;
+        padding-bottom: 0;
+    }
+    
+    .album-name {
+        font-size: 7px;
+        margin-top: 6px;
+    }
+    
+    .mixcloud-player {
+        margin-top: 120px;
+        left: 15px;
+        right: 15px;
+    }
+    
+    .section-number,
+    .section-name,
+    .scroll-indicator {
+        font-size: 1.8vmin;
+        bottom: 2vh;
+    }
+    
+    .section-number {
+        left: 2vw;
+    }
+    
+    .scroll-indicator {
+        right: 2vw;
+    }
+    
+    .events-menu {
+        bottom: 2vh;
+        font-size: 10px;
+    }
+    
+    .events-menu button {
+        font-size: 10px;
+        margin-bottom: 6px;
+    }
+}
 
 /* Small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px) {
+@media only screen and (min-width: 376px) and (max-width: 600px) {
     body {
         font-size: 12px;
         background-size: cover;
