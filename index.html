@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+    
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>sofi</title>
@@ -56,15 +61,19 @@ html {
             height: calc(var(--vh, 1vh) * 100);
             overflow-y: scroll;
             scroll-behavior: smooth;
-            scroll-snap-type: y mandatory;
+            /*scroll-snap-type: y mandatory;*/
+            scroll-snap-type: none !important;
+            -webkit-scroll-snap-type: none !important;
         }
         .section {
             height: 100vh;
             height: calc(var(--vh, 1vh) * 100);
             position: relative;
-            scroll-snap-align: start;
+            /*scroll-snap-align: start;*/
             opacity: 0;
             transition: opacity 1.5s ease-in-out;
+            scroll-snap-align: none !important;
+            -webkit-scroll-snap-align: none !important;
         }
         .section.active {
             opacity: 1;
@@ -872,10 +881,70 @@ html {
             </div> 
         
             <div class="events-menu">
-                <button onclick="showEvents('2024')" class="active">2024</button>
+                <button onclick="showEvents('2025')" class="active">2025</button>
+                <button onclick="showEvents('2024')">2024</button>
                 <button onclick="showEvents('2023')">2023</button>
             </div>
-            <div class="events-container" id="events-2024">
+            
+            <div class="events-container" id="events-2025">
+                <!-- New 2025 events -->
+                <div class="event">
+                    <div class="event-date">15/09/2025 - 28/09/2025</div>
+                    <div class="event-title">
+                        <a href="https://elektronmusikstudion.se/en/guest-composers/guest-composers-2025/sofia-zaiceva/" target="_blank">
+                            ELEKTRONMUSIKSTUDION EMS GUEST COMPOSER
+                        </a>
+                    </div>
+                    <div class="event-location">STOCKHOLM, SWEDEN </div>
+                    <div class="event-type">RESIDENCY</div>
+                </div>
+                
+                <div class="event">
+                    <div class="event-date">07/06/2025</div>
+                    <div class="event-title">
+                        <a href="#" target="_blank">
+                            TBA
+                        </a>
+                    </div>
+                    <div class="event-location">HELSINKI, FINLAND</div>
+                    <div class="event-type">LIVE</div>
+                </div>
+                
+                <div class="event">
+                    <div class="event-date">17/05/2025</div>
+                    <div class="event-title">
+                        <a href="#" target="_blank">
+                            TBA
+                        </a>
+                    </div>
+                    <div class="event-location">HELSINKI, FINLAND</div>
+                    <div class="event-type">LIVE</div>
+                </div>
+                
+                <div class="event">
+                    <div class="event-date">03/05/2025</div>
+                    <div class="event-title">
+                        <a href="#" target="_blank">
+                            TBA
+                        </a>
+                    </div>
+                    <div class="event-location">HELSINKI, FINLAND</div>
+                    <div class="event-type">LIVE</div>
+                </div>
+                
+                <div class="event">
+                    <div class="event-date">25/04/2025</div>
+                    <div class="event-title">
+                        <a href="https://sound.mplab.lv/en/programme/" target="_blank">
+                            SOUND DAYS X ALGORAVE LIEPĀJA
+                        </a>
+                    </div>
+                    <div class="event-location">LIEPĀJA, LATVIA</div>
+                    <div class="event-type">LIVE</div>
+                </div>
+            </div>
+            
+            <div class="events-container" id="events-2024" style="display: none;">
                 <!-- Your existing 2024 events here -->
                 <div class="event">
                     <div class="event-date">02/12/2024</div>
@@ -1126,20 +1195,30 @@ html {
         setVH(); // Set the value initially
     
         document.addEventListener('DOMContentLoaded', (event) => {
+            // Firefox detection function
+            function isFirefox() {
+                return typeof InstallTrigger !== 'undefined';
+            }
+    
             const container = document.querySelector('.container');
             const sections = document.querySelectorAll('.section');
+            
+            // Remove scroll-snap properties
+            container.style.scrollSnapType = 'none';
+            container.style.webkitScrollSnapType = 'none';
+            
+            sections.forEach(section => {
+                section.style.scrollSnapAlign = 'none';
+                section.style.webkitScrollSnapAlign = 'none';
+            });
+            
             let currentIndex = 0;
             let isScrolling = false;
-            const scrollCooldown = 1300;
+            const scrollCooldown = 800; // Slightly shorter than your original for more responsiveness
             const scrollThreshold = 50;
             let lastScrollTime = 0;
             let touchStartY = 0;
             let touchStartX = 0;
-
-             // Add the Firefox detection function here
-        function isFirefox() {
-        return typeof InstallTrigger !== 'undefined';
-    }
     
             function updateScrollIndicators() {
                 const currentSection = document.querySelector('.section.active');
@@ -1162,19 +1241,32 @@ html {
             }
     
             function scrollToSection(index) {
-    if (isScrolling) return;
-    isScrolling = true;
-    
-    if (isFirefox()) {
-        // Firefox-specific scrolling
-        sections[index].scrollIntoView({ behavior: 'auto' });
-    } else {
-        // Standard smooth scrolling for other browsers
-        sections[index].scrollIntoView({ behavior: 'smooth' });
-    }
-                setActiveSection(index);
+                if (isScrolling) return;
+                
+                // Bounds check
+                if (index < 0) index = 0;
+                if (index >= sections.length) index = sections.length - 1;
+                
+                isScrolling = true;
                 currentIndex = index;
-                setTimeout(() => { isScrolling = false; }, scrollCooldown);
+                
+                // Use GSAP for smoother scrolling
+                gsap.to(container, {
+                    duration: isFirefox() ? 0.7 : 1,
+                    scrollTo: {
+                        y: sections[index].offsetTop,
+                        autoKill: false
+                    },
+                    ease: "power2.inOut",
+                    onComplete: () => {
+                        setTimeout(() => {
+                            isScrolling = false;
+                        }, 200); // Additional buffer after animation completes
+                    }
+                });
+                
+                setActiveSection(index);
+                lastScrollTime = new Date().getTime();
             }
     
             function handleScroll(delta) {
@@ -1187,14 +1279,13 @@ html {
                 } else if (delta < -scrollThreshold && currentIndex > 0) {
                     newIndex--;
                 } else if (delta > scrollThreshold && currentIndex === sections.length - 1) {
-                    newIndex = 0;
+                    newIndex = 0; // Loop to first section
                 } else if (delta < -scrollThreshold && currentIndex === 0) {
-                    newIndex = sections.length - 1;
+                    newIndex = sections.length - 1; // Loop to last section
                 }
                 
                 if (newIndex !== currentIndex) {
                     scrollToSection(newIndex);
-                    lastScrollTime = currentTime;
                 }
             }
     
@@ -1236,7 +1327,7 @@ html {
             window.addEventListener('keydown', (e) => {
                 if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
                     e.preventDefault();
-                    handleScroll(e.key === 'ArrowDown' ? 1 : -1);
+                    handleScroll(e.key === 'ArrowDown' ? 100 : -100);
                 }
             });
     
@@ -1295,6 +1386,11 @@ html {
                     const scrollPosition = (mouseY / containerHeight) * (scrollHeight - containerHeight);
                     container.scrollTop = scrollPosition;
                 });
+                
+                // Prevent page scrolling while scrolling events container
+                container.addEventListener('wheel', function(e) {
+                    e.stopPropagation();
+                }, { passive: false });
             });
     
             // Prevent default touchmove behavior on the main container
@@ -1303,9 +1399,22 @@ html {
                     e.preventDefault();
                 }
             }, { passive: false });
+            
+            // Handle direct links and section navigation via hash
+            if (window.location.hash) {
+                const targetId = window.location.hash.substring(1);
+                const targetIndex = Array.from(sections).findIndex(section => section.id === targetId);
+                
+                if (targetIndex >= 0) {
+                    setTimeout(() => {
+                        scrollToSection(targetIndex);
+                    }, 500);
+                }
+            }
         });
     
         function showEvents(year) {
+            document.getElementById('events-2025').style.display = year === '2025' ? 'block' : 'none';
             document.getElementById('events-2024').style.display = year === '2024' ? 'block' : 'none';
             document.getElementById('events-2023').style.display = year === '2023' ? 'block' : 'none';
             document.querySelectorAll('.events-menu button').forEach(button => {
@@ -1316,3 +1425,4 @@ html {
     </script>
 </body>
 </html>
+
