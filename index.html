@@ -794,6 +794,155 @@ html {
     position: relative;
     z-index: 0;
 }
+
+
+
+
+
+
+
+/* Updates Section Styling */
+.updates-container {
+    position: absolute;
+    bottom: 30%; /* Position 30% from the bottom */
+    left: 40px;
+    right: 40px;
+    overflow-y: hidden;
+    font-size: 12px;
+    line-height: 80%;
+    padding: 15px 0;
+}
+
+.updates-heading {
+    font-size: 16px;
+    font-weight: normal;
+    letter-spacing: 0.3em;
+    text-transform: lowercase;
+    text-align: center;
+    margin: 0 0 15px 0;
+    color: #000;
+}
+
+.updates-wrapper {
+    position: relative;
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 20px 0;
+    -webkit-overflow-scrolling: touch;
+    mask-image: linear-gradient(to bottom, transparent, black 20px, black calc(100% - 20px), transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 20px, black calc(100% - 20px), transparent);
+}
+
+.updates-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.updates-wrapper {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.updates-wrapper::before,
+.updates-wrapper::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 20px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.updates-wrapper::before {
+    top: 0;
+    background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0));
+}
+
+.updates-wrapper::after {
+    bottom: 0;
+    background: linear-gradient(to top, rgba(255,255,255,1), rgba(255,255,255,0));
+}
+
+.update-item {
+    margin-bottom: 15px;
+    padding: 15px;
+    border: 0.5px solid #000;
+    transition: all 0.3s ease;
+    border-radius: 25%;
+    background-color: rgb(255, 255, 255, 0.5);
+    position: relative;
+    z-index: 0;
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    align-items: center;
+    gap: 10px;
+}
+
+.update-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    transform: translateY(-5px);
+}
+
+.update-date {
+    font-weight: bold;
+    text-align: left;
+    margin-left: 10px;
+}
+
+.update-title {
+    font-size: 1.1em;
+    text-align: left;
+}
+
+.update-title a {
+    color: #000;
+    text-decoration: none;
+}
+
+.update-title a:hover {
+    text-decoration: underline;
+}
+
+.update-type {
+    font-style: italic;
+    text-align: right;
+    margin-right: 10px;
+}
+
+/* Responsive adjustments */
+@media only screen and (max-width: 600px) {
+    .updates-container {
+        bottom: 30%; /* Keep consistent positioning on mobile */
+        left: 20px;
+        right: 20px;
+        font-size: 10px;
+    }
+    
+    .updates-heading {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+    
+    .update-item {
+        padding: 10px;
+        margin-bottom: 10px;
+        grid-template-columns: 1fr 2fr 1fr;
+    }
+    
+    .update-date {
+        margin-left: 5px;
+    }
+    
+    .update-type {
+        margin-right: 5px;
+    }
+    
+    .updates-wrapper {
+        max-height: 250px;
+        padding: 15px 0;
+    }
+
+}
     </style>
 </head>
 <body>
@@ -806,6 +955,44 @@ html {
                 <a href="https://soundcloud.com/sofiazaiceva" target="_blank">soundcloud</a>
                 <a href="https://sofi.bandcamp.com" target="_blank">bandcamp</a>
             </div>
+            
+            <div class="updates-container">
+                <h2 class="updates-heading">updates</h2>
+                <div class="updates-wrapper">
+                    <div class="update-item">
+                        <div class="update-date">2024</div>
+                        <div class="update-title">
+                            <a href="https://cashmereradio.com/episode/cashmere-guest-mixes-riforma-w-sofi-guests/" target="_blank">
+                                ♡ listen to a guest mix on Cashmere / Kinked, Giulia Rae, Elif Gülin Soğuksu, Justin, Linus Åberg together with sofi✧･ﾟ: ♡
+                            </a>
+                        </div>
+                        <div class="update-type">radio</div>
+                    </div>
+                    
+                     <div class="update-item">
+                        <div class="update-date">2025</div>
+                        <div class="update-title">
+                            <a href="https://audiospace.soundingfuture.com/artists/sofi" target="_blank">
+                                new digital space for immersive audio ✧･ﾟ: binaural/stereo versions of ambiX pieces
+                            </a>
+                        </div>
+                        <div class="update-type">sound</div>
+                    </div>
+                    
+                
+                    <!--
+                    <div class="update-item">
+                        <div class="update-date">12/2024</div>
+                        <div class="update-title">
+                            <a href="#" target="_blank">
+                                Live performance at Algorave Helsinki
+                            </a>
+                        </div>
+                        <div class="update-type">live</div>
+                    </div> -->
+                </div>
+            </div>
+            
             <div class="section-number">1/5</div>
             <div class="section-name">home</div>
             <div class="scroll-indicator">scroll</div>
@@ -1420,7 +1607,55 @@ html {
                     }, 500);
                 }
             }
+
+            const updatesWrapper = document.querySelector('.updates-wrapper');
+    
+    if (updatesWrapper) {
+        let startY, startTopScroll;
+        let touchStarted = false;
+
+        updatesWrapper.addEventListener('touchstart', function(e) {
+            touchStarted = true;
+            startY = e.touches[0].clientY;
+            startTopScroll = updatesWrapper.scrollTop;
+
+            if (startTopScroll <= 0)
+                updatesWrapper.scrollTop = 1;
+
+            if (startTopScroll + updatesWrapper.offsetHeight >= updatesWrapper.scrollHeight)
+                updatesWrapper.scrollTop = updatesWrapper.scrollHeight - updatesWrapper.offsetHeight - 1;
+
+        }, { passive: true });
+
+        updatesWrapper.addEventListener('touchmove', function(e) {
+            if (!touchStarted) {
+                return;
+            }
+
+            const y = e.touches[0].clientY;
+            const scrollTop = startTopScroll + startY - y;
+
+            if (scrollTop > 0 && scrollTop < updatesWrapper.scrollHeight - updatesWrapper.offsetHeight) {
+                e.stopPropagation();
+                e.preventDefault();
+                updatesWrapper.scrollTop = scrollTop;
+            }
+            else {
+                updatesWrapper.scrollTop = scrollTop;
+            }
+        }, { passive: false });
+
+        updatesWrapper.addEventListener('touchend', function() {
+            touchStarted = false;
         });
+
+        // Add mouse-based scrolling for web version
+        updatesWrapper.addEventListener('wheel', function(e) {
+            e.stopPropagation();
+        }, { passive: false });
+    }
+});
+      
     
         function showEvents(year) {
             document.getElementById('events-2025').style.display = year === '2025' ? 'block' : 'none';
@@ -1434,5 +1669,4 @@ html {
     </script>
 </body>
 </html>
-
 
