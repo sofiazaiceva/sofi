@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>sofi</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet">
+
+    <style>
+    /* ── TOKENS ────────────────────────────────── */
+    :root {
+        --bg:   #EDEAE0;
+        --ink:  #111;
+        --dim:  #8A8880;
+        --line: rgba(0,0,0,.09);
+        --xs:   12px;
+        --xl:   clamp(96px, 19vw, 230px);
+        --f:    'Bricolage Grotesque', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+        font-family: var(--f);
+        font-size: var(--xs);
+        font-weight: 400;
+        letter-spacing: .04em;
+        background: var(--bg);
+        color: var(--ink);
+        overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── GRAIN ─────────────────────────────────── */
+    body::before {
+        content: '';
+        position: fixed; inset: 0;
+        pointer-events: none;
+        z-index: 9998;
+        opacity: .03;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");
+        background-size: 200px 200px;
+    }
+
+    /* ── CURSOR IMAGE PREVIEW ──────────────────── */
+    #cursor-img {
+        position: fixed;
+        width: 300px;
+        height: 300px;
+        object-fit: cover;
+        pointer-events: none;
+        opacity: 0;
+        z-index: 9999;
+        transition: opacity .2s ease;
+        transform: translate(18px, -150px);
+        top: 0; left: 0;
+    }
+    #cursor-img.on { opacity: 1; }
+    #cursor-img.video {
+        width: 570px;
+        height: 321px;
+        transform: translate(18px, -161px);
+    }
+
+    /* ── HERO — bracket grid ──────────────────── */
+    .hero {
+        position: relative;
+        height: 100svh;
+        overflow: hidden;
+    }
+
+    /* Two-column bracket grid — top of hero */
+    .hero-grid {
+        position: absolute;
+        top: 28px;
+        left: 32px;
+        right: 32px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        z-index: 10;
+    }
+
+    /* Bracket text block */
+    .hb {
+        font-size: clamp(28px, 4.2vw, 62px);
+        font-weight: 700;
+        letter-spacing: -.024em;
+        line-height: 1.12;
+        color: var(--ink);
+        display: block;
+    }
+
+    .hb a, .hb span {
+        display: block;
+        color: inherit;
+        transition: opacity .14s;
+    }
+
+    .hb a:hover { opacity: .28; }
+
+    /* Right column — right-aligned */
+    .hero-col-r { text-align: right; }
+
+    .hb--dim { color: var(--dim); }
+
+    /* Name — bottom left */
+    .hero-name {
+        position: absolute;
+        bottom: -.06em; left: -.01em;
+        font-size: var(--xl);
+        font-weight: 800;
+        letter-spacing: -.052em;
+        line-height: 1;
+        text-transform: lowercase;
+        color: var(--ink);
+        z-index: 10;
+        user-select: none;
+        mix-blend-mode: multiply;
+    }
+
+    /* ── RHYTHM ────────────────────────────────── */
+    .gap   { height: 88px; }
+    .gap-s { height: 40px; }
+    .gap-l { height: 120px; }
+
+    /* ── SECTION LABEL ─────────────────────────── */
+    .mark {
+        padding: 0 32px;
+        color: var(--dim);
+        letter-spacing: .28em;
+        text-transform: lowercase;
+    }
+
+    /* Sub-label (used inside discography to separate groups) */
+    .sub-mark {
+        padding: 32px 0 0;
+        color: var(--dim);
+        letter-spacing: .22em;
+        text-transform: lowercase;
+        font-style: italic;
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    /* ── SHARED ROW ────────────────────────────── */
+    .row {
+        gap: 12px;
+        align-items: baseline;
+        padding: 13px 0;
+        border-bottom: .5px solid var(--line);
+        transition: opacity .14s;
+    }
+
+    .row:first-child { border-top: .5px solid var(--line); }
+    .row:hover { opacity: .38; }
+    .row[href], .row[onclick] { cursor: pointer; }
+
+    .c-dim   { color: var(--dim); }
+    .c-it    { color: var(--dim); font-style: italic; }
+    .c-right { text-align: right; }
+    .c-up    { letter-spacing: .04em; }
+
+    /* ── EVENTS ────────────────────────────────── */
+    .events { padding: 0 32px; }
+
+    .ev-details { border-bottom: .5px solid var(--line); }
+    .ev-details:first-child { border-top: .5px solid var(--line); }
+
+    .ev-summary {
+        display: flex;
+        align-items: baseline;
+        gap: 7px;
+        padding: 13px 0;
+        cursor: pointer;
+        list-style: none;
+        color: var(--dim);
+        letter-spacing: .18em;
+        transition: color .12s;
+        user-select: none;
+    }
+
+    .ev-summary::-webkit-details-marker { display: none; }
+    .ev-summary::marker { display: none; }
+
+    .ev-details[open] .ev-summary { color: var(--ink); }
+    .ev-summary:hover { color: var(--ink); }
+
+    .ev-summary-arrow {
+        letter-spacing: 0;
+        transition: transform .3s ease;
+        display: inline-block;
+    }
+
+    .ev-details[open] .ev-summary-arrow { transform: rotate(180deg); }
+
+    .ev-list {
+        overflow: hidden;
+        transition: height .38s cubic-bezier(.4,0,.2,1);
+    }
+
+    .ev {
+        display: grid;
+        grid-template-columns: 148px 1fr 148px 108px;
+    }
+
+    /* ── FULL-BLEED PHOTO ──────────────────────── */
+    .bleed {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .bleed img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 30%;
+        display: block;
+        opacity: 0.72;
+    }
+
+    .bleed::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(237, 234, 224, 0.22);
+        pointer-events: none;
+    }
+
+    @media (max-width: 768px) {
+        .bleed img { object-position: center 20%; }
+    }
+
+    /* ── DISCOGRAPHY — plain text list ─────────── */
+    .disco { padding: 0 32px; }
+
+    /* First row border-top only on first item of each group */
+    .disco-group:first-of-type .disco-row:first-child,
+    .row:first-child { border-top: .5px solid var(--line); }
+
+    .disco-row {
+        display: grid;
+        grid-template-columns: 1fr 200px 56px;
+        cursor: crosshair;
+    }
+
+    /* ── LIVE ──────────────────────────────────── */
+    .live { padding: 0 32px; }
+
+    .live-row {
+        display: grid;
+        grid-template-columns: 1fr 200px 56px;
+        cursor: crosshair;
+    }
+
+    /* ── PRESS ─────────────────────────────────── */
+    .press { padding: 0 32px; }
+
+    .pq {
+        padding: 28px 0;
+        border-bottom: .5px solid var(--line);
+        max-width: 720px;
+    }
+
+    .pq:first-child { border-top: .5px solid var(--line); }
+
+    .pq-t {
+        font-style: italic;
+        line-height: 1.78;
+        margin-bottom: 10px;
+    }
+
+    .pq-s { color: var(--dim); letter-spacing: .2em; text-transform: uppercase; }
+    .pq-s a { color: var(--dim); }
+    .pq-s a:hover { color: var(--ink); }
+
+    /* ── PHOTO GRID ────────────────────────────── */
+    .ph-wrap {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        width: 72%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 60px 8% 60px 0;
+        z-index: 5;
+    }
+    .ph-grid {
+        width: 100%;
+        max-width: 840px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        column-gap: 28px;
+        row-gap: 52px;
+    }
+    .ph-cell {
+        display: block;
+        cursor: pointer;
+        text-decoration: none;
+        min-width: 0;
+        position: relative;
+    }
+    .ph-cell:hover .ph-img-wrap { opacity: .72; }
+    .ph-img-wrap {
+        position: relative;
+        aspect-ratio: 4 / 3;
+        overflow: hidden;
+        background: var(--line);
+        transition: opacity .2s;
+    }
+    .ph-img-wrap img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: opacity .8s ease;
+    }
+    .ph-caption {
+        position: absolute;
+        top: calc(100% + 5px);
+        left: 0;
+        right: 0;
+        font-size: var(--xs);
+        color: var(--dim);
+        letter-spacing: .1em;
+        line-height: 1.4;
+    }
+    @media (max-width: 768px) {
+        .ph-wrap {
+            top: 90px;
+            bottom: clamp(110px, 23vw, 190px);
+            left: 0;
+            right: 0;
+            width: 100%;
+            justify-content: center;
+            padding: 0 28px;
+        }
+        .ph-grid {
+            width: 100%;
+            max-width: 100%;
+            grid-template-columns: repeat(2, 1fr);
+            column-gap: 14px;
+            row-gap: 36px;
+        }
+        .ph-img-wrap { aspect-ratio: 3 / 2; }
+        .ph-caption { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 9px; }
+    }
+
+    /* ── WRITING ───────────────────────────────── */
+    .writing-note {
+        padding: 0 32px;
+        color: var(--dim);
+        letter-spacing: .04em;
+    }
+    .writing-note a { color: var(--ink); transition: opacity .14s; }
+    .writing-note a:hover { opacity: .35; }
+
+    /* ── MIXES ─────────────────────────────────── */
+    .mixes { padding: 0 32px; }
+
+    .mx {
+        padding: 20px 0;
+        border-bottom: .5px solid var(--line);
+    }
+
+    .mx:first-child { border-top: .5px solid var(--line); }
+    .mx-tag { color: var(--dim); font-style: italic; margin-bottom: 4px; }
+    .mx-title { margin-bottom: 6px; }
+    .mx-sub { color: var(--dim); font-size: var(--xs); letter-spacing: .04em; margin-bottom: 10px; }
+    .mx-title a { transition: opacity .14s; }
+    .mx-title a:hover { opacity: .38; }
+    .mx-embed iframe { border: none; width: 100%; max-width: 600px; }
+
+    /* ── CONTACT ───────────────────────────────── */
+    .contact { padding: 0 32px; }
+
+    .ct-email {
+        display: block;
+        margin-bottom: 28px;
+        transition: opacity .14s;
+    }
+
+    .ct-email:hover { opacity: .36; }
+
+    .ct-row {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+        align-items: baseline;
+    }
+
+    .ct-row a { color: var(--dim); letter-spacing: .14em; transition: color .14s; }
+    .ct-row a:hover { color: var(--ink); }
+    .ct-row span { color: var(--dim); }
+
+    .footer {
+        padding: 0 32px 40px;
+        margin-top: 32px;
+        color: var(--dim);
+        letter-spacing: .14em;
+    }
+
+    /* ── RESPONSIVE ────────────────────────────── */
+    @media (max-width: 900px) {
+        .ev { grid-template-columns: 120px 1fr 120px 80px; }
+    }
+
+    /* ── MOBILE FLOAT IMAGE ──────────────────── */
+    #mobile-float {
+        display: none;
+        position: fixed;
+        width: 180px;
+        height: 180px;
+        object-fit: cover;
+        pointer-events: none;
+        opacity: 0;
+        z-index: 9999;
+        transition: opacity .3s ease, top .18s ease;
+        right: 20px;
+    }
+
+    @media (hover: none), (max-width: 768px) {
+        #mobile-float { display: block; }
+    }
+
+    @media (max-width: 768px) {
+        .mark, .events, .disco, .live,
+        .press, .mixes, .contact, .footer {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .hero-grid { top: 20px; left: 20px; right: 20px; }
+        .hero-name { bottom: 64px; }
+        .hb { font-size: clamp(22px, 6.5vw, 42px); }
+
+        .ev { grid-template-columns: 1fr auto; row-gap: 2px; }
+        .ev .c-up { grid-column: 1 / -1; order: -1; }
+        .ev .c-right:last-child { display: none; }
+
+        .disco-row { grid-template-columns: 1fr auto; }
+        .disco-row span:last-child { display: none; }
+        .live-row { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 540px) {
+        #cursor-img { display: none; }
+        .ev { grid-template-columns: 1fr; }
+        .ev .c-right { text-align: left; display: none; }
+        .hero-grid {
+            grid-template-columns: 1fr;
+            padding: 18px;
+        }
+        .hero-col-r { text-align: left; margin-top: .8em; }
+        .hb { font-size: clamp(20px, 7.5vw, 34px); }
+    }
+    </style>
+</head>
+<body>
+
+<!-- CURSOR IMAGE PREVIEW -->
+<img id="cursor-img" src="" alt="">
+
+<!-- MOBILE FLOATING IMAGE -->
+<img id="mobile-float" src="" alt="">
+
+<!-- ── HERO ──────────────────────────────────────── -->
+<section class="hero">
+
+    <!-- Bracket grid — top of hero -->
+    <div class="hero-grid">
+
+        <!-- Left column — social links only -->
+        <div class="hero-col-l">
+            <div class="hb hb--dim">
+                <a href="https://www.instagram.com/sofizaiceva/" target="_blank">[instagram]</a>
+                <a href="https://soundcloud.com/sofiazaiceva" target="_blank">[soundcloud]</a>
+                <a href="https://sofi.bandcamp.com" target="_blank">[bandcamp]</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Photo grid — centered in hero -->
+    <div class="ph-wrap">
+    <div class="ph-grid">
+
+    <!-- 1. hypergloss -->
+    <a class="ph-cell" href="#discography"
+       data-captions='["hypergloss, 2024","hypergloss — helsinki","hypergloss — album"]'>
+        <div class="ph-img-wrap">
+            <img src="photos/Hypergloss_by_Aino_Ahola990.jpg" alt="" style="opacity:1">
+            <img src="photos/Hupergloss_Helsinki_by_Aino_Ahola204.jpg" alt="" style="opacity:0">
+            <img src="photos/Hypergloss_album_codes.jpg" alt="" style="opacity:0">
+        </div>
+        <div class="ph-caption">hypergloss, 2024</div>
+    </a>
+
+    <!-- 2. catpurse -->
+    <a class="ph-cell" href="#discography"
+       data-captions='["catpurse — she has candy","catpurse","catpurse — recording sessions"]'>
+        <div class="ph-img-wrap">
+            <img src="photos/CATPURSE09.JPG" alt="" style="opacity:1">
+            <img src="photos/CATPURSE10.JPG" alt="" style="opacity:0">
+            <img src="photos/Catpurse_album_recording_sessions.JPG" alt="" style="opacity:0">
+        </div>
+        <div class="ph-caption">catpurse — she has candy</div>
+    </a>
+
+    <!-- 3. swim / zimmt -->
+    <a class="ph-cell" href="#live"
+       data-captions='["swim 2025 — zimmt, leipzig","swim 2025 — poster"]'>
+        <div class="ph-img-wrap">
+            <img src="photos/Zimmt_Leipzig_2025.JPG" alt="" style="opacity:1">
+            <img src="photos/Zimmt_Leipzig_2025_poster.JPG" alt="" style="opacity:0">
+        </div>
+        <div class="ph-caption">swim 2025 — zimmt, leipzig</div>
+    </a>
+
+    <!-- 4. aze / cashmere radio -->
+    <a class="ph-cell" href="#discography"
+       data-captions='["aze — cashmere radio, berlin","aze — cashmere radio"]'>
+        <div class="ph-img-wrap">
+            <img src="photos/aze_album_at_ Cashmere_Radio_berlin.JPG" alt="" style="opacity:1">
+            <img src="photos/aze_album_at_ Cashmere_Radio_with_bests.JPG" alt="" style="opacity:0">
+        </div>
+        <div class="ph-caption">aze — cashmere radio, berlin</div>
+    </a>
+
+    <!-- 5. üle heli -->
+    <a class="ph-cell" href="#events"
+       data-captions='["üle heli festival 2024, tallinn","üle heli festival 2024"]'>
+        <div class="ph-img-wrap">
+            <img src="photos/%C3%9Cle%20Heli%20Festival%202024%20Tallinn.JPG" alt="" style="opacity:1">
+            <img src="photos/%C3%9Cle%20Heli%20Festival%202024.JPG" alt="" style="opacity:0">
+        </div>
+        <div class="ph-caption">üle heli festival 2024, tallinn</div>
+    </a>
+
+    <!-- 6. vagonu hall -->
+    <a class="ph-cell" href="#events">
+        <div class="ph-img-wrap">
+            <img src="photos/DDA%20Ambisonics%20Weekend%20%40%20Vagonu%20Hall.JPG" alt="" style="opacity:1">
+        </div>
+        <div class="ph-caption">dda ambisonics weekend — vagonu hall</div>
+    </a>
+
+    <!-- 7. bugbath -->
+    <a class="ph-cell" href="#events">
+        <div class="ph-img-wrap">
+            <img src="photos/Bugbath_event.JPG" alt="" style="opacity:1">
+        </div>
+        <div class="ph-caption">bugbath</div>
+    </a>
+
+    <!-- 8. helsinki / free improv -->
+    <a class="ph-cell" href="#events"
+       data-captions='["helsinki, 2024","free improv w/ lumi — rahina"]'>
+        <div class="ph-img-wrap">
+            <img src="photos/Helsinki_2024.JPG" alt="" style="opacity:1">
+            <img src="photos/Free%20Improv%20%40%20Rahina_rehersals_with_Lumi.JPG" alt="" style="opacity:0">
+        </div>
+        <div class="ph-caption">helsinki, 2024</div>
+    </a>
+
+    </div>
+    </div>
+
+    <!-- Name — always bottom left -->
+    <h1 class="hero-name">sofi</h1>
+</section>
+
+<!-- ── DISCOGRAPHY — plain text, no numbers ──────── -->
+<div class="gap" id="discography"></div>
+<div class="mark">discography</div>
+<div class="gap-s"></div>
+
+<div class="disco">
+
+    <!-- Own releases -->
+    <div class="disco-group">
+        <a href="https://sofi.bandcamp.com/album/hypergloss" target="_blank"
+           class="row disco-row" data-img="media/Hypergloss_art.jpg">
+            <span>hypergloss</span>
+            <span class="c-it">Superpang</span>
+            <span class="c-dim c-right">2025</span>
+        </a>
+        <a href="https://riforma.bandcamp.com/album/aze" target="_blank"
+           class="row disco-row" data-img="media/artwork.jpg">
+            <span>AZE</span>
+            <span class="c-it">Riforma</span>
+            <span class="c-dim c-right">2024</span>
+        </a>
+        <a href="https://sofi.bandcamp.com/album/naked-eye" target="_blank"
+           class="row disco-row" data-img="media/nakedeye.png">
+            <span>naked eye</span>
+            <span class="c-it">self-released</span>
+            <span class="c-dim c-right">2023</span>
+        </a>
+        <a href="https://sofi.bandcamp.com/track/objects-in-mirror-installation-at-soundmanor360" target="_blank"
+           class="row disco-row" data-img="media/mirrorcover.png">
+            <span>objects in mirror</span>
+            <span class="c-it">self-released</span>
+            <span class="c-dim c-right">2023</span>
+        </a>
+    </div>
+
+    <!-- Collaborations + features -->
+    <span class="sub-mark">as / with</span>
+    <div class="disco-group">
+        <a href="https://sovnrecords.bandcamp.com/album/she-has-candy" target="_blank"
+           class="row disco-row" data-img="media/catpurse.jpg">
+            <span>she has candy</span>
+            <span class="c-it">SØVN Records</span>
+            <span class="c-dim c-right">2025</span>
+        </a>
+        <a href="https://renatura.bandcamp.com/album/nocturna" target="_blank"
+           class="row disco-row" data-img="https://f4.bcbits.com/img/a3908136062_5.jpg">
+            <span>nocturna — Deniz Dortok</span>
+            <span class="c-it">re:natura (electronics)</span>
+            <span class="c-dim c-right">2025</span>
+        </a>
+        <a href="https://renatura.bandcamp.com/album/re-natura-04-ther" target="_blank"
+           class="row disco-row" data-img="media/Instagram_Cover .png">
+            <span>re:natura #04 — Æther</span>
+            <span class="c-it">compilation</span>
+            <span class="c-dim c-right">2024</span>
+        </a>
+    </div>
+</div>
+
+<!-- ── LIVE ───────────────────────────────────────── -->
+<div class="gap" id="live"></div>
+<div class="mark">live</div>
+<div class="gap-s"></div>
+
+<div class="live">
+    <!--
+        Add rows when you have video links. YouTube thumbnail format:
+        data-img="https://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg"
+
+        <a href="https://youtu.be/VIDEO_ID" target="_blank"
+           class="row live-row" data-img="https://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg">
+            <span>Title — Venue, City</span>
+            <span class="c-it">live coding / ambisonics / etc.</span>
+            <span class="c-dim c-right">2024</span>
+        </a>
+    -->
+    <a href="https://youtu.be/0FjNSU0hQgc" target="_blank"
+       class="row live-row" data-img="https://img.youtube.com/vi/0FjNSU0hQgc/hqdefault.jpg">
+        <span>SWIM 2025 — live at ZiMMT Leipzig (3D audio, binaural)</span>
+        <span class="c-it">live coding / ambisonics</span>
+        <span class="c-dim c-right">2025</span>
+    </a>
+    <a href="https://youtu.be/vb0oe1zzq-g" target="_blank"
+       class="row live-row" data-img="https://img.youtube.com/vi/vb0oe1zzq-g/hqdefault.jpg">
+        <span>Branches &amp; Bytes — Zaiceva &amp; Trobollowitsch @ Spin Foam, Vilnius</span>
+        <span class="c-it">duo — modular / live coding</span>
+        <span class="c-dim c-right">2025</span>
+    </a>
+</div>
+
+<!-- ── PHOTO BREAK ────────────────────────────────── -->
+<div class="gap"></div>
+<div class="bleed" style="aspect-ratio:16/9;max-height:620px;min-height:260px;">
+    <img src="media/by_Aino_Ahola895-2.jpg" alt="" style="object-position:center 35%;">
+</div>
+
+<!-- ── EVENTS ────────────────────────────────────── -->
+<div class="gap" id="events"></div>
+<div class="mark">events</div>
+<div class="gap-s"></div>
+
+<div class="events">
+    <details class="ev-details">
+        <summary class="ev-summary">2025 <span class="ev-summary-arrow">↓</span></summary>
+        <div class="ev-list" id="ev-2025">
+
+        <div class="row ev" onclick="window.open('https://www.cityofmediaarts.de/en/events/nan-festival/','_blank')" style="cursor:pointer">
+            <span class="c-dim">21.11.2025</span>
+            <span class="c-up">NAN Computer Music Festival</span>
+            <span class="c-dim c-right">Karlsruhe, DE</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://www.instagram.com/p/DRDBegMjlyP/?hl=en','_blank')" style="cursor:pointer">
+            <span class="c-dim">21.11.2025</span>
+            <span class="c-up">Spin Foam @ Retrito Smarsas</span>
+            <span class="c-dim c-right">Vilnius, LT</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://www.balticanaloglab.lv/events/baltic-analog-lab-9','_blank')" style="cursor:pointer">
+            <span class="c-dim">15.11.2025</span>
+            <span class="c-up">Baltic Analog Lab 9</span>
+            <span class="c-dim c-right">Riga, LV</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev" onclick="window.open('http://www.bachfestriga.com/programma/','_blank')" style="cursor:pointer">
+            <span class="c-dim">10.11.2025</span>
+            <span class="c-up">Bach Chamber Music Festival</span>
+            <span class="c-dim c-right">Riga, LV</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://www.facebook.com/events/636677222850303','_blank')" style="cursor:pointer">
+            <span class="c-dim">25.10.2025</span>
+            <span class="c-up">Trať off the rails #5</span>
+            <span class="c-dim c-right">Prague, CZ</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://punctum.cz/event/andy-loebs-orange-milk-sofi-ursula-sereghy-sonitus','_blank')" style="cursor:pointer">
+            <span class="c-dim">22.10.2025</span>
+            <span class="c-up">Sonitus @ Punctum</span>
+            <span class="c-dim c-right">Prague, CZ</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://ra.co/events/2275629','_blank')" style="cursor:pointer">
+            <span class="c-dim">21.10.2025</span>
+            <span class="c-up">scribble.mp3 × Holy Matrimony</span>
+            <span class="c-dim c-right">Berlin, DE</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://www.dda.lv/events','_blank')" style="cursor:pointer">
+            <span class="c-dim">18.10.2025</span>
+            <span class="c-up">DDA Ambisonics Weekend @ Vagonu Hall</span>
+            <span class="c-dim c-right">Riga, LV</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://zimmt.net/swim-2025/','_blank')" style="cursor:pointer">
+            <span class="c-dim">09–11.10.2025</span>
+            <span class="c-up">SWIM @ ZiMMT</span>
+            <span class="c-dim c-right">Leipzig, DE</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://elektronmusikstudion.se/en/guest-composers/guest-composers-2025/sofia-zaiceva/','_blank')" style="cursor:pointer">
+            <span class="c-dim">15–28.09.2025</span>
+            <span class="c-up">EMS Studios Guest Composer</span>
+            <span class="c-dim c-right">Stockholm, SE</span>
+            <span class="c-it c-right">residency</span>
+        </div>
+        <div class="row ev">
+            <span class="c-dim">20.09.2025</span>
+            <span class="c-up">Nya Perspektiv</span>
+            <span class="c-dim c-right">Västerås, SE</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev">
+            <span class="c-dim">17.08.2025</span>
+            <span class="c-up">TBA</span>
+            <span class="c-dim c-right">Helsinki, FI</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://nonagonfestival.se/en/events/nonagon-residency-showcase','_blank')" style="cursor:pointer">
+            <span class="c-dim">07–20.07.2025</span>
+            <span class="c-up">Nonagon Festival Residency & Concert</span>
+            <span class="c-dim c-right">Svanö, SE</span>
+            <span class="c-it c-right">live audiovisual</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://www.uniarts.fi/tapahtumat/masters-degree-concert-sofija-zaiceva/','_blank')" style="cursor:pointer">
+            <span class="c-dim">07.06.2025</span>
+            <span class="c-up">Musiikkitalo — Loudspeaker Orchestra</span>
+            <span class="c-dim c-right">Helsinki, FI</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://meetfactory.cz/en/program/detail/shape-dali-muru-the-polyphonic-swarm-donna-haringwey-sofi-sorbitol-drops-natalie-plevakova-tonota','_blank')" style="cursor:pointer">
+            <span class="c-dim">23.05–04.06.2025</span>
+            <span class="c-up">MeetFactory (w/ Sorbitol Drops + Natálie Pleváková)</span>
+            <span class="c-dim c-right">Prague, CZ</span>
+            <span class="c-it c-right">residency + live</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://www.caisa.fi/en/events/event/91615898C92EED0CC83D76B68D0A65DD/Object_Permanence_2025','_blank')" style="cursor:pointer">
+            <span class="c-dim">17.05.2025</span>
+            <span class="c-up">Object Permanence</span>
+            <span class="c-dim c-right">Helsinki, FI</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://www.madhousehelsinki.fi/en/ohjelmisto/bugbath-questing-questing','_blank')" style="cursor:pointer">
+            <span class="c-dim">03.05.2025</span>
+            <span class="c-up">Bugbath: Questing – Questing</span>
+            <span class="c-dim c-right">Helsinki, FI</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://sound.mplab.lv/en/programme/','_blank')" style="cursor:pointer">
+            <span class="c-dim">25.04.2025</span>
+            <span class="c-up">Sound Days × Algorave Liepāja</span>
+            <span class="c-dim c-right">Liepāja, LV</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://pro.tmw.ee/speakers/sofia-zaiceva','_blank')" style="cursor:pointer">
+            <span class="c-dim">05.04.2025</span>
+            <span class="c-up">TMW Conference</span>
+            <span class="c-dim c-right">Tallinn, EE</span>
+            <span class="c-it c-right">speaker</span>
+        </div>
+        </div>
+    </details>
+
+    <details class="ev-details">
+        <summary class="ev-summary">2024 <span class="ev-summary-arrow">↓</span></summary>
+        <div class="ev-list" id="ev-2024">
+        <div class="row ev" onclick="window.open('https://madameclaude.de/event/outro-sofi-dj-offcourse/','_blank')" style="cursor:pointer">
+            <span class="c-dim">02.12.2024</span>
+            <span class="c-up">Madame Claude × Renatura</span>
+            <span class="c-dim c-right">Berlin, DE</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://ra.co/events/2044938','_blank')" style="cursor:pointer">
+            <span class="c-dim">28.11.2024</span>
+            <span class="c-up">Algomystica × Riforma</span>
+            <span class="c-dim c-right">Berlin, DE</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://ule-heli.ee','_blank')" style="cursor:pointer">
+            <span class="c-dim">18.10.2024</span>
+            <span class="c-up">Üle Heli Festival</span>
+            <span class="c-dim c-right">Tallinn, EE</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev">
+            <span class="c-dim">17.10.2024</span>
+            <span class="c-up">Free Improv @ Rahina</span>
+            <span class="c-dim c-right">Helsinki, FI</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://www.altparty.org','_blank')" style="cursor:pointer">
+            <span class="c-dim">11.10.2024</span>
+            <span class="c-up">Alternative Party</span>
+            <span class="c-dim c-right">Helsinki, FI</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://musikprotokoll.orf.at/en/2024/project/periphery-oneness','_blank')" style="cursor:pointer">
+            <span class="c-dim">03.10.2024</span>
+            <span class="c-up">Musikprotokoll Festival</span>
+            <span class="c-dim c-right">Graz, AT</span>
+            <span class="c-it c-right">live ambisonics</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://shapeplatform.eu/events/event/shape-prague-artist-meetup-event/','_blank')" style="cursor:pointer">
+            <span class="c-dim">28.08.2024</span>
+            <span class="c-up">SHAPE+ Meetup</span>
+            <span class="c-dim c-right">Prague, CZ</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://tartu2024.ee/programm/valga-glow/?event=83614','_blank')" style="cursor:pointer">
+            <span class="c-dim">28.06.2024</span>
+            <span class="c-up">Valga Glow Festival</span>
+            <span class="c-dim c-right">Valga, EE</span>
+            <span class="c-it c-right">dj</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://elektron.art/projects/ruum/kristall','_blank')" style="cursor:pointer">
+            <span class="c-dim">11.05.2024</span>
+            <span class="c-up">Kristallofoonia Vol 4 @ Elektron.Art</span>
+            <span class="c-dim c-right">Tallinn, EE</span>
+            <span class="c-it c-right">live ambisonics</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://tmw.ee/events/ule-heli-kristallofonia','_blank')" style="cursor:pointer">
+            <span class="c-dim">05.04.2024</span>
+            <span class="c-up">Tallinn Music Week @ Üle Heli</span>
+            <span class="c-dim c-right">Tallinn, EE</span>
+            <span class="c-it c-right">live ambisonics</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://ra.co/events/1826020','_blank')" style="cursor:pointer">
+            <span class="c-dim">21.01.2024</span>
+            <span class="c-up">Morevi & Coppi @ About Blank</span>
+            <span class="c-dim c-right">Berlin, DE</span>
+            <span class="c-it c-right">dj</span>
+        </div>
+    </div>
+    </details>
+
+    <details class="ev-details">
+        <summary class="ev-summary">2023 <span class="ev-summary-arrow">↓</span></summary>
+        <div class="ev-list" id="ev-2023">
+        <div class="row ev" onclick="window.open('https://www.uniarts.fi/tapahtumat/nyky-ensemble-morphing-musicianship/','_blank')" style="cursor:pointer">
+            <span class="c-dim">08.12.2023</span>
+            <span class="c-up">Nyky Ensemble: Morphing Musicianship</span>
+            <span class="c-dim c-right">Helsinki, FI</span>
+            <span class="c-it c-right">performance</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://fb.me/e/1F8aVcdW7','_blank')" style="cursor:pointer">
+            <span class="c-dim">18.11.2023</span>
+            <span class="c-up">S-27 Spinnitre @ Muovitehdas</span>
+            <span class="c-dim c-right">Tampere, FI</span>
+            <span class="c-it c-right">dj</span>
+        </div>
+        <div class="row ev">
+            <span class="c-dim">17.11.2023</span>
+            <span class="c-up">Sonic Impact @ Hall Techno Club</span>
+            <span class="c-dim c-right">Tallinn, EE</span>
+            <span class="c-it c-right">dj</span>
+        </div>
+        <div class="row ev">
+            <span class="c-dim">03.11.2023</span>
+            <span class="c-up">Sola Festival @ WHS Teatteri Union</span>
+            <span class="c-dim c-right">Helsinki, FI</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev">
+            <span class="c-dim">20.10.2023</span>
+            <span class="c-up">Üle Heli Festival</span>
+            <span class="c-dim c-right">Tallinn, EE</span>
+            <span class="c-it c-right">fixed piece</span>
+        </div>
+        <div class="row ev" onclick="window.open('https://fb.me/e/1m0Nys8ep','_blank')" style="cursor:pointer">
+            <span class="c-dim">06.10.2023</span>
+            <span class="c-up">Skaņu Mežs @ Tu Jau Zini Kur</span>
+            <span class="c-dim c-right">Riga, LV</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        <div class="row ev">
+            <span class="c-dim">16.04.2023</span>
+            <span class="c-up">COMMUTE#5 @ EAMT Blackbox</span>
+            <span class="c-dim c-right">Riga, LV</span>
+            <span class="c-it c-right">live</span>
+        </div>
+        </div>
+    </details>
+</div>
+
+<!-- ── PRESS ──────────────────────────────────────── -->
+<div class="gap" id="press"></div>
+<div class="mark">press</div>
+<div class="gap-s"></div>
+
+<div class="press">
+    <div class="pq">
+        <p class="pq-t">"A journey through computer music marbled with fleeting, iridescent melodies, curious harmonic resonance, and a mix of sublime and fractious impulses... the music treated as living matter, coding serving as a form of live improvisation."</p>
+        <span class="pq-s"><a href="https://thequietus.com/quietus-reviews/quietus-international/inner-ear-latvian-music-for-june-by-jakub-knera/" target="_blank">The Quietus — 2026</a></span>
+    </div>
+    <div class="pq">
+        <p class="pq-t">"I approach sound as something that is never fixed — it's a material that can be continuously reshaped. I'm drawn to sonic fiction, uncertainty, and constant communication with my computer — as if it's a co-performer, reacting to its mechanics within the codes I create."</p>
+        <span class="pq-s"><a href="https://www.shapeplatform.eu/2025/i-noticed-myself-imagining-new-sounds-and-algorithms-even-while-performing-other-works-an-interview-with-sofi/" target="_blank">SHAPE+ Platform interview — 2025</a></span>
+    </div>
+    <div class="pq">
+        <p class="pq-t">"She Has Candy... a duo record that maps intimate territories through digital grain and tactile synthesis."</p>
+        <span class="pq-s"><a href="https://www.radioaktiv.it/catpurse-she-has-candy/" target="_blank">Radioaktiv.it — 2025</a></span>
+    </div>
+</div>
+
+<!-- ── MIXES + ARCHIVE ────────────────────────────── -->
+<div class="gap" id="mixes"></div>
+<div class="mark">mixes + archive</div>
+<div class="gap-s"></div>
+
+<div class="mixes">
+    <div class="mx">
+        <div class="mx-tag">radio / mix</div>
+        <div class="mx-title">Sofi @ Kiosk Radio, 2026</div>
+        <div class="mx-embed">
+            <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay; encrypted-media"
+                src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2301587612&color=%23848488&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"
+                loading="lazy"></iframe>
+        </div>
+    </div>
+    <div class="mx">
+        <div class="mx-tag">radio / mix</div>
+        <div class="mx-title">
+            <a href="https://www.radioflouka.com/shows/bonjour-glitza-invites-sofi-20-06-2025" target="_blank">
+                Radio Flouka — Glitza invites sofi, 2025 ↗
+            </a>
+        </div>
+    </div>
+    <div class="mx">
+        <div class="mx-tag">radio / mix</div>
+        <div class="mx-title">SHAPE+ sofi — Radio Relativa, 2024</div>
+        <div class="mx-embed">
+            <iframe width="100%" height="60"
+                src="https://player-widget.mixcloud.com/widget/iframe/?hide_cover=1&mini=1&light=1&feed=%2Frelativa%2Fshape-sofi-02082024%2F"
+                title="SHAPE+ sofi" loading="lazy"></iframe>
+        </div>
+    </div>
+    <div class="mx">
+        <div class="mx-tag">radio / mix</div>
+        <div class="mx-title">
+            <a href="https://livestream.cashmereradio.com/episode/cashmere-guest-mixes-riforma-w-sofi-guests/" target="_blank">
+                Cashmere Radio — Riforma w/ sofi, 2024 ↗
+            </a>
+        </div>
+    </div>
+    <div class="mx">
+        <div class="mx-tag">digital space / immersive audio</div>
+        <div class="mx-title">
+            <a href="https://audiospace.soundingfuture.com/artists/sofi" target="_blank">
+                audiospace — binaural & ambiX pieces ↗
+            </a>
+        </div>
+    </div>
+    <div class="mx">
+        <div class="mx-tag">selected credit / contributor</div>
+        <div class="mx-title">
+            <a href="https://forumwallis.ch/programm-2026arselectronicaforumwallis.htm" target="_blank">
+                Ars Electronica Forum Wallis 2026 — Tesorini, Riccardo: <em>Hyphae</em> ↗
+            </a>
+        </div>
+        <div class="mx-sub">co-composer / contributor alongside Daniele Carcassi, Andrea Laudante, Paolo Montella, Mattia Parisse, Jonatan Snapir</div>
+    </div>
+</div>
+
+<!-- ── WRITING ───────────────────────────────────────── -->
+<div class="gap" id="writing"></div>
+<div class="mark">writing</div>
+<div class="gap-s"></div>
+
+<div class="writing-note">
+    cultural freelance journalist for <a href="https://www.lsm.lv/autors/sofija-zaiceva/" target="_blank">LSM ↗</a> — Latvian national public media
+</div>
+
+<!-- ── CONTACT ─────────────────────────────────────── -->
+<div class="gap" id="contact"></div>
+<div class="mark">contact</div>
+<div class="gap-s"></div>
+
+<div class="contact">
+    <a href="mailto:sofijazaiceva7@gmail.com" class="ct-email">
+        sofijazaiceva7@gmail.com
+    </a>
+    <div class="ct-row">
+        <a href="https://www.instagram.com/sofizaiceva/" target="_blank">instagram</a>
+        <a href="https://soundcloud.com/sofiazaiceva" target="_blank">soundcloud</a>
+        <a href="https://sofi.bandcamp.com" target="_blank">bandcamp</a>
+    </div>
+</div>
+
+<div class="gap-l"></div>
+<div class="footer">sofia zaiceva — 2025</div>
+<div class="gap"></div>
+
+<script>
+    /* ── PHOTO GRID CYCLING ──────────────────── */
+    document.querySelectorAll('.ph-cell').forEach((cell, ci) => {
+        const imgs = Array.from(cell.querySelectorAll('.ph-img-wrap img'));
+        const cap = cell.querySelector('.ph-caption');
+        const captions = JSON.parse(cell.dataset.captions || '[]');
+        if (imgs.length <= 1) return;
+        let cur = 0;
+        setTimeout(() => {
+            setInterval(() => {
+                imgs[cur].style.opacity = '0';
+                cur = (cur + 1) % imgs.length;
+                imgs[cur].style.opacity = '1';
+                if (cap && captions[cur]) cap.textContent = captions[cur];
+            }, 2600);
+        }, ci * 520);
+    });
+
+    /* ── CURSOR IMAGE PREVIEW ─────────────────── */
+    const cursorImg = document.getElementById('cursor-img');
+
+    document.addEventListener('mousemove', (e) => {
+        cursorImg.style.left = e.clientX + 'px';
+        cursorImg.style.top  = e.clientY + 'px';
+    });
+
+    document.querySelectorAll('[data-img]').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            const src = el.dataset.img;
+            const isVideo = src.includes('youtube') || src.includes('youtu.be') || src.includes('vimeo');
+            cursorImg.src = src;
+            cursorImg.classList.toggle('video', isVideo);
+            cursorImg.classList.add('on');
+        });
+        el.addEventListener('mouseleave', () => {
+            cursorImg.classList.remove('on');
+            cursorImg.classList.remove('video');
+        });
+    });
+
+    /* ── SMOOTH EVENTS DROPDOWN ───────────────── */
+    document.querySelectorAll('.ev-details').forEach(det => {
+        const list = det.querySelector('.ev-list');
+
+        // Set initial height without animation
+        list.style.transition = 'none';
+        list.style.height = det.open ? list.scrollHeight + 'px' : '0';
+        requestAnimationFrame(() => { list.style.transition = ''; });
+
+        det.querySelector('.ev-summary').addEventListener('click', e => {
+            e.preventDefault();
+            if (det.open) {
+                list.style.height = list.scrollHeight + 'px';
+                requestAnimationFrame(() => requestAnimationFrame(() => {
+                    list.style.height = '0';
+                }));
+                list.addEventListener('transitionend', () => {
+                    det.removeAttribute('open');
+                }, { once: true });
+            } else {
+                det.setAttribute('open', '');
+                list.style.height = '0';
+                requestAnimationFrame(() => requestAnimationFrame(() => {
+                    list.style.height = list.scrollHeight + 'px';
+                }));
+                list.addEventListener('transitionend', () => {
+                    list.style.height = 'auto';
+                }, { once: true });
+            }
+        });
+    });
+
+    /* ── MOBILE FLOATING SCROLL IMAGE ────────── */
+    const mobileFloat = document.getElementById('mobile-float');
+    if (mobileFloat && window.matchMedia('(hover: none), (max-width: 768px)').matches) {
+        const scrollRows = document.querySelectorAll('.disco-row[data-img], .live-row[data-img]');
+        let activeRow = null;
+
+        function updateFloat() {
+            let best = null, bestScore = -Infinity;
+            scrollRows.forEach(row => {
+                const r = row.getBoundingClientRect();
+                const center = r.top + r.height / 2;
+                const score = -Math.abs(center - window.innerHeight * 0.45);
+                if (r.top < window.innerHeight && r.bottom > 0 && score > bestScore) {
+                    bestScore = score;
+                    best = row;
+                }
+            });
+
+            if (best && best !== activeRow) {
+                activeRow = best;
+                mobileFloat.src = best.dataset.img;
+                mobileFloat.style.opacity = '1';
+            }
+
+            if (best) {
+                const r = best.getBoundingClientRect();
+                const imgTop = r.top + r.height / 2 - 90;
+                mobileFloat.style.top = Math.max(12, Math.min(window.innerHeight - 192, imgTop)) + 'px';
+            } else {
+                mobileFloat.style.opacity = '0';
+                activeRow = null;
+            }
+        }
+
+        window.addEventListener('scroll', updateFloat, { passive: true });
+        updateFloat();
+    }
+
+</script>
+
+</body>
+</html>
