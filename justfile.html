@@ -565,6 +565,386 @@
             text-align: center;
         }
 
+        .footer-archive-link {
+            display: inline-block;
+            font-size: 8.5px;
+            color: var(--color-subtle);
+            letter-spacing: 0.18em;
+            margin-left: 20px;
+            opacity: 0.45;
+            cursor: pointer;
+            border-bottom: 1px solid transparent;
+            transition: opacity 0.3s, border-color 0.3s;
+        }
+        .footer-archive-link:hover { opacity: 1; border-bottom-color: var(--color-subtle); }
+
+        /* ═══════════════════════════════════
+           HOT-PINK ABOUT LINK
+           ═══════════════════════════════════ */
+        .contact-about-link {
+            color: #FF1493 !important;
+            opacity: 1;
+            transition: opacity 0.25s !important;
+        }
+        .contact-about-link:hover { opacity: 0.6 !important; }
+
+        /* ═══════════════════════════════════
+           ABOUT MODAL OVERLAY
+           ═══════════════════════════════════ */
+        .about-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 900;
+            display: none;
+        }
+        .about-modal.open { display: block; }
+
+        .about-modal-bg {
+            position: fixed;
+            inset: 0;
+            background: rgba(245,244,240,0.82);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+        }
+
+        /* ── Vibrating hot-pink border ── */
+        .about-modal-border {
+            position: fixed;
+            inset: 0;
+            z-index: 901;
+            pointer-events: none;
+        }
+        .bdr {
+            position: absolute;
+        }
+        .bdr-top {
+            top: 0; left: 0; right: 0; height: 160px;
+            background: linear-gradient(to bottom,
+                rgba(255,20,147,0.38) 0%,
+                rgba(255,105,180,0.18) 40%,
+                transparent 100%);
+            animation: bdrTop 2.3s ease-in-out infinite;
+            transform-origin: top center;
+        }
+        .bdr-bottom {
+            bottom: 0; left: 0; right: 0; height: 160px;
+            background: linear-gradient(to top,
+                rgba(255,20,147,0.32) 0%,
+                rgba(255,105,180,0.14) 40%,
+                transparent 100%);
+            animation: bdrBot 2.9s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+        .bdr-left {
+            top: 0; left: 0; bottom: 0; width: 160px;
+            background: linear-gradient(to right,
+                rgba(255,20,147,0.30) 0%,
+                rgba(255,105,180,0.11) 45%,
+                transparent 100%);
+            animation: bdrLeft 3.2s ease-in-out infinite;
+            transform-origin: left center;
+        }
+        .bdr-right {
+            top: 0; right: 0; bottom: 0; width: 160px;
+            background: linear-gradient(to left,
+                rgba(255,20,147,0.30) 0%,
+                rgba(255,105,180,0.11) 45%,
+                transparent 100%);
+            animation: bdrRight 2.6s ease-in-out infinite;
+            transform-origin: right center;
+        }
+        /* corner accents */
+        .bdr-corner-tl {
+            position: absolute; top: 0; left: 0;
+            width: 200px; height: 200px;
+            background: radial-gradient(ellipse at top left,
+                rgba(255,20,147,0.28) 0%, transparent 65%);
+            animation: bdrCorner 3.8s ease-in-out infinite;
+        }
+        .bdr-corner-tr {
+            position: absolute; top: 0; right: 0;
+            width: 200px; height: 200px;
+            background: radial-gradient(ellipse at top right,
+                rgba(255,20,147,0.22) 0%, transparent 65%);
+            animation: bdrCorner 3.8s ease-in-out infinite 0.9s;
+        }
+        .bdr-corner-bl {
+            position: absolute; bottom: 0; left: 0;
+            width: 200px; height: 200px;
+            background: radial-gradient(ellipse at bottom left,
+                rgba(255,20,147,0.22) 0%, transparent 65%);
+            animation: bdrCorner 3.8s ease-in-out infinite 1.8s;
+        }
+        .bdr-corner-br {
+            position: absolute; bottom: 0; right: 0;
+            width: 200px; height: 200px;
+            background: radial-gradient(ellipse at bottom right,
+                rgba(255,20,147,0.25) 0%, transparent 65%);
+            animation: bdrCorner 3.8s ease-in-out infinite 2.7s;
+        }
+
+        @keyframes bdrTop {
+            0%,100% { opacity: 0.65; transform: scaleY(1); }
+            28%      { opacity: 1;    transform: scaleY(1.07); }
+            58%      { opacity: 0.45; transform: scaleY(0.93); }
+            80%      { opacity: 0.9;  transform: scaleY(1.03); }
+        }
+        @keyframes bdrBot {
+            0%,100% { opacity: 0.55; }
+            35%      { opacity: 0.95; }
+            65%      { opacity: 0.38; }
+        }
+        @keyframes bdrLeft {
+            0%,100% { opacity: 0.6;  transform: scaleX(1); }
+            22%      { opacity: 0.85; transform: scaleX(1.06); }
+            52%      { opacity: 0.35; transform: scaleX(0.94); }
+            78%      { opacity: 0.9;  transform: scaleX(1.04); }
+        }
+        @keyframes bdrRight {
+            0%,100% { opacity: 0.7; }
+            18%      { opacity: 0.38; }
+            48%      { opacity: 1; }
+            74%      { opacity: 0.5; }
+        }
+        @keyframes bdrCorner {
+            0%,100% { opacity: 0.7; }
+            50%      { opacity: 0.3; }
+        }
+
+        .about-modal-scroll {
+            position: fixed;
+            inset: 0;
+            overflow-y: auto;
+            z-index: 902;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .about-modal-scroll::-webkit-scrollbar { display: none; }
+
+        .about-modal-inner {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: clamp(72px,10vh,120px) clamp(28px,5vw,64px) 90px;
+        }
+
+        .about-close {
+            position: fixed;
+            top: 22px; right: 24px;
+            z-index: 903;
+            background: none;
+            border: 1px solid var(--color-border);
+            font-family: var(--font-main);
+            font-size: 9px;
+            letter-spacing: 0.2em;
+            color: var(--color-muted);
+            cursor: pointer;
+            padding: 6px 14px;
+            transition: all 0.25s;
+        }
+        .about-close:hover { color: var(--color-fg); border-color: var(--color-fg); }
+
+        .about-greeting {
+            font-size: clamp(30px,5.5vw,58px);
+            font-weight: 300;
+            font-style: italic;
+            line-height: 1.05;
+            letter-spacing: 0.04em;
+            margin-bottom: 10px;
+        }
+        .about-tagline {
+            font-size: 11px;
+            color: var(--color-muted);
+            font-style: italic;
+            letter-spacing: 0.1em;
+            margin-bottom: 60px;
+        }
+
+        .abt-sec { margin-bottom: 52px; }
+
+        .abt-lbl {
+            font-size: 8px;
+            letter-spacing: 0.45em;
+            text-transform: uppercase;
+            color: var(--color-subtle);
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .abt-bio {
+            font-size: 12px;
+            line-height: 1.9;
+            text-align: justify;
+            hyphens: auto;
+            max-width: 640px;
+        }
+        .abt-bio p + p { margin-top: 16px; }
+
+        .abt-list {
+            list-style: none;
+            font-size: 10.5px;
+            line-height: 2.1;
+        }
+        .abt-list li { padding-left: 18px; position: relative; }
+        .abt-list li::before {
+            content: '–';
+            position: absolute; left: 0;
+            color: var(--color-subtle);
+        }
+
+        .abt-releases {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 16px;
+        }
+        .abt-release { text-decoration: none; color: inherit; display: block; }
+        .abt-release img {
+            width: 100%; aspect-ratio: 1; object-fit: cover; display: block;
+            filter: grayscale(0.15);
+            transition: filter 0.4s, transform 0.4s;
+        }
+        .abt-release:hover img { filter: grayscale(0); transform: scale(1.03); }
+        .abt-release-title { font-size: 9.5px; font-style: italic; margin-top: 7px; }
+        .abt-release-meta { font-size: 8.5px; color: var(--color-muted); margin-top: 2px; }
+
+        .abt-list-item {
+            display: block;
+            text-decoration: none;
+            color: var(--color-fg);
+            padding: 10px 0;
+            border-bottom: 1px solid var(--color-border);
+            font-size: 10.5px;
+            font-style: italic;
+            transition: opacity 0.3s;
+        }
+        .abt-list-item:hover { opacity: 0.5; }
+        .abt-item-src {
+            display: block;
+            font-size: 8px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--color-subtle);
+            font-style: normal;
+            margin-bottom: 3px;
+        }
+
+        .archive-cta-link {
+            display: inline-block;
+            margin-top: 14px;
+            font-size: 9px;
+            letter-spacing: 0.18em;
+            color: rgba(255,20,147,0.65);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255,20,147,0.25);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .archive-cta-link:hover { color: #FF1493; border-color: #FF1493; }
+
+        @media (max-width: 640px) {
+            .abt-releases { grid-template-columns: repeat(2,1fr); gap: 12px; }
+            .about-modal-inner { padding-top: 80px; }
+        }
+
+        /* ═══════════════════════════════════
+           SOUND WORKS ARCHIVE (hidden)
+           ═══════════════════════════════════ */
+        #archive {
+            justify-content: flex-start;
+            padding-top: var(--section-pad-y);
+            display: none !important;
+        }
+        #archive.archive-open { display: flex !important; }
+
+        .archive-intro {
+            max-width: 620px;
+            font-size: 11px;
+            color: var(--color-muted);
+            line-height: 1.75;
+            margin-bottom: 44px;
+        }
+
+        .archive-cases { max-width: 760px; width: 100%; }
+
+        .archive-case {
+            border-top: 1px solid var(--color-border);
+            padding: 30px 0;
+        }
+        .archive-case:last-child { border-bottom: 1px solid var(--color-border); }
+
+        .archive-case-header {
+            display: flex;
+            align-items: baseline;
+            gap: 20px;
+            margin-bottom: 14px;
+        }
+        .archive-case-num {
+            font-size: 9px;
+            color: var(--color-subtle);
+            letter-spacing: 0.15em;
+            min-width: 22px;
+        }
+        .archive-case-title {
+            font-size: 12px;
+            font-weight: 400;
+            font-style: italic;
+            letter-spacing: 0.02em;
+            flex: 1;
+        }
+        .archive-case-year {
+            font-size: 9px;
+            color: var(--color-muted);
+            letter-spacing: 0.1em;
+            white-space: nowrap;
+        }
+        .archive-case-body p {
+            font-size: 10.5px;
+            line-height: 1.82;
+            color: var(--color-muted);
+            max-width: 600px;
+            padding-left: 42px;
+        }
+        .archive-case-body p + p { margin-top: 10px; }
+
+        .archive-case-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 14px;
+            padding-left: 42px;
+            margin-top: 14px;
+        }
+        .archive-case-links a {
+            font-size: 9px;
+            color: var(--color-muted);
+            text-decoration: none;
+            letter-spacing: 0.06em;
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 1px;
+            transition: all 0.25s;
+        }
+        .archive-case-links a:hover { color: var(--color-fg); border-color: var(--color-fg); }
+
+        .archive-back {
+            display: inline-block;
+            margin-top: 42px;
+            font-size: 9px;
+            letter-spacing: 0.18em;
+            color: var(--color-subtle);
+            cursor: pointer;
+            border: none;
+            border-bottom: 1px solid var(--color-border);
+            background: none;
+            font-family: var(--font-main);
+            padding: 0 0 2px;
+            transition: color 0.25s;
+        }
+        .archive-back:hover { color: var(--color-fg); }
+
+        @media (max-width: 640px) {
+            .archive-case-body p,
+            .archive-case-links { padding-left: 0; }
+            .archive-case-header { flex-wrap: wrap; gap: 8px; }
+        }
+
         /* ═══════════════════════════════════
            ANIMATIONS
            ═══════════════════════════════════ */
@@ -798,7 +1178,6 @@
     <div class="media-audio fade-in">
         <h3>Listen</h3>
         <div class="audio-links">
-            <a href="https://soundcloud.com/sofiazaiceva" target="_blank">soundcloud</a>
             <a href="https://sofi.bandcamp.com" target="_blank">bandcamp</a>
             <a href="https://on.soundcloud.com/ATfdqpPhhTRZAxPy5" target="_blank">live @ meetfactory</a>
             <a href="https://on.soundcloud.com/YBUBN5f9chRHYn9z8" target="_blank">live @ sola</a>
@@ -868,8 +1247,8 @@
                 <h3>Links</h3>
                 <ul>
                     <li><a href="https://www.instagram.com/sofizaiceva/" target="_blank">instagram</a></li>
-                    <li><a href="https://soundcloud.com/sofiazaiceva" target="_blank">soundcloud</a></li>
                     <li><a href="https://sofi.bandcamp.com" target="_blank">bandcamp</a></li>
+                    <li><a href="#" class="contact-about-link" onclick="openAbout(event)">about</a></li>
                     <li><a href="https://youtube.com/@sofiazaiceva" target="_blank">youtube</a></li>
                     <li><a href="https://shapeplatform.eu/artist/sofi/" target="_blank">SHAPE+</a></li>
                 </ul>
@@ -897,9 +1276,232 @@
     </div>
 </section>
 
-<footer>© sofi 2025</footer>
+<footer>
+    © sofi 2025
+    <span class="footer-archive-link" onclick="openArchive(null)">sound works archive</span>
+</footer>
 
 </main>
+
+<!-- ── ABOUT MODAL ── -->
+<div class="about-modal" id="aboutModal" aria-modal="true" role="dialog">
+    <div class="about-modal-bg"></div>
+    <div class="about-modal-border">
+        <div class="bdr bdr-top"></div>
+        <div class="bdr bdr-bottom"></div>
+        <div class="bdr bdr-left"></div>
+        <div class="bdr bdr-right"></div>
+        <div class="bdr-corner-tl"></div>
+        <div class="bdr-corner-tr"></div>
+        <div class="bdr-corner-bl"></div>
+        <div class="bdr-corner-br"></div>
+    </div>
+    <div class="about-modal-scroll">
+        <div class="about-modal-inner">
+            <button class="about-close" onclick="closeAbout()">close ×</button>
+
+            <div class="about-greeting">Hi, I'm Sofia Zaiceva.</div>
+            <div class="about-tagline">here's a bit more about my journey in sonic space.</div>
+
+            <div class="abt-sec">
+                <div class="abt-lbl">about</div>
+                <div class="abt-bio">
+                    <p>Sofi (Sofia Zaiceva) is a Latvian sound artist, composer and performer. With a background that spans classical piano training and electroacoustic composition to live coding and DJ scene, she has developed a distinctive approach to experimental electronic music that prioritises open-source approach and immersive sonic experiences.</p>
+                    <p>Through creative coding, spatial sound design, and improvisational practice, she excavates the relational qualities of sonic environments — revealing how digital processes can articulate deeply human experiences.</p>
+                    <p>Her latest releases include collaborative album "SHE HAS CANDY" by duo CATPURSE (SØVN Records, 2025) and solo albums "hypergloss" (Superpang, 2025) and "aze" (Riforma, 2024). Sofi is an artist of the SHAPE+ platform (2024/2025) for innovative music and interdisciplinary art.</p>
+                </div>
+            </div>
+
+            <div class="abt-sec">
+                <div class="abt-lbl">education</div>
+                <ul class="abt-list">
+                    <li>Sibelius Academy — MA Music Technology, 2023–2025</li>
+                    <li>Estonian Academy of Music — BA Electroacoustic Composition, 2020–2023</li>
+                    <li>Royal Conservatory Antwerp — Erasmus+, 2022–2023</li>
+                    <li>Jāzeps Vītols Academy — BA Piano Performance, 2018–2022</li>
+                </ul>
+            </div>
+
+            <div class="abt-sec">
+                <div class="abt-lbl">practice</div>
+                <ul class="abt-list">
+                    <li>experimental electronic music · sound art · electroacoustic composition</li>
+                    <li>spatial audio & ambisonics (up to 48-channel)</li>
+                    <li>live coding — Tidal Cycles, SuperCollider</li>
+                    <li>AV performance · DJ · club music</li>
+                    <li>film sound design · radio sound · institutional commissions</li>
+                    <li>open-source tools · networked music performance</li>
+                </ul>
+            </div>
+
+            <div class="abt-sec">
+                <div class="abt-lbl">releases</div>
+                <div class="abt-releases">
+                    <a href="https://sofi.bandcamp.com/album/hypergloss" target="_blank" class="abt-release">
+                        <img src="https://f4.bcbits.com/img/a0647498637_16.jpg" alt="Hypergloss" loading="lazy">
+                        <div class="abt-release-title">hypergloss</div>
+                        <div class="abt-release-meta">Superpang · 2025</div>
+                    </a>
+                    <a href="https://sovnrecords.bandcamp.com/album/she-has-candy" target="_blank" class="abt-release">
+                        <img src="https://f4.bcbits.com/img/a1961191498_16.jpg" alt="SHE HAS CANDY" loading="lazy">
+                        <div class="abt-release-title">SHE HAS CANDY</div>
+                        <div class="abt-release-meta">CATPURSE · SØVN · 2025</div>
+                    </a>
+                    <a href="https://riforma.bandcamp.com/album/aze" target="_blank" class="abt-release">
+                        <img src="https://f4.bcbits.com/img/a3936498614_16.jpg" alt="aze" loading="lazy">
+                        <div class="abt-release-title">aze</div>
+                        <div class="abt-release-meta">Riforma · 2024</div>
+                    </a>
+                    <a href="https://sofi.bandcamp.com/album/naked-eye" target="_blank" class="abt-release">
+                        <img src="https://f4.bcbits.com/img/a2345259498_16.jpg" alt="naked eye" loading="lazy">
+                        <div class="abt-release-title">naked eye</div>
+                        <div class="abt-release-meta">2021–2024</div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="abt-sec">
+                <div class="abt-lbl">radio · broadcast</div>
+                <a href="https://cashmereradio.com/episode/cashmere-guest-mixes-riforma-w-sofi-guests/" target="_blank" class="abt-list-item">
+                    <span class="abt-item-src">Cashmere Radio · 2024</span>
+                    Riforma w/ Sofi — guest mix
+                </a>
+                <a href="https://cashmereradio.com/episode/shape-broadcast-series-shape-broadcast-9a-elischa-heller/" target="_blank" class="abt-list-item">
+                    <span class="abt-item-src">Cashmere Radio · SHAPE Broadcast Series · 2024</span>
+                    SHAPE Broadcast 9A — Elischa Heller (sonic identity)
+                </a>
+                <a href="https://cashmereradio.com/episode/shape-broadcast-series-ha-kyoon/" target="_blank" class="abt-list-item">
+                    <span class="abt-item-src">Cashmere Radio · SHAPE Broadcast Series · 2025</span>
+                    SHAPE Broadcast — Ha Kyoon (sonic identity)
+                </a>
+                <a href="https://lr4.lsm.lv/lv/lr4/peredachi/maigais-vakars/" target="_blank" class="abt-list-item">
+                    <span class="abt-item-src">Latvijas Radio 4 — LR4 / LSM</span>
+                    Maigais Vakars — jingles & sound editorial
+                </a>
+                <a href="https://lr4.lsm.lv/lv/lr4/peredachi/vechernjaja-skazka/" target="_blank" class="abt-list-item">
+                    <span class="abt-item-src">Latvijas Radio 4 — LR4 / LSM</span>
+                    Vechernjaja Skazka — jingles, seasonal sound design
+                </a>
+                <a href="https://on.soundcloud.com/ATfdqpPhhTRZAxPy5" target="_blank" class="abt-list-item">
+                    <span class="abt-item-src">SoundCloud · live recording</span>
+                    live @ MeetFactory, Prague
+                </a>
+                <a href="https://on.soundcloud.com/YBUBN5f9chRHYn9z8" target="_blank" class="abt-list-item">
+                    <span class="abt-item-src">SoundCloud · live recording</span>
+                    live @ Sola Festival, Helsinki
+                </a>
+                <a href="https://on.soundcloud.com/LWW9u7vUUabe6JEp6" target="_blank" class="abt-list-item">
+                    <span class="abt-item-src">SoundCloud · live recording</span>
+                    live @ TMW, Tallinn
+                </a>
+                <a href="https://audiospace.soundingfuture.com/artists/sofi" target="_blank" class="abt-list-item">
+                    <span class="abt-item-src">Sounding Future</span>
+                    immersive audio space — spatial works
+                </a>
+            </div>
+
+            <div class="abt-sec">
+                <div class="abt-lbl">press</div>
+                <a href="https://thequietus.com/news/shape-artist-sofi-shares-recording-captured-during-residency-at-pragues-meetfactory/" target="_blank" class="abt-list-item">
+                    <span class="abt-item-src">The Quietus · 2025</span>
+                    SHAPE+ artist Sofi shares recording from MeetFactory residency
+                </a>
+                <a href="https://www.radioaktiv.it/catpurse-she-has-candy/" target="_blank" class="abt-list-item">
+                    <span class="abt-item-src">Radioaktiv · 2025</span>
+                    CATPURSE — "SHE HAS CANDY" review
+                </a>
+                <a href="https://elektronmusikstudion.se/en/guest-composers/guest-composers-2025/sofia-zaiceva/" target="_blank" class="abt-list-item">
+                    <span class="abt-item-src">EMS Studios · 2025</span>
+                    Guest composer profile
+                </a>
+                <a href="https://cashmereradio.com/episode/cashmere-guest-mixes-riforma-w-sofi-guests/" target="_blank" class="abt-list-item">
+                    <span class="abt-item-src">Cashmere Radio · 2024</span>
+                    Riforma guest mix session
+                </a>
+            </div>
+
+            <div class="abt-sec">
+                <div class="abt-lbl">commissioned work</div>
+                <p style="font-size:10.5px;color:var(--color-muted);line-height:1.85;max-width:560px;margin-bottom:12px;">Film sound design, radio jingles, and institutional audio production — from Latvia's Radio 4 to the SHAPE+ broadcast network and Creative Europe events.</p>
+                <span class="archive-cta-link" onclick="closeAbout(); setTimeout(openArchive, 200)">→ sound works archive</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ── SOUND WORKS ARCHIVE (hidden) ── -->
+<section id="archive">
+    <div class="section-label">sound works archive</div>
+    <div class="archive-intro fade-in">
+        Selected commissioned and collaborative sound work — music, sound design, and audio production for clients and institutions.
+    </div>
+    <div class="archive-cases fade-in">
+
+        <div class="archive-case">
+            <div class="archive-case-header">
+                <span class="archive-case-num">01</span>
+                <h2 class="archive-case-title">Skin of a Mandarin — film sound design</h2>
+                <span class="archive-case-year">2023</span>
+            </div>
+            <div class="archive-case-body">
+                <p>Original sound design and music for the short film directed by Jaanika Arum.</p>
+                <div class="archive-case-links">
+                    <a href="https://letterboxd.com/film/skin-of-a-mandarin/" target="_blank">Letterboxd</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="archive-case">
+            <div class="archive-case-header">
+                <span class="archive-case-num">02</span>
+                <h2 class="archive-case-title">SHAPE+ Platform — radio network sonic identity</h2>
+                <span class="archive-case-year">2024–2025</span>
+            </div>
+            <div class="archive-case-body">
+                <p>Custom jingles and sonic identity for SHAPE+ Platform's newly formed European radio network. Created as part of the SHAPE+ artist program (2024/2025) and broadcast across partner stations.</p>
+                <p>Featured in: SHAPE Broadcast Series on Cashmere Radio, Berlin.</p>
+                <div class="archive-case-links">
+                    <a href="https://shapeplus.eu/2024/shape-announces-newly-formed-radio-network/" target="_blank">SHAPE+ Radio Network announcement</a>
+                    <a href="https://cashmereradio.com/episode/shape-broadcast-series-shape-broadcast-9a-elischa-heller/" target="_blank">Cashmere Radio: SHAPE Broadcast 9A (Elischa Heller)</a>
+                    <a href="https://cashmereradio.com/episode/shape-broadcast-series-ha-kyoon/" target="_blank">Cashmere Radio: SHAPE Broadcast (Ha Kyoon)</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="archive-case">
+            <div class="archive-case-header">
+                <span class="archive-case-num">03</span>
+                <h2 class="archive-case-title">Latvijas Radio 4 — show jingles & sound editorial</h2>
+                <span class="archive-case-year">2022–2023</span>
+            </div>
+            <div class="archive-case-body">
+                <p>Original jingles, sound design, and audio editing for two shows on LR4 (Latvijas Radio 4, LSM): <em>Maigais Vakars</em> and <em>Vechernjaja Skazka</em>.</p>
+                <p>Includes custom seasonal sound design for Christmas-themed winter episodes (Dec 2022 – Jan 2023) and ongoing editorial work across the series.</p>
+                <div class="archive-case-links">
+                    <a href="https://lr4.lsm.lv/lv/lr4/peredachi/maigais-vakars/" target="_blank">LR4: Maigais Vakars</a>
+                    <a href="https://lr4.lsm.lv/lv/lr4/peredachi/vechernjaja-skazka/" target="_blank">LR4: Vechernjaja Skazka</a>
+                    <a href="https://lr4.lsm.lv/lv/raksts/vechernjaja-skazka/yuris-zvirgzdinsh-pervaja-rozhdestvenskaja-elka.-chast-1.a170393/" target="_blank">Christmas episode example (Dec 2022)</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="archive-case">
+            <div class="archive-case-header">
+                <span class="archive-case-num">04</span>
+                <h2 class="archive-case-title">Creative Europe — event sound design</h2>
+                <span class="archive-case-year">2026</span>
+            </div>
+            <div class="archive-case-body">
+                <p>Sound design and audio production for the Creative Europe Culture Project Coordinators gathering "When We Create Together We Build What Remains" (EACEA, June 2026). Work included soundbite editing, mini-interview audio production, and music composition for the event.</p>
+                <div class="archive-case-links">
+                    <a href="https://www.eacea.ec.europa.eu/news-events/news/when-we-create-together-we-build-what-remains-creative-europe-culture-project-coordinators-gather-2026-06-15_en" target="_blank">EACEA event page</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <button class="archive-back" onclick="closeArchive()">← back</button>
+</section>
 
 <script>
     // ── Fade in on scroll
@@ -945,6 +1547,57 @@
     }, { threshold: 0.35 });
 
     sections.forEach(s => sectionObserver.observe(s));
+
+    // ── About modal ──
+    function openAbout(e) {
+        if (e) e.preventDefault();
+        document.getElementById('aboutModal').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeAbout() {
+        document.getElementById('aboutModal').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    // ── Sound works archive ──
+    function openArchive(e) {
+        if (e && e.preventDefault) e.preventDefault();
+        const arch = document.getElementById('archive');
+        arch.classList.add('archive-open');
+        setTimeout(() => arch.scrollIntoView({ behavior: 'smooth' }), 30);
+    }
+    function closeArchive() {
+        document.getElementById('archive').classList.remove('archive-open');
+        document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ── Close modal on Escape ──
+    document.addEventListener('keydown', function(ev) {
+        if (ev.key === 'Escape') { closeAbout(); }
+    });
+
+    // ── JS-driven border shimmer (adds organic noise on top of CSS) ──
+    (function shimmerBorders() {
+        const borders = document.querySelectorAll('.bdr, .bdr-corner-tl, .bdr-corner-tr, .bdr-corner-bl, .bdr-corner-br');
+        let rafId;
+        function tick() {
+            if (!document.getElementById('aboutModal').classList.contains('open')) {
+                rafId = requestAnimationFrame(tick);
+                return;
+            }
+            const t = Date.now() / 1000;
+            borders.forEach((el, i) => {
+                // Layered sine waves at different frequencies/phases give organic shimmer
+                const v = 0.72
+                    + 0.18 * Math.sin(t * 1.3 + i * 0.9)
+                    + 0.08 * Math.sin(t * 3.7 + i * 1.7)
+                    + 0.04 * Math.sin(t * 7.1 + i * 2.3);
+                el.style.opacity = Math.max(0.25, Math.min(1, v));
+            });
+            rafId = requestAnimationFrame(tick);
+        }
+        tick();
+    })();
 </script>
 
 </body>

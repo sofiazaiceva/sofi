@@ -335,8 +335,8 @@
     }
     @media (max-width: 768px) {
         .ph-wrap {
-            top: 90px;
-            bottom: clamp(110px, 23vw, 190px);
+            top: 170px;
+            bottom: 145px;
             left: 0;
             right: 0;
             width: 100%;
@@ -347,10 +347,10 @@
             width: 100%;
             max-width: 100%;
             grid-template-columns: repeat(2, 1fr);
-            column-gap: 14px;
-            row-gap: 36px;
+            column-gap: 20px;
+            row-gap: 20px;
         }
-        .ph-img-wrap { aspect-ratio: 3 / 2; }
+        .ph-img-wrap { aspect-ratio: 2 / 1; }
         .ph-caption { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 9px; }
     }
 
@@ -439,7 +439,7 @@
         }
 
         .hero-grid { top: 20px; left: 20px; right: 20px; }
-        .hero-name { bottom: 64px; }
+        .hero-name { bottom: 32px; }
         .hb { font-size: clamp(22px, 6.5vw, 42px); }
 
         .ev { grid-template-columns: 1fr auto; row-gap: 2px; }
@@ -462,6 +462,217 @@
         .hero-col-r { text-align: left; margin-top: .8em; }
         .hb { font-size: clamp(20px, 7.5vw, 34px); }
     }
+
+    /* ── ABOUT LINK ─────────────────────────────── */
+    .about-link { color: #FF1493 !important; }
+    .about-link:hover { opacity: .55 !important; }
+
+    /* ── ABOUT OVERLAY ──────────────────────────── */
+    #about-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 10000;
+        background: rgba(237, 234, 224, 0.96);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .4s ease;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #about-overlay.open {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    /* Animated hot-pink edge glow — the "vibrating border" */
+    #about-border-glow {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 10002;
+        background:
+            linear-gradient(to bottom,  rgba(255,20,147,.32) 0%, transparent 18%, transparent 82%, rgba(255,20,147,.32) 100%),
+            linear-gradient(to right,   rgba(255,20,147,.18) 0%, transparent 14%, transparent 86%, rgba(255,20,147,.18) 100%);
+        animation: pinkVibe 7.4s cubic-bezier(.37,0,.63,1) infinite;
+    }
+
+    @keyframes pinkVibe {
+        0%   { opacity: .28; }
+        8%   { opacity: .52; }
+        19%  { opacity: .31; }
+        27%  { opacity: .74; }
+        38%  { opacity: .38; }
+        44%  { opacity: .61; }
+        53%  { opacity: .29; }
+        61%  { opacity: .80; }
+        70%  { opacity: .35; }
+        79%  { opacity: .55; }
+        88%  { opacity: .30; }
+        100% { opacity: .28; }
+    }
+
+    .about-close {
+        position: fixed;
+        top: 28px;
+        right: 32px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-family: var(--f);
+        font-size: 11px;
+        letter-spacing: .28em;
+        color: var(--dim);
+        z-index: 10003;
+        transition: color .14s;
+        padding: 6px 0;
+        text-transform: lowercase;
+    }
+
+    .about-close:hover { color: #FF1493; }
+
+    .about-inner {
+        max-width: 740px;
+        margin: 0 auto;
+        padding: 90px 40px 120px;
+        position: relative;
+        z-index: 10001;
+    }
+
+    .about-hi {
+        font-size: clamp(24px, 3.8vw, 52px);
+        font-weight: 800;
+        letter-spacing: -.038em;
+        line-height: 1.1;
+        margin-bottom: 40px;
+        color: var(--ink);
+    }
+
+    .about-hi em {
+        font-style: normal;
+        color: #FF1493;
+    }
+
+    .about-body {
+        font-size: 13px;
+        line-height: 1.85;
+        color: var(--ink);
+        margin-bottom: 18px;
+        max-width: 580px;
+    }
+
+    .about-section-gap { height: 44px; }
+
+    .about-label {
+        font-size: var(--xs);
+        letter-spacing: .28em;
+        text-transform: lowercase;
+        color: var(--dim);
+        display: block;
+        margin-bottom: 0;
+    }
+
+    .about-list {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 0;
+    }
+
+    .about-list li {
+        border-bottom: .5px solid var(--line);
+        padding: 11px 0;
+        font-size: 12px;
+        line-height: 1.55;
+        display: flex;
+        gap: 18px;
+        align-items: baseline;
+    }
+
+    .about-list li:first-child { border-top: .5px solid var(--line); }
+    .al-dim { color: var(--dim); font-style: italic; min-width: 72px; flex-shrink: 0; }
+    .about-list a { color: var(--ink); transition: opacity .14s; }
+    .about-list a:hover { opacity: .35; }
+
+    @media (max-width: 768px) {
+        .about-inner { padding: 72px 20px 80px; }
+        .about-close { top: 20px; right: 20px; }
+        .about-hi { font-size: clamp(26px, 7.5vw, 48px); }
+        .about-body { font-size: 13px; }
+    }
+
+    /* ── SOUND WORKS ARCHIVE ────────────────────── */
+    .archive-trigger-wrap {
+        text-align: center;
+        padding: 20px 0 0;
+    }
+
+    .archive-trigger {
+        background: none;
+        border: none;
+        font-family: var(--f);
+        font-size: 10px;
+        letter-spacing: .26em;
+        color: var(--dim);
+        cursor: pointer;
+        transition: color .14s;
+        text-transform: lowercase;
+        padding: 8px 0;
+    }
+
+    .archive-trigger:hover { color: var(--ink); }
+
+    #sound-archive {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height .55s cubic-bezier(.4,0,.2,1);
+    }
+
+    #sound-archive.open { max-height: 9999px; }
+
+    .archive-inner { padding: 28px 32px 60px; }
+
+    .archive-label {
+        font-size: var(--xs);
+        letter-spacing: .28em;
+        text-transform: lowercase;
+        color: var(--dim);
+        margin-bottom: 0;
+    }
+
+    .archive-case {
+        border-bottom: .5px solid var(--line);
+        padding: 26px 0;
+    }
+
+    .archive-case:first-child { border-top: .5px solid var(--line); }
+
+    .ac-head {
+        display: flex;
+        gap: 16px;
+        align-items: baseline;
+        margin-bottom: 10px;
+    }
+
+    .ac-year { color: var(--dim); font-size: var(--xs); min-width: 40px; }
+    .ac-title { font-size: 13px; font-weight: 600; letter-spacing: .03em; }
+
+    .ac-body {
+        font-size: var(--xs);
+        line-height: 1.8;
+        color: var(--ink);
+        max-width: 620px;
+        margin-bottom: 12px;
+    }
+
+    .ac-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 6px; }
+    .ac-link { font-size: var(--xs); letter-spacing: .14em; color: var(--dim); transition: color .14s; }
+    .ac-link:hover { color: var(--ink); }
+
+    @media (max-width: 768px) {
+        .archive-inner { padding: 20px 20px 40px; }
+    }
+
+    .archive-gap { height: 44px; }
     </style>
 </head>
 <body>
@@ -482,8 +693,8 @@
         <div class="hero-col-l">
             <div class="hb hb--dim">
                 <a href="https://www.instagram.com/sofizaiceva/" target="_blank">[instagram]</a>
-                <a href="https://soundcloud.com/sofiazaiceva" target="_blank">[soundcloud]</a>
                 <a href="https://sofi.bandcamp.com" target="_blank">[bandcamp]</a>
+                <a href="#" id="about-trigger" class="about-link">[about]</a>
             </div>
         </div>
 
@@ -577,6 +788,97 @@
     <!-- Name — always bottom left -->
     <h1 class="hero-name">sofi</h1>
 </section>
+
+<!-- ── ABOUT OVERLAY ────────────────────────────── -->
+<div id="about-overlay" role="dialog" aria-modal="true" aria-label="About Sofia Zaiceva">
+    <div id="about-border-glow"></div>
+    <button class="about-close" id="about-close" aria-label="Close about">[close ×]</button>
+    <div class="about-inner">
+
+        <h2 class="about-hi">ᥫ᭡.ִֶָ𓂃 hei, im sofia zaiceva aka <span style="color:#FF1493">sofi</span> 𓍯𓂃</h2>
+
+        <p class="about-body">
+            I'm a Latvian sound artist and performer, currently based in Brussels, Belgium. I have a background spanning from classical piano training and electroacoustic composition to live coding and DJ scene. Through my practice I've developed a distinctive approach to experimental electronic music that prioritises open-source tools. Through contemplation on digital obsession, creative coding, spatial sound design, and improvisational practice, I excavate the relational qualities of sonic environments, to reveal how digital processes can articulate deeply human experiences.
+        </p>
+
+        <div class="about-section-gap"></div>
+        <span class="about-label">education</span>
+        <ul class="about-list">
+            <li><span class="al-dim">2023–2025</span> Sibelius Academy / Uniarts Helsinki — MA in Music Technology, Creative Electronic Music Practices</li>
+            <li><span class="al-dim">2022–2023</span> Royal Conservatory Antwerp — Erasmus+ / Composition &amp; Music Technology (Prof. Wim Henderickx)</li>
+            <li><span class="al-dim">2020–2023</span> Estonian Academy of Music and Theatre — BA in Electroacoustic Composition</li>
+            <li><span class="al-dim">2018–2022</span> Jāzeps Vītols Latvian Music Academy — BA in Piano Performance</li>
+        </ul>
+
+        <div class="about-section-gap"></div>
+        <span class="about-label">practice</span>
+        <ul class="about-list">
+            <li>composition, electroacoustics, spatial audio, creative coding (SuperCollider), sound design, film score, radio, broadcast</li>
+            <li>interests — digital obsession, myth, micro expressions</li>
+            <li>writing — cultural journalism / <a href="https://www.lsm.lv/autors/sofija-zaiceva/" target="_blank">LSM / Latvian national public media ↗</a></li>
+        </ul>
+
+        <div class="about-section-gap"></div>
+        <span class="about-label">personal</span>
+        <ul class="about-list">
+            <li><span class="al-dim">2025</span> <a href="https://sofi.bandcamp.com/album/hypergloss" target="_blank">hypergloss — album (Superpang) ↗</a></li>
+            <li><span class="al-dim">2025</span> <a href="https://sovnrecords.bandcamp.com/album/she-has-candy" target="_blank">SHE HAS CANDY — CATPURSE duo (SØVN Records) ↗</a></li>
+            <li><span class="al-dim">2025</span> <a href="https://youtu.be/0FjNSU0hQgc" target="_blank">SWIM — live at ZiMMT, Leipzig (26ch ambisonics) ↗</a></li>
+            <li><span class="al-dim">2025</span> <a href="https://vimeo.com/1110758346" target="_blank">Nonagon Festival AV — live in oil cisterns, Svanö (w/ Ľubomír Slovinský) ↗</a></li>
+            <li><span class="al-dim">2025</span> <a href="https://vimeo.com/1128668567" target="_blank">Musiikkitalo Blackbox — 48ch loudspeaker orchestra, Helsinki ↗</a></li>
+            <li><span class="al-dim">2025</span> <a href="https://youtu.be/vb0oe1zzq-g" target="_blank">Branches &amp; Bytes — duo w/ Andreas Trobollowitsch (State Culture Capital of Latvia) ↗</a></li>
+            <li><span class="al-dim">2025</span> <a href="https://soundcloud.com/radiofantasia" target="_blank">MeetFactory residency — w/ Sorbitol Drops &amp; Natálie Pleváková, Prague ↗</a></li>
+            <li><span class="al-dim">2024</span> <a href="https://musikprotokoll.orf.at/en/2024/project/periphery-oneness" target="_blank">periphery of oneness — live ambisonics, Musikprotokoll, Graz ↗</a></li>
+            <li><span class="al-dim">2024</span> <a href="https://riforma.bandcamp.com/album/aze" target="_blank">aze — album (Riforma) ↗</a></li>
+            <li><span class="al-dim">2024</span> <a href="https://renatura.bandcamp.com/album/re-natura-04-ther" target="_blank">powerlines — re:natura #04 compilation ↗</a></li>
+            <li><span class="al-dim">2024</span> <a href="https://sofi.bandcamp.com/track/objects-in-mirror-installation-at-soundmanor360" target="_blank">objects in mirror — sound installation, Sound Manor 360 ↗</a></li>
+            <li><span class="al-dim">2021–24</span> <a href="https://sofi.bandcamp.com/album/naked-eye" target="_blank">naked eye — album ↗</a></li>
+            <li><span class="al-dim">2023</span> <a href="https://youtu.be/Bx15dRLitn4" target="_blank">Dominant Wavelength 600 nm — live SuperCollider + modular, COMMUTE#5, Tallinn ↗</a></li>
+            <li><span class="al-dim">2023</span> <a href="https://flowerpower333.bandcamp.com/track/live-at-ska-u-me-s" target="_blank">Autumn Fairies — duo Flowerpower w/ Agita Reķe, Skaņu Mežs Festival ↗</a></li>
+            <li><span class="al-dim">2022</span> <a href="https://youtu.be/-phmJ0v-5dI" target="_blank">Memoria Navis — original computer game soundtrack ↗</a></li>
+            <li><span class="al-dim">2022</span> <a href="https://youtu.be/tFpiDowrP0k" target="_blank">Place, Where I Look for Myself — Polar Sounds project ↗</a></li>
+            <li><span class="al-dim">2021</span> <a href="https://flowerpower333.bandcamp.com/album/margery-the-medium" target="_blank">Margery the Medium — duo Flowerpower w/ Agita Reķe ↗</a></li>
+        </ul>
+
+        <div class="about-section-gap"></div>
+        <span class="about-label">commissioned</span>
+        <ul class="about-list">
+            <li><span class="al-dim">2026</span> EU Creative Europe — sound design &amp; music editing for <a href="https://www.eacea.ec.europa.eu/news-events/news/when-we-create-together-we-build-what-remains-creative-europe-culture-project-coordinators-gather-2026-06-15_en" target="_blank">Culture Project Coordinators event ↗</a></li>
+            <li><span class="al-dim">2024/25</span> SHAPE+ radio network — broadcast jingles &amp; sound design (<a href="https://cashmereradio.com/episode/shape-broadcast-series-shape-broadcast-9a-elischa-heller/" target="_blank">Cashmere Radio ↗</a>, <a href="https://shapeplus.eu/2024/shape-announces-newly-formed-radio-network/" target="_blank">about the network ↗</a>)</li>
+            <li><span class="al-dim">2023</span> <a href="https://youtu.be/HWtrWQipKmk" target="_blank">Skin of a Mandarin — original film score (dir. Jaanika Arum, PÖFF Shorts 2023) ↗</a></li>
+            <li><span class="al-dim">2022/23</span> Latvia's Radio 4 — jingles &amp; sound editing for <a href="https://lr4.lsm.lv/lv/lr4/peredachi/maigais-vakars/" target="_blank">Maigais Vakars ↗</a> and <a href="https://lr4.lsm.lv/lv/lr4/peredachi/vechernjaja-skazka/" target="_blank">Vechernjaja Skazka ↗</a></li>
+        </ul>
+
+        <div class="about-section-gap"></div>
+        <span class="about-label">residencies</span>
+        <ul class="about-list">
+            <li><span class="al-dim">2025</span> <a href="https://elektronmusikstudion.se/en/guest-composers" target="_blank">EMS Studios — guest composer, Stockholm ↗</a></li>
+            <li><span class="al-dim">2025</span> <a href="https://nonagonfestival.se/en/events/nonagon-residency-showcase" target="_blank">Nonagon Festival residency, Svanö, Sweden ↗</a></li>
+            <li><span class="al-dim">2025</span> <a href="https://meetfactory.cz/en/program/detail/shape-dali-muru-the-polyphonic-swarm-donna-haringwey-sofi-sorbitol-drops-natalie-plevakova-tonota" target="_blank">MeetFactory — SHAPE+ residency, Prague ↗</a></li>
+        </ul>
+
+        <div class="about-section-gap"></div>
+        <span class="about-label">radio shows &amp; mixes</span>
+        <ul class="about-list">
+            <li><span class="al-dim">2026</span> <a href="https://sofiazaiceva.xyz/#mixes" target="_blank">Kiosk Radio ↗</a></li>
+            <li><span class="al-dim">2025</span> <a href="https://www.radioflouka.com/shows/bonjour-glitza-invites-sofi-20-06-2025" target="_blank">Radio Flouka — Glitza invites sofi ↗</a></li>
+            <li><span class="al-dim">2024</span> <a href="https://player-widget.mixcloud.com/widget/iframe/?feed=%2Frelativa%2Fshape-sofi-02082024%2F" target="_blank">SHAPE+ — Radio Relativa ↗</a></li>
+            <li><span class="al-dim">2024</span> <a href="https://livestream.cashmereradio.com/episode/cashmere-guest-mixes-riforma-w-sofi-guests/" target="_blank">Cashmere Radio — Riforma w/ sofi ↗</a></li>
+            <li><span class="al-dim">—</span> <a href="https://audiospace.soundingfuture.com/artists/sofi" target="_blank">Audiospace — binaural &amp; ambiX pieces ↗</a></li>
+        </ul>
+
+        <div class="about-section-gap"></div>
+        <span class="about-label">press</span>
+        <ul class="about-list">
+            <li><span class="al-dim">2026</span> <a href="https://thequietus.com/quietus-reviews/quietus-international/inner-ear-latvian-music-for-june-by-jakub-knera/" target="_blank">The Quietus — Inner Ear: Latvian Music ↗</a></li>
+            <li><span class="al-dim">2025</span> <a href="https://klasika.lsm.lv/lv/raksts/vakara-autorprogramma/elektroniskas-muzikas-komponiste-sofija-zaiceva.-rakstit-muziku-.a210731/" target="_blank">LSM Klasika — intervija ↗</a></li>
+            <li><span class="al-dim">2025</span> <a href="https://www.shapeplatform.eu/2025/i-noticed-myself-imagining-new-sounds-and-algorithms-even-while-performing-other-works-an-interview-with-sofi/" target="_blank">SHAPE+ Platform — artist interview ↗</a></li>
+            <li><span class="al-dim">2025</span> <a href="https://www.radioaktiv.it/catpurse-she-has-candy/" target="_blank">Radioaktiv.it — Catpurse: She Has Candy ↗</a></li>
+            <li><span class="al-dim">2025</span> <a href="https://thequietus.com/news/shape-artist-sofi-shares" target="_blank">The Quietus — SHAPE+ artist feature ↗</a></li>
+        </ul>
+
+    </div>
+</div>
 
 <!-- ── DISCOGRAPHY — plain text, no numbers ──────── -->
 <div class="gap" id="discography"></div>
@@ -1021,8 +1323,262 @@
     </a>
     <div class="ct-row">
         <a href="https://www.instagram.com/sofizaiceva/" target="_blank">instagram</a>
-        <a href="https://soundcloud.com/sofiazaiceva" target="_blank">soundcloud</a>
         <a href="https://sofi.bandcamp.com" target="_blank">bandcamp</a>
+    </div>
+</div>
+
+<!-- ── SOUND WORKS ARCHIVE ─────────────────────── -->
+<div class="archive-trigger-wrap">
+    <button class="archive-trigger" id="archive-trigger">— sound works archive —</button>
+</div>
+
+<div id="sound-archive">
+    <div class="archive-inner">
+
+        <span class="archive-label">personal</span>
+
+        <div class="archive-case">
+            <div class="ac-head">
+                <span class="ac-year">2025</span>
+                <span class="ac-title">hypergloss — album (Superpang)</span>
+            </div>
+            <p class="ac-body">
+                Solo album released on Superpang label (July 2025), made in SuperCollider. Cello on track "manic memos" by Lumi Mannermaa. Hypergloss is a feeling that keeps coming back again and again and again. Hypergloss is <em>poetry of frustration</em>.
+            </p>
+            <div class="ac-links">
+                <a href="https://sofi.bandcamp.com/album/hypergloss" target="_blank" class="ac-link">bandcamp ↗</a>
+                <a href="https://on.soundcloud.com/aovxuU3TGq" target="_blank" class="ac-link">soundcloud ↗</a>
+            </div>
+        </div>
+
+        <div class="archive-case">
+            <div class="ac-head">
+                <span class="ac-year">2025</span>
+                <span class="ac-title">SHE HAS CANDY — CATPURSE duo (SØVN Records)</span>
+            </div>
+            <p class="ac-body">
+                Collaborative album by duo CATPURSE (Hulda Ragnhildur Hjálmarsdóttir &amp; Sofi), released on SØVN Records (November 2025, digital + cassette). A feminine journey through a single day at sea, where each encounter materialises into an auditory body. Pop culture echoes intertwine with collective human murmurs, where physical sensation of taste, smell and touch dissolves into deformed resonances. About the strange disconnection of being an observer in a fabricated paradise.
+            </p>
+            <div class="ac-links">
+                <a href="https://sovnrecords.bandcamp.com/album/she-has-candy" target="_blank" class="ac-link">bandcamp ↗</a>
+            </div>
+        </div>
+
+        <div class="archive-case">
+            <div class="ac-head">
+                <span class="ac-year">2025</span>
+                <span class="ac-title">MeetFactory residency — w/ Sorbitol Drops &amp; Natálie Pleváková</span>
+            </div>
+            <p class="ac-body">
+                Experimental trio performance captured during an artist residency live concert at MeetFactory, Prague (June 2025). The trio questioned "how contemplative practices become commodified experiences to be consumed efficiently rather than embodied processes to be lived fully."
+            </p>
+            <div class="ac-links">
+                <a href="https://soundcloud.com/radiofantasia" target="_blank" class="ac-link">soundcloud ↗</a>
+                <a href="https://meetfactory.cz/en/program/detail/shape-dali-muru-the-polyphonic-swarm-donna-haringwey-sofi-sorbitol-drops-natalie-plevakova-tonota" target="_blank" class="ac-link">meetfactory ↗</a>
+            </div>
+        </div>
+
+        <div class="archive-case">
+            <div class="ac-head">
+                <span class="ac-year">2025</span>
+                <span class="ac-title">Nonagon Festival — AV performance in oil cisterns</span>
+            </div>
+            <p class="ac-body">
+                Live audiovisual performance within the decommissioned oil cisterns on Svanö in Ådalen (July 2025), with reverberation times extending up to 25 seconds. Conceptually drawn from the site's archaeological traces — remnants of historical landmarks, coastal geography, and industrial infrastructure. Utilises real-time feedback processing and resynthesis in SuperCollider, with sound generation directly controlling lighting via OSC. In collaboration with Ľubomír Slovinský.
+            </p>
+            <div class="ac-links">
+                <a href="https://vimeo.com/1110758346" target="_blank" class="ac-link">vimeo ↗</a>
+                <a href="https://nonagonfestival.se/en/events/nonagon-residency-showcase" target="_blank" class="ac-link">festival page ↗</a>
+            </div>
+        </div>
+
+        <div class="archive-case">
+            <div class="ac-head">
+                <span class="ac-year">2025</span>
+                <span class="ac-title">Musiikkitalo Blackbox — 48ch loudspeaker orchestra</span>
+            </div>
+            <p class="ac-body">
+                Master's degree concert at Musiikkitalo Blackbox, Helsinki (June 2025). Performance of "objects in mirror are closer then they appear" — live SuperCollider and modular synthesisers spatialised across a 48-channel loudspeaker orchestra.
+            </p>
+            <div class="ac-links">
+                <a href="https://vimeo.com/1128668567" target="_blank" class="ac-link">vimeo ↗</a>
+            </div>
+        </div>
+
+        <div class="archive-case">
+            <div class="ac-head">
+                <span class="ac-year">2024</span>
+                <span class="ac-title">periphery of oneness — live ambisonics, Musikprotokoll</span>
+            </div>
+            <p class="ac-body">
+                Live ambisonics composition performed at Musikprotokoll festival (October 2024, Graz, Austria). Inspired by the Japanese art of <em>kintsugi</em>, offering a transformative perspective on moments of rupture, imperfection, and the ability to rebuild. The unpredictable cross-feedback strands foster a dialogue between performer, code (SuperCollider), and space — resulting in novel sonic, bodily, and kinetic experiences.
+            </p>
+            <div class="ac-links">
+                <a href="https://musikprotokoll.orf.at/en/2024/project/periphery-oneness" target="_blank" class="ac-link">musikprotokoll ↗</a>
+            </div>
+        </div>
+
+        <div class="archive-case">
+            <div class="ac-head">
+                <span class="ac-year">2024</span>
+                <span class="ac-title">aze — album (Riforma)</span>
+            </div>
+            <p class="ac-body">
+                Solo album released on Riforma label (November 2024, digital + limited cassette of 50). AZE — an abstract domain evoking diverse responses and states of mindfulness — mirrors the intimate narrative of living between Tallinn, Riga, and Helsinki. Sonically it amplifies the smallest details through granular synthesis and code algorithms, or gets lost in feedback networks of muddier synthesisers and the crackles of vinyl samples. Traversing between improvisation and fixed media, AZE embraces duality and uncertainty.
+            </p>
+            <div class="ac-links">
+                <a href="https://riforma.bandcamp.com/album/aze" target="_blank" class="ac-link">bandcamp ↗</a>
+            </div>
+        </div>
+
+        <div class="archive-case">
+            <div class="ac-head">
+                <span class="ac-year">2024</span>
+                <span class="ac-title">objects in mirror — sound installation</span>
+            </div>
+            <p class="ac-body">
+                Sound installation presented at Sound Manor 360, Ropaži, Latvia (June 2024). Delves into portraying the intimacy and harshness of natural environments. With a mirror as the centre point, the installation invites you to reflect and meditate whilst navigating personal associations within a sonic environment.
+            </p>
+            <div class="ac-links">
+                <a href="https://sofi.bandcamp.com/track/objects-in-mirror-installation-at-soundmanor360" target="_blank" class="ac-link">bandcamp ↗</a>
+            </div>
+        </div>
+
+        <div class="archive-case">
+            <div class="ac-head">
+                <span class="ac-year">2021–24</span>
+                <span class="ac-title">naked eye — album</span>
+            </div>
+            <p class="ac-body">
+                Album of works composed during 2022–2023, self-released. Exploring liminal spaces between perception and reality, shimmering at the edges of consciousness. Blends underwater recordings of Ross seal sirens with synthesised sounds, traumatic sound triggers, and elements inspired by Baltic mythology — offering glimpses into sonic environments both familiar and startlingly alien.
+            </p>
+            <div class="ac-links">
+                <a href="https://sofi.bandcamp.com/album/naked-eye" target="_blank" class="ac-link">bandcamp ↗</a>
+            </div>
+        </div>
+
+        <div class="archive-case">
+            <div class="ac-head">
+                <span class="ac-year">2023</span>
+                <span class="ac-title">Dominant Wavelength 600 nm — live performance</span>
+            </div>
+            <p class="ac-body">
+                Live SuperCollider and modular synthesisers performance. Premiered at COMMUTE #5 festival, Tallinn (April 2023). 600 nm is the dominant wavelength of orange — symbolising the Sacred Chakra, evoking emotional flow and physical reactivity in an experimental meditative sound practice.
+            </p>
+            <div class="ac-links">
+                <a href="https://youtu.be/Bx15dRLitn4" target="_blank" class="ac-link">youtube ↗</a>
+            </div>
+        </div>
+
+        <div class="archive-case">
+            <div class="ac-head">
+                <span class="ac-year">2023</span>
+                <span class="ac-title">Autumn Fairies — duo Flowerpower (w/ Agita Reķe)</span>
+            </div>
+            <p class="ac-body">
+                Live performance at Skaņu Mežs Festival, Latvia (September 2023). Duo project with sound artist Agita Reķe.
+            </p>
+            <div class="ac-links">
+                <a href="https://flowerpower333.bandcamp.com/track/live-at-ska-u-me-s" target="_blank" class="ac-link">bandcamp ↗</a>
+            </div>
+        </div>
+
+        <div class="archive-case">
+            <div class="ac-head">
+                <span class="ac-year">2022</span>
+                <span class="ac-title">Memoria Navis — original computer game soundtrack</span>
+            </div>
+            <p class="ac-body">
+                Original soundtrack for the computer game <em>Memoria Navis</em> (December 2022).
+            </p>
+            <div class="ac-links">
+                <a href="https://youtu.be/-phmJ0v-5dI" target="_blank" class="ac-link">youtube ↗</a>
+                <a href="https://wout-de-bolster.itch.io/memoria-navis" target="_blank" class="ac-link">itch.io ↗</a>
+            </div>
+        </div>
+
+        <div class="archive-case">
+            <div class="ac-head">
+                <span class="ac-year">2021</span>
+                <span class="ac-title">Margery the Medium — duo Flowerpower (w/ Agita Reķe)</span>
+            </div>
+            <p class="ac-body">
+                Collaboration with sound artist Agita Reķe (July 2021).
+            </p>
+            <div class="ac-links">
+                <a href="https://flowerpower333.bandcamp.com/album/margery-the-medium" target="_blank" class="ac-link">bandcamp ↗</a>
+            </div>
+        </div>
+
+        <div class="archive-gap"></div>
+        <span class="archive-label">commissioned</span>
+
+        <div class="archive-case">
+            <div class="ac-head">
+                <span class="ac-year">2026</span>
+                <span class="ac-title">EU Creative Europe — sound design &amp; music</span>
+            </div>
+            <p class="ac-body">
+                Soundbites editing and music composition for the Creative Europe Culture Project
+                Coordinators gathering — <em>When We Create Together, We Build What Remains</em> (June 2026).
+                Included mini-interview audio production and original music.
+            </p>
+            <div class="ac-links">
+                <a href="https://www.eacea.ec.europa.eu/news-events/news/when-we-create-together-we-build-what-remains-creative-europe-culture-project-coordinators-gather-2026-06-15_en" target="_blank" class="ac-link">event page ↗</a>
+            </div>
+        </div>
+
+        <div class="archive-case">
+            <div class="ac-head">
+                <span class="ac-year">2024/25</span>
+                <span class="ac-title">SHAPE+ Radio Network — broadcast jingles</span>
+            </div>
+            <p class="ac-body">
+                Composed a set of jingles for the newly formed SHAPE+ international radio broadcast network,
+                used across partner stations including Cashmere Radio (Berlin). The jingles appear across
+                multiple broadcast series episodes.
+            </p>
+            <div class="ac-links">
+                <a href="https://shapeplus.eu/2024/shape-announces-newly-formed-radio-network/" target="_blank" class="ac-link">about the network ↗</a>
+                <a href="https://cashmereradio.com/episode/shape-broadcast-series-shape-broadcast-9a-elischa-heller/" target="_blank" class="ac-link">cashmere radio — Elischa Heller ↗</a>
+                <a href="https://cashmereradio.com/episode/shape-broadcast-series-ha-kyoon/" target="_blank" class="ac-link">cashmere radio — ha-kyoon ↗</a>
+            </div>
+        </div>
+
+        <div class="archive-case">
+            <div class="ac-head">
+                <span class="ac-year">2023</span>
+                <span class="ac-title">Skin of a Mandarin — original film score</span>
+            </div>
+            <p class="ac-body">
+                Original film score for the short film <em>Skin of a Mandarin</em> (2023), directed by Jaanika Arum.
+                Selected for PÖFF Shorts 2023 (Tallinn Black Nights Film Festival). Full original score composed and designed for this Estonian short film.
+            </p>
+            <div class="ac-links">
+                <a href="https://youtu.be/HWtrWQipKmk" target="_blank" class="ac-link">excerpts ↗</a>
+                <a href="https://shorts.poff.ee/en/film/shorts-live-action-competition-3/" target="_blank" class="ac-link">pöff shorts ↗</a>
+                <a href="https://letterboxd.com/film/skin-of-a-mandarin/" target="_blank" class="ac-link">letterboxd ↗</a>
+            </div>
+        </div>
+
+        <div class="archive-case">
+            <div class="ac-head">
+                <span class="ac-year">2022/23</span>
+                <span class="ac-title">Latvia's Radio 4 — show jingles &amp; sound editing</span>
+            </div>
+            <p class="ac-body">
+                Composed and edited all jingles and audio for two regular shows on Latvia's national
+                Radio 4: <em>Maigais Vakars</em> and <em>Vechernjaja Skazka</em>.
+                Included custom Christmas jingles for the winter 2022/23 season
+                (episodes 21.12.2022 – 19.01.2023).
+            </p>
+            <div class="ac-links">
+                <a href="https://lr4.lsm.lv/lv/lr4/peredachi/maigais-vakars/" target="_blank" class="ac-link">maigais vakars ↗</a>
+                <a href="https://lr4.lsm.lv/lv/lr4/peredachi/vechernjaja-skazka/" target="_blank" class="ac-link">vechernjaja skazka ↗</a>
+                <a href="https://lr4.lsm.lv/lv/raksts/vechernjaja-skazka/yuris-zvirgzdinsh-pervaja-rozhdestvenskaja-elka.-chast-1.a170393/" target="_blank" class="ac-link">christmas episode ↗</a>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -1101,6 +1657,45 @@
             }
         });
     });
+
+    /* ── ABOUT OVERLAY ───────────────────────── */
+    const aboutOverlay = document.getElementById('about-overlay');
+    const aboutTrigger = document.getElementById('about-trigger');
+    const aboutClose   = document.getElementById('about-close');
+
+    function openAbout(e) {
+        if (e) e.preventDefault();
+        aboutOverlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        aboutOverlay.scrollTop = 0;
+    }
+
+    function closeAbout() {
+        aboutOverlay.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    if (aboutTrigger) aboutTrigger.addEventListener('click', openAbout);
+    if (aboutClose)   aboutClose.addEventListener('click', closeAbout);
+
+    aboutOverlay.addEventListener('click', (e) => {
+        if (e.target === aboutOverlay) closeAbout();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && aboutOverlay.classList.contains('open')) closeAbout();
+    });
+
+    /* ── SOUND ARCHIVE TOGGLE ─────────────────── */
+    const archiveTrigger = document.getElementById('archive-trigger');
+    const soundArchive   = document.getElementById('sound-archive');
+
+    if (archiveTrigger && soundArchive) {
+        archiveTrigger.addEventListener('click', () => {
+            const open = soundArchive.classList.toggle('open');
+            archiveTrigger.textContent = open ? '— hide archive —' : '— sound works archive —';
+        });
+    }
 
     /* ── MOBILE FLOATING SCROLL IMAGE ────────── */
     const mobileFloat = document.getElementById('mobile-float');
