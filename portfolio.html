@@ -102,6 +102,15 @@ body::before {
 .gap   { height: 76px; }
 .gap-s { height: 26px; }
 
+.sub {
+    color: var(--dim);
+    letter-spacing: .22em;
+    text-transform: lowercase;
+    font-style: italic;
+    display: block;
+    padding: 34px 0 6px;
+}
+
 .mark {
     color: var(--dim);
     letter-spacing: .28em;
@@ -161,6 +170,23 @@ body::before {
 }
 .w-media.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
 
+/* embedded video */
+.vid {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+    background: #0d0d0d;
+}
+.vid iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+}
+.w-media img.still { display: none; }
+
 .tracks { list-style: none; margin-top: 14px; }
 .tracks li {
     padding: 7px 0;
@@ -217,10 +243,13 @@ ul.list a:hover { color: var(--pink); }
     .cover-img { margin-top: 26pt; max-width: none; max-height: 118mm; width: auto; }
     .gap { height: 0; }
     .yrmark { font-size: 20pt; page-break-after: avoid; }
+    .sub { padding: 12pt 0 3pt; page-break-after: avoid; }
     .work { page-break-inside: avoid; padding: 14pt 0; gap: 16pt; }
     .w-title { font-size: 11.5pt; }
     .w-body { font-size: 9pt; line-height: 1.55; max-width: none; }
     .w-media img { max-height: 78mm; width: auto; max-width: 100%; }
+    .vid { display: none; }
+    .w-media img.still { display: block; }
     .w-media.pair img { max-height: 52mm; }
     ul.list li { padding: 4.5pt 0; page-break-inside: avoid; }
     ul.list li:hover { opacity: 1; }
@@ -233,7 +262,6 @@ ul.list a:hover { color: var(--pink); }
 <nav class="pnav">
     <a href="cv.html">cv</a>
     <a href="portfolio.html" class="here">portfolio</a>
-    <a href="SofiaZaiceva_Portfolio_2026.pdf" download>pdf ↓</a>
     <a href="index.html">site</a>
 </nav>
 
@@ -298,7 +326,8 @@ ul.list a:hover { color: var(--pink); }
         </div>
     </div>
     <div class="w-media">
-        <img src="portfolio/branches-bytes.jpg" alt="Branches &amp; Bytes live">
+        <div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/vb0oe1zzq-g" title="Branches & Bytes — live" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+        <img class="still" src="portfolio/branches-bytes.jpg" alt="Branches &amp; Bytes live">
     </div>
 </div>
 
@@ -313,6 +342,19 @@ ul.list a:hover { color: var(--pink); }
         <div class="w-links"><a href="https://nonagonfestival.se/en/festivalen" target="_blank">nonagonfestival.se ↗</a></div>
     </div>
 </div>
+
+
+<span class="sub">live performances 2026</span>
+<ul class="list">
+    <li><span class="yr">13.11</span><span class="body">TBA — Oulu, Finland</span></li>
+    <li><span class="yr">17.10</span><span class="body"><a href="https://www.progettobao.com/bao-sound-experience/" target="_blank">BAO Sound Experience ↗</a> — Brescia, Italy</span></li>
+    <li><span class="yr">09.10</span><span class="body"><a href="https://www.skanumezs.lv/en/festival2026/sofi/" target="_blank">Skaņu Mežs Festival ↗</a> — Riga, Latvia</span></li>
+    <li><span class="yr">08.10</span><span class="body"><a href="https://musikprotokoll.orf.at/2026/projekt/branches-bytes" target="_blank">ORF musikprotokoll @ Dom im Berg ↗</a> — Graz, Austria — Branches &amp; Bytes, world premiere</span></li>
+    <li><span class="yr">04.10</span><span class="body">DDA @ Laidi Palace — Latvia — concert &amp; artist talk w/ Andreas Trobollowitsch</span></li>
+    <li><span class="yr">24.09</span><span class="body">TBA — Vilnius, Lithuania</span></li>
+    <li><span class="yr">05.09</span><span class="body"><a href="https://www.baltanakts.lv/2026/lv/program/?article_id=328&amp;controller=program&amp;action=index" target="_blank">Baltā nakts ↗</a> — Riga, Latvia</span></li>
+    <li><span class="yr">17.07</span><span class="body"><a href="https://nonagonfestival.se/en/festivalen" target="_blank">Nonagon Festival ↗</a> — Svanö, Sweden — AV live w/ Ľubomír Slovinský</span></li>
+</ul>
 
 <div class="gap"></div>
 <div class="yrmark">2025</div>
@@ -368,7 +410,8 @@ ul.list a:hover { color: var(--pink); }
         <div class="w-links"><a href="https://vimeo.com/1110758346" target="_blank">vimeo ↗</a></div>
     </div>
     <div class="w-media">
-        <img src="portfolio/nonagon-svano.jpg" alt="Nonagon Festival performance in the oil cisterns">
+        <div class="vid"><iframe src="https://player.vimeo.com/video/1110758346" title="Nonagon Festival — audio-visual live" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+        <img class="still" src="portfolio/nonagon-svano.jpg" alt="Nonagon Festival performance in the oil cisterns">
     </div>
 </div>
 
@@ -383,7 +426,8 @@ ul.list a:hover { color: var(--pink); }
         <div class="w-links"><a href="https://youtu.be/0FjNSU0hQgc" target="_blank">video ↗</a></div>
     </div>
     <div class="w-media">
-        <img src="portfolio/swim-zimmt.jpg" alt="SWIM at ZiMMT Leipzig">
+        <div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/0FjNSU0hQgc" title="SWIM — live at ZiMMT Leipzig" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+        <img class="still" src="portfolio/swim-zimmt.jpg" alt="SWIM at ZiMMT Leipzig">
     </div>
 </div>
 
@@ -398,7 +442,8 @@ ul.list a:hover { color: var(--pink); }
         <div class="w-links"><a href="https://vimeo.com/1128668567" target="_blank">vimeo ↗</a></div>
     </div>
     <div class="w-media">
-        <img src="portfolio/musiikkitalo-blackbox.jpg" alt="Musiikkitalo Blackbox performance">
+        <div class="vid"><iframe src="https://player.vimeo.com/video/1128668567" title="Musiikkitalo Blackbox — 48-channel loudspeaker orchestra" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+        <img class="still" src="portfolio/musiikkitalo-blackbox.jpg" alt="Musiikkitalo Blackbox performance">
     </div>
 </div>
 
@@ -418,7 +463,7 @@ ul.list a:hover { color: var(--pink); }
     </div>
 </div>
 
-<div class="work solo">
+<div class="work">
     <div>
         <div class="w-title">Branches &amp; Bytes — duo w/ Andreas Trobollowitsch</div>
         <div class="w-meta">
@@ -428,7 +473,31 @@ ul.list a:hover { color: var(--pink); }
         <p class="w-body">"Branches &amp; Bytes" is a duo project that explores contrasting sonic approaches: digital sound programming meets mechanical, analog friction. Zaiceva shapes sound through code, spatialisation, and algorithmic structures, while Trobollowitsch creates raw, physical textures using branches and rotating wooden discs. Together, they forge a hybrid sonic field where contrasts collide, intertwine, and dissolve into unexpected resonances.</p>
         <div class="w-links"><a href="https://youtu.be/vb0oe1zzq-g" target="_blank">video ↗</a></div>
     </div>
+    <div class="w-media">
+        <img src="portfolio/branches-bytes.jpg" alt="Branches &amp; Bytes — Vilnius">
+    </div>
 </div>
+
+
+<span class="sub">live performances 2025</span>
+<ul class="list">
+    <li><span class="yr">21.11</span><span class="body"><a href="https://www.cityofmediaarts.de/en/events/nan-festival/" target="_blank">NAN Computer Music Festival ↗</a> — Karlsruhe, Germany</span></li>
+    <li><span class="yr">25.10</span><span class="body"><a href="https://www.facebook.com/events/636677222850303" target="_blank">Trať off the rails #5 ↗</a> — Prague, Czech Republic</span></li>
+    <li><span class="yr">22.10</span><span class="body"><a href="https://punctum.cz/event/andy-loebs-orange-milk-sofi-ursula-sereghy-sonitus" target="_blank">Sonitus @ Punctum ↗</a> — Prague, Czech Republic</span></li>
+    <li><span class="yr">21.10</span><span class="body"><a href="https://ra.co/events/2275629" target="_blank">scribble.mp3 × Holy Matrimony ↗</a> — Berlin, Germany</span></li>
+    <li><span class="yr">18.10</span><span class="body"><a href="https://www.dda.lv/events" target="_blank">DDA Ambisonics Weekend @ Vagonu Hall ↗</a> — Riga, Latvia</span></li>
+    <li><span class="yr">09–11.10</span><span class="body"><a href="https://zimmt.net/swim-2025/" target="_blank">SWIM @ ZiMMT ↗</a> — Leipzig, Germany</span></li>
+    <li><span class="yr">15–28.09</span><span class="body"><a href="https://elektronmusikstudion.se/en/guest-composers/guest-composers-2025/sofia-zaiceva/" target="_blank">EMS Studios guest composer ↗</a> — Stockholm, Sweden</span></li>
+    <li><span class="yr">20.09</span><span class="body"><a href="https://www.nyaperspektiv.se/news/?page_id=17" target="_blank">Nya Perspektiv ↗</a> — Västerås, Sweden</span></li>
+    <li><span class="yr">17.08</span><span class="body">Pethaus — Tampere, Finland</span></li>
+    <li><span class="yr">07–20.07</span><span class="body"><a href="https://nonagonfestival.se/en/events/nonagon-residency-showcase" target="_blank">Nonagon Festival residency &amp; concert ↗</a> — Svanö, Sweden</span></li>
+    <li><span class="yr">07.06</span><span class="body"><a href="https://www.uniarts.fi/tapahtumat/masters-degree-concert-sofija-zaiceva/" target="_blank">Musiikkitalo — loudspeaker orchestra ↗</a> — Helsinki, Finland</span></li>
+    <li><span class="yr">23.05–04.06</span><span class="body"><a href="https://meetfactory.cz/en/program/detail/shape-dali-muru-the-polyphonic-swarm-donna-haringwey-sofi-sorbitol-drops-natalie-plevakova-tonota" target="_blank">MeetFactory ↗</a> — Prague, Czech Republic</span></li>
+    <li><span class="yr">17.05</span><span class="body"><a href="https://www.caisa.fi/en/events/event/91615898C92EED0CC83D76B68D0A65DD/Object_Permanence_2025" target="_blank">Object Permanence ↗</a> — Helsinki, Finland</span></li>
+    <li><span class="yr">03.05</span><span class="body"><a href="https://www.madhousehelsinki.fi/en/ohjelmisto/bugbath-questing-questing" target="_blank">Bugbath: Questing ↗</a> — Helsinki, Finland</span></li>
+    <li><span class="yr">25.04</span><span class="body"><a href="https://sound.mplab.lv/en/programme/" target="_blank">Sound Days × Algorave Liepāja ↗</a> — Liepāja, Latvia</span></li>
+    <li><span class="yr">05.04</span><span class="body"><a href="https://pro.tmw.ee/speakers/sofia-zaiceva" target="_blank">TMW Conference ↗</a> — Tallinn, Estonia</span></li>
+</ul>
 
 <div class="gap"></div>
 <div class="yrmark">2024</div>
@@ -512,6 +581,22 @@ ul.list a:hover { color: var(--pink); }
     </div>
 </div>
 
+
+<span class="sub">live performances 2024</span>
+<ul class="list">
+    <li><span class="yr">02.12</span><span class="body"><a href="https://madameclaude.de/event/outro-sofi-dj-offcourse/" target="_blank">Madame Claude × Renatura ↗</a> — Berlin, Germany</span></li>
+    <li><span class="yr">28.11</span><span class="body"><a href="https://ra.co/events/2044938" target="_blank">Algomystica × Riforma ↗</a> — Berlin, Germany</span></li>
+    <li><span class="yr">18.10</span><span class="body"><a href="https://ule-heli.ee" target="_blank">Üle Heli Festival ↗</a> — Tallinn, Estonia</span></li>
+    <li><span class="yr">17.10</span><span class="body">Rahina — Helsinki, Finland</span></li>
+    <li><span class="yr">11.10</span><span class="body"><a href="https://www.altparty.org" target="_blank">Alternative Party ↗</a> — Helsinki, Finland</span></li>
+    <li><span class="yr">03.10</span><span class="body"><a href="https://musikprotokoll.orf.at/en/2024/project/periphery-oneness" target="_blank">ORF musikprotokoll Festival ↗</a> — Graz, Austria — live ambisonics</span></li>
+    <li><span class="yr">28.08</span><span class="body"><a href="https://shapeplatform.eu/events/event/shape-prague-artist-meetup-event/" target="_blank">SHAPE+ meetup event ↗</a> — Prague, Czech Republic</span></li>
+    <li><span class="yr">28.06</span><span class="body"><a href="https://tartu2024.ee/programm/valga-glow/?event=83614" target="_blank">Valga Glow Festival ↗</a> — Valga, Estonia — dj</span></li>
+    <li><span class="yr">11.05</span><span class="body"><a href="https://elektron.art/projects/ruum/kristall" target="_blank">Kristallofoonia Vol 4 @ Elektron.art ↗</a> — Tallinn, Estonia — live ambisonics</span></li>
+    <li><span class="yr">05.04</span><span class="body"><a href="https://tmw.ee/events/ule-heli-kristallofonia" target="_blank">Tallinn Music Week @ Üle Heli stage ↗</a> — Tallinn, Estonia — live ambisonics</span></li>
+    <li><span class="yr">21.01</span><span class="body"><a href="https://ra.co/events/1826020" target="_blank">Morevi &amp; Coppi @ About Blank ↗</a> — Berlin, Germany — dj</span></li>
+</ul>
+
 <div class="gap"></div>
 <div class="yrmark">2023</div>
 
@@ -525,9 +610,10 @@ ul.list a:hover { color: var(--pink); }
         <p class="w-body">A performance with the SuperCollider programming platform and synthesisers. The "dominant wavelength 600 nm" symbolises the orange colour and the increase of the consciousness of the Sacred Chakra. Its aim is to allow our emotions to flow freely and restore balance by evoking their expression and physical reactivity in an experimental meditative sound practice.</p>
         <div class="w-links"><a href="https://youtu.be/Bx15dRLitn4" target="_blank">video ↗</a></div>
     </div>
-    <div class="w-media pair">
-        <img src="portfolio/dominant-wavelength-1.jpg" alt="Dominant Wavelength 600 nm performance">
-        <img src="portfolio/dominant-wavelength-2.jpg" alt="Dominant Wavelength 600 nm — modular setup">
+    <div class="w-media">
+        <div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/Bx15dRLitn4" title="Dominant Wavelength 600 nm" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+        <img class="still" src="portfolio/dominant-wavelength-1.jpg" alt="Dominant Wavelength 600 nm performance">
+        <img class="still" src="portfolio/dominant-wavelength-2.jpg" alt="Dominant Wavelength 600 nm — modular setup">
     </div>
 </div>
 
@@ -536,6 +622,18 @@ ul.list a:hover { color: var(--pink); }
     <li><span class="yr">11.2023</span><span class="body"><span class="t"><a href="https://youtu.be/HWtrWQipKmk" target="_blank">Skin of a Mandarin ↗</a></span><span class="d">original film score for short film, dir. Jaanika Arum — international premiere at PÖFF Shorts, Tallinn</span></span></li>
     <li><span class="yr">11.2023</span><span class="body"><span class="t"><a href="https://solafestival.fi/Sofia-Zaiceva" target="_blank">Objects in Mirror Are Closer Then They Appear ↗</a></span><span class="d">live performance at Sola Festival, Helsinki</span></span></li>
     <li><span class="yr">09.2023</span><span class="body"><span class="t"><a href="https://flowerpower333.bandcamp.com/track/live-at-ska-u-me-s" target="_blank">Autumn Fairies — duo Flowerpower ↗</a></span><span class="d">live at Skaņu Mežs Festival, Latvia — with sound artist Agita Reķe</span></span></li>
+</ul>
+
+
+<span class="sub">live performances 2023</span>
+<ul class="list">
+    <li><span class="yr">08.12</span><span class="body"><a href="https://www.uniarts.fi/tapahtumat/nyky-ensemble-morphing-musicianship/" target="_blank">NYKY Ensemble: Morphing Musicianship ↗</a> — Helsinki, Finland</span></li>
+    <li><span class="yr">18.11</span><span class="body">S-27 Spinnitre @ Muovitehdas — Tampere, Finland — dj</span></li>
+    <li><span class="yr">17.11</span><span class="body">Sonic Impact @ Hall Techno Club — Tallinn, Estonia — dj</span></li>
+    <li><span class="yr">03.11</span><span class="body"><a href="https://solafestival.fi/Sofia-Zaiceva" target="_blank">Sola Festival @ WHS Teatteri Union ↗</a> — Helsinki, Finland</span></li>
+    <li><span class="yr">20.10</span><span class="body">Üle Heli Festival — Tallinn, Estonia — fixed piece</span></li>
+    <li><span class="yr">06.10</span><span class="body"><a href="https://flowerpower333.bandcamp.com/track/live-at-ska-u-me-s" target="_blank">Skaņu Mežs Festival ↗</a> — Riga, Latvia — duo Flowerpower</span></li>
+    <li><span class="yr">16.04</span><span class="body">COMMUTE #5 @ EAMT blackbox — Tallinn, Estonia</span></li>
 </ul>
 
 <div class="gap"></div>
