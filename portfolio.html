@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>sofia zaiceva — portfolio</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --bg:   #EDEAE0;
+    --ink:  #111;
+    --dim:  #8A8880;
+    --pink: #FF1493;
+    --line: rgba(0,0,0,.09);
+    --xs:   12px;
+    --f:    'Bricolage Grotesque', system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: var(--f);
+    font-size: var(--xs);
+    font-weight: 400;
+    letter-spacing: .04em;
+    background: var(--bg);
+    color: var(--ink);
+    overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+
+body::before {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: .03;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+}
+
+.pnav {
+    position: fixed;
+    top: 26px; right: 32px;
+    z-index: 100;
+    display: flex;
+    gap: 16px;
+    font-size: var(--xs);
+    letter-spacing: .2em;
+    text-transform: lowercase;
+    mix-blend-mode: multiply;
+}
+.pnav a { color: var(--dim); transition: color .14s; }
+.pnav a:hover { color: var(--ink); }
+.pnav a.here { color: var(--pink); }
+
+.wrap { padding: 0 32px 120px; max-width: 1180px; }
+.head { padding: 108px 0 0; }
+
+.pname {
+    font-size: clamp(46px, 10vw, 128px);
+    font-weight: 800;
+    letter-spacing: -.052em;
+    line-height: .92;
+    text-transform: lowercase;
+    mix-blend-mode: multiply;
+}
+
+.ptag {
+    margin-top: 14px;
+    color: var(--dim);
+    letter-spacing: .22em;
+    text-transform: lowercase;
+    font-style: italic;
+}
+
+.bio {
+    font-size: 13px;
+    line-height: 1.85;
+    max-width: 620px;
+    margin-top: 40px;
+    padding-top: 26px;
+    border-top: .5px solid var(--line);
+}
+
+.cover-img {
+    display: block;
+    width: 100%;
+    max-width: 900px;
+    height: auto;
+    margin-top: 44px;
+    filter: saturate(.96);
+}
+
+.gap   { height: 76px; }
+.gap-s { height: 26px; }
+
+.mark {
+    color: var(--dim);
+    letter-spacing: .28em;
+    text-transform: lowercase;
+}
+
+.yrmark {
+    font-size: clamp(30px, 6vw, 64px);
+    font-weight: 800;
+    letter-spacing: -.045em;
+    line-height: 1;
+    color: var(--ink);
+    mix-blend-mode: multiply;
+    padding-top: 12px;
+    border-top: .5px solid var(--line);
+}
+
+/* ── work case ────────────────────────────── */
+.work {
+    padding: 44px 0;
+    border-bottom: .5px solid var(--line);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 40px;
+    align-items: start;
+}
+.work.solo { grid-template-columns: minmax(0, 1fr); max-width: 680px; }
+
+.w-title {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -.012em;
+    line-height: 1.25;
+    margin-bottom: 10px;
+}
+.w-meta { color: var(--dim); line-height: 1.75; margin-bottom: 14px; }
+.w-meta span { display: block; }
+
+.w-body { font-size: 12.5px; line-height: 1.8; max-width: 560px; }
+.w-body + .w-body { margin-top: 12px; }
+
+.w-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 16px; }
+.w-links a {
+    letter-spacing: .14em;
+    color: var(--dim);
+    border-bottom: .5px solid var(--line);
+    transition: color .14s;
+}
+.w-links a:hover { color: var(--pink); }
+
+.w-media { display: flex; flex-direction: column; gap: 12px; }
+.w-media img {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: saturate(.96);
+}
+.w-media.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
+
+.tracks { list-style: none; margin-top: 14px; }
+.tracks li {
+    padding: 7px 0;
+    border-bottom: .5px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    color: var(--dim);
+}
+.tracks li:first-child { border-top: .5px solid var(--line); }
+
+/* compact list for lighter entries */
+ul.list { list-style: none; }
+ul.list li {
+    border-bottom: .5px solid var(--line);
+    padding: 13px 0;
+    line-height: 1.6;
+    display: flex;
+    gap: 18px;
+    align-items: baseline;
+    transition: opacity .14s;
+}
+ul.list li:first-child { border-top: .5px solid var(--line); }
+ul.list li:hover { opacity: .45; }
+.yr { color: var(--dim); font-style: italic; min-width: 82px; flex-shrink: 0; }
+.body { flex: 1; }
+.t { display: block; }
+.d { display: block; color: var(--dim); margin-top: 3px; }
+ul.list a { border-bottom: .5px solid var(--line); }
+ul.list a:hover { color: var(--pink); }
+
+@media (max-width: 860px) {
+    .work { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+}
+@media (max-width: 720px) {
+    .wrap { padding: 0 20px 80px; }
+    .pnav { top: 18px; right: 20px; gap: 12px; }
+    .head { padding: 88px 0 0; }
+    ul.list li { flex-wrap: wrap; gap: 4px 14px; }
+    .yr { min-width: 68px; }
+}
+
+@media print {
+    @page { size: A4; margin: 14mm 13mm; }
+    :root { --dim: #55534d; --line: rgba(0,0,0,.22); }
+    body { background: #fff; color: #000; font-size: 9.2pt; letter-spacing: .01em; }
+    body::before { display: none; }
+    .pnav { display: none; }
+    .wrap { padding: 0; max-width: none; }
+    .head { padding: 0; page-break-after: always; }
+    .pname { font-size: 46pt; }
+    .ptag { font-size: 11pt; margin-top: 18pt; }
+    .bio { font-size: 10pt; line-height: 1.7; max-width: none; margin-top: 26pt; padding-top: 20pt; }
+    .cover-img { margin-top: 26pt; max-width: none; max-height: 118mm; width: auto; }
+    .gap { height: 0; }
+    .yrmark { font-size: 20pt; page-break-after: avoid; }
+    .work { page-break-inside: avoid; padding: 14pt 0; gap: 16pt; }
+    .w-title { font-size: 11.5pt; }
+    .w-body { font-size: 9pt; line-height: 1.55; max-width: none; }
+    .w-media img { max-height: 78mm; width: auto; max-width: 100%; }
+    .w-media.pair img { max-height: 52mm; }
+    ul.list li { padding: 4.5pt 0; page-break-inside: avoid; }
+    ul.list li:hover { opacity: 1; }
+    a { border: none !important; }
+}
+</style>
+</head>
+<body>
+
+<nav class="pnav">
+    <a href="cv.html">cv</a>
+    <a href="portfolio.html" class="here">portfolio</a>
+    <a href="SofiaZaiceva_Portfolio_2026.pdf" download>pdf ↓</a>
+    <a href="index.html">site</a>
+</nav>
+
+<div class="wrap">
+
+<header class="head">
+    <h1 class="pname">portfolio</h1>
+    <div class="ptag">sofia zaiceva — sound artist &amp; performer</div>
+    <p class="bio">
+        Selected works 2021–2026 — albums, commissioned compositions, sound installations and live audio-visual performances. Practice moves between creative coding in SuperCollider, spatial and ambisonic sound, modular synthesis and improvisation.
+    </p>
+    <img class="cover-img" src="portfolio/sofi-portrait.jpg" alt="sofi">
+</header>
+
+<div class="gap"></div>
+<div class="yrmark">2026</div>
+
+<div class="work">
+    <div>
+        <div class="w-title">glitter ice — on <em>Synthetic Water Music</em></div>
+        <div class="w-meta">
+            <span>September 2026</span>
+            <span>compilation on label mappa</span>
+            <span>format: digital</span>
+        </div>
+        <p class="w-body">A track contributed to mappa's <em>Synthetic Water Music</em>, a 51-track compilation gathering artists around the sound of water in synthetic form.</p>
+        <div class="w-links"><a href="https://mappa.bandcamp.com/album/synthetic-water-music" target="_blank">bandcamp ↗</a></div>
+    </div>
+    <div class="w-media">
+        <img src="https://f4.bcbits.com/img/a2000102701_5.jpg" alt="Synthetic Water Music cover" onerror="this.style.display='none'">
+    </div>
+</div>
+
+<div class="work">
+    <div>
+        <div class="w-title">..pearly.. — on <em>Superpang: World Tour Vol.1</em></div>
+        <div class="w-meta">
+            <span>2026</span>
+            <span>compilation on label Superpang</span>
+            <span>format: digital</span>
+        </div>
+        <p class="w-body">A track on the first volume of Superpang's World Tour compilation, following the <em>hypergloss</em> album released on the same label in 2025.</p>
+        <div class="w-links"><a href="https://superpang.bandcamp.com/album/superpang-world-tour-vol-1" target="_blank">bandcamp ↗</a></div>
+    </div>
+    <div class="w-media">
+        <img src="https://f4.bcbits.com/img/a1420838306_5.jpg" alt="Superpang World Tour Vol.1 cover" onerror="this.style.display='none'">
+    </div>
+</div>
+
+<div class="work">
+    <div>
+        <div class="w-title">Branches &amp; Bytes — world premiere at ORF musikprotokoll</div>
+        <div class="w-meta">
+            <span>8 October 2026 — Dom im Berg, Graz, Austria</span>
+            <span>duo w/ Andreas Trobollowitsch</span>
+            <span>commissioned by ORF musikprotokoll</span>
+        </div>
+        <p class="w-body">A commission developed from the Branches &amp; Bytes duo — digital sound programming meeting mechanical-analogue friction. Preceded by a joint residency at DDA, Laidi Palace.</p>
+        <div class="w-links">
+            <a href="https://musikprotokoll.orf.at/2026/projekt/branches-bytes" target="_blank">musikprotokoll ↗</a>
+            <a href="https://youtu.be/vb0oe1zzq-g" target="_blank">video ↗</a>
+        </div>
+    </div>
+    <div class="w-media">
+        <img src="portfolio/branches-bytes.jpg" alt="Branches &amp; Bytes live">
+    </div>
+</div>
+
+<div class="work solo">
+    <div>
+        <div class="w-title">Live audio-visual performance at Nonagon Festival</div>
+        <div class="w-meta">
+            <span>17 July 2026 — Svanö, Sweden</span>
+            <span>in collaboration with Ľubomír Slovinský</span>
+        </div>
+        <p class="w-body">A return to the decommissioned oil cisterns on Svanö in Ådalen, following the 2025 residency and performance in the same structures.</p>
+        <div class="w-links"><a href="https://nonagonfestival.se/en/festivalen" target="_blank">nonagonfestival.se ↗</a></div>
+    </div>
+</div>
+
+<div class="gap"></div>
+<div class="yrmark">2025</div>
+
+<div class="work">
+    <div>
+        <div class="w-title">SHE HAS CANDY — duo CATPURSE</div>
+        <div class="w-meta">
+            <span>November 2025</span>
+            <span>album on label SØVN Records</span>
+            <span>format: digital + cassette</span>
+            <span>artwork by Hulda Ragnhildur Hjálmarsdóttir</span>
+        </div>
+        <p class="w-body">The album's theme revives around a feminine journey through a single day at sea, where each encounter materialises into an auditory body. Pop culture echoes intertwine with collective human murmurs, where physical sensation of taste, smell and touch dissolves into deformed resonances. This album isn't just documenting a journey — it's about the strange disconnection of being an observer in a fabricated paradise.</p>
+        <p class="w-body">Catpurse is a collaborative project of experimental musicians Hulda Ragnhildur Hjálmarsdóttir and Sofia Zaiceva, primarily exploring creative coding techniques via SuperCollider.</p>
+        <div class="w-links"><a href="https://sovnrecords.bandcamp.com/album/she-has-candy" target="_blank">bandcamp ↗</a></div>
+    </div>
+    <div class="w-media">
+        <img src="media/catpurse.jpg" alt="SHE HAS CANDY artwork">
+    </div>
+</div>
+
+<div class="work">
+    <div>
+        <div class="w-title">hypergloss</div>
+        <div class="w-meta">
+            <span>July 2025</span>
+            <span>album on label Superpang</span>
+            <span>format: digital</span>
+            <span>artwork by Linus Åberg</span>
+        </div>
+        <p class="w-body">Hypergloss was made in SuperCollider. Cello on track “manic memos” by Lumi Mannermaa.</p>
+        <p class="w-body">Hypergloss is a feeling that keeps coming back again and again and again. Hypergloss is <em>poetry of frustration</em>.</p>
+        <div class="w-links">
+            <a href="https://sofi.bandcamp.com/album/hypergloss" target="_blank">bandcamp ↗</a>
+            <a href="https://on.soundcloud.com/aovxuU3TGq" target="_blank">listen ↗</a>
+        </div>
+    </div>
+    <div class="w-media">
+        <img src="media/Hypergloss_art.jpg" alt="hypergloss artwork">
+    </div>
+</div>
+
+<div class="work">
+    <div>
+        <div class="w-title">Live audio-visual performance at Nonagon Festival</div>
+        <div class="w-meta">
+            <span>July 2025 — Svanö, Sweden</span>
+            <span>in collaboration with Ľubomír Slovinský</span>
+        </div>
+        <p class="w-body">This immersive audio-visual performance took place within the decommissioned oil cisterns on Svanö in Ådalen, utilizing these monumental cylindrical structures as both venue and instrument, with reverberation times extending up to 25 seconds.</p>
+        <p class="w-body">The conceptual inspiration emerged from the site's archaeological traces — remnants of historical landmarks, coastal geography, and industrial infrastructure. Sonically it utilises real-time feedback processing and resynthesis techniques implemented in SuperCollider. The work employs a tightly integrated audio-visual system where sound generation directly controls lighting and visual elements via OSC protocol.</p>
+        <div class="w-links"><a href="https://vimeo.com/1110758346" target="_blank">vimeo ↗</a></div>
+    </div>
+    <div class="w-media">
+        <img src="portfolio/nonagon-svano.jpg" alt="Nonagon Festival performance in the oil cisterns">
+    </div>
+</div>
+
+<div class="work">
+    <div>
+        <div class="w-title">SWIM — live at ZiMMT</div>
+        <div class="w-meta">
+            <span>October 2025 — Leipzig, Germany</span>
+            <span>Center for Immersive Media Art, Music and Technology</span>
+        </div>
+        <p class="w-body">This performance took place during SWIM (spatial works and immersive music) concert series at Zit in Leipzig. Live SuperCollider and laser light control in a 26-channel ambisonics setup.</p>
+        <div class="w-links"><a href="https://youtu.be/0FjNSU0hQgc" target="_blank">video ↗</a></div>
+    </div>
+    <div class="w-media">
+        <img src="portfolio/swim-zimmt.jpg" alt="SWIM at ZiMMT Leipzig">
+    </div>
+</div>
+
+<div class="work">
+    <div>
+        <div class="w-title">objects in mirror are closer then they appear — Musiikkitalo Blackbox</div>
+        <div class="w-meta">
+            <span>June 2025 — Helsinki, Finland</span>
+            <span>48-channel loudspeaker orchestra</span>
+        </div>
+        <p class="w-body">Performance with creative audio coding and modular synthesisers in a multichannel setup. Live SuperCollider in a 48-channel loudspeaker orchestra.</p>
+        <div class="w-links"><a href="https://vimeo.com/1128668567" target="_blank">vimeo ↗</a></div>
+    </div>
+    <div class="w-media">
+        <img src="portfolio/musiikkitalo-blackbox.jpg" alt="Musiikkitalo Blackbox performance">
+    </div>
+</div>
+
+<div class="work">
+    <div>
+        <div class="w-title">Creative residency at MeetFactory</div>
+        <div class="w-meta">
+            <span>June 2025 — Prague, Czech Republic</span>
+            <span>with Sorbitol Drops and Natálie Pleváková</span>
+            <span>SHAPE+ residency</span>
+        </div>
+        <p class="w-body">The experimental piece is a collaboration with the artists Sorbitol Drops and Natálie Pleváková, recorded during an artist residency live concert at the venue. With the performance, the trio aimed to question “how contemplative practices become commodified experiences to be consumed efficiently rather than embodied processes to be lived fully.”</p>
+        <div class="w-links"><a href="https://soundcloud.com/radiofantasia" target="_blank">soundcloud ↗</a></div>
+    </div>
+    <div class="w-media">
+        <img src="portfolio/meetfactory-residency.jpg" alt="MeetFactory residency">
+    </div>
+</div>
+
+<div class="work solo">
+    <div>
+        <div class="w-title">Branches &amp; Bytes — duo w/ Andreas Trobollowitsch</div>
+        <div class="w-meta">
+            <span>2025 — ongoing</span>
+            <span>supported by State Culture Capital Foundation of Latvia</span>
+        </div>
+        <p class="w-body">"Branches &amp; Bytes" is a duo project that explores contrasting sonic approaches: digital sound programming meets mechanical, analog friction. Zaiceva shapes sound through code, spatialisation, and algorithmic structures, while Trobollowitsch creates raw, physical textures using branches and rotating wooden discs. Together, they forge a hybrid sonic field where contrasts collide, intertwine, and dissolve into unexpected resonances.</p>
+        <div class="w-links"><a href="https://youtu.be/vb0oe1zzq-g" target="_blank">video ↗</a></div>
+    </div>
+</div>
+
+<div class="gap"></div>
+<div class="yrmark">2024</div>
+
+<div class="work">
+    <div>
+        <div class="w-title">aze</div>
+        <div class="w-meta">
+            <span>November 2024</span>
+            <span>album on label Riforma</span>
+            <span>format: digital + limited edition of 50 cassettes</span>
+        </div>
+        <p class="w-body">This album serves as a testament to the multifaceted state of AZE — an abstract domain evoking diverse responses and states of mindfulness. AZE mirrors the intimate narrative and collection of experiences of living between Tallinn, Riga, and Helsinki, where the album was recorded. Sonically, it amplifies the smallest details through granular synthesis and code algorithms, or gets lost in feedback networks of muddler synthesisers and the crackles of vinyl samples. Traversing between improvisation and fixed media, AZE embraces duality and uncertainty through its blend of synthetic and analog origins.</p>
+        <div class="w-links"><a href="https://riforma.bandcamp.com/album/aze" target="_blank">bandcamp ↗</a></div>
+    </div>
+    <div class="w-media">
+        <img src="media/artwork.jpg" alt="aze artwork">
+    </div>
+</div>
+
+<div class="work">
+    <div>
+        <div class="w-title">objects in mirror</div>
+        <div class="w-meta">
+            <span>June 2024 — Ropaži, Latvia</span>
+            <span>sound installation, presented at Sound Manor 360</span>
+        </div>
+        <p class="w-body">Delves into portraying intimacy and harshness of natural environments. With a mirror as a centre point, the installation invites you to reflect and meditate, whilst navigating personal associations within a sonic environment.</p>
+        <div class="w-links"><a href="https://sofi.bandcamp.com/track/objects-in-mirror-installation-at-soundmanor360" target="_blank">bandcamp ↗</a></div>
+    </div>
+    <div class="w-media pair">
+        <img src="portfolio/objects-in-mirror-1.jpg" alt="objects in mirror — speaker in grass">
+        <img src="portfolio/objects-in-mirror-2.jpg" alt="objects in mirror — mirror installation">
+    </div>
+</div>
+
+<div class="work solo">
+    <div>
+        <div class="w-title">periphery of oneness</div>
+        <div class="w-meta">
+            <span>October 2024 — ORF musikprotokoll, Graz, Austria</span>
+            <span>commissioned live ambisonics composition</span>
+        </div>
+        <p class="w-body">Inspired by the centuries-old Japanese art form of 'kintsugi', this piece offers a transformative perspective on experiencing moments of rupture, imperfection and the ability to rebuild and reconstruct. The unpredictable nature of the cross-feedback strands fosters a dialogue between the performer, the code via SuperCollider and the space, resulting in novel sonic, bodily and kinetic experiences.</p>
+        <div class="w-links"><a href="https://musikprotokoll.orf.at/en/2024/project/periphery-oneness" target="_blank">musikprotokoll ↗</a></div>
+    </div>
+</div>
+
+<div class="work">
+    <div>
+        <div class="w-title">naked eye</div>
+        <div class="w-meta">
+            <span>2021–2024</span>
+            <span>album of works, presented during various concerts</span>
+        </div>
+        <p class="w-body">Collection of pieces composed on a path of exploring liminal spaces between perception and reality, shimmering at the edges of consciousness. "naked eye" blends underwater recordings of Ross seal sirens with synthesised sounds, traumatic sound triggers, and elements inspired by Baltic mythology, offering glimpses into sonic environments both familiar and startlingly alien.</p>
+        <ul class="tracks">
+            <li><span>1. fight or flight response</span><span>06:32</span></li>
+            <li><span>2. naked eye</span><span>06:03</span></li>
+            <li><span>3. natrix</span><span>06:40</span></li>
+            <li><span>4. place, where i look for myself</span><span>07:55</span></li>
+        </ul>
+        <div class="w-links"><a href="https://sofi.bandcamp.com/album/naked-eye" target="_blank">bandcamp ↗</a></div>
+    </div>
+    <div class="w-media">
+        <img src="media/nakedeye.png" alt="naked eye artwork">
+    </div>
+</div>
+
+<div class="work">
+    <div>
+        <div class="w-title">powerlines — on <em>re:natura #04 — Æther</em></div>
+        <div class="w-meta">
+            <span>September 2024</span>
+            <span>composition for compilation release</span>
+        </div>
+        <div class="w-links"><a href="https://renatura.bandcamp.com/album/re-natura-04-ther" target="_blank">bandcamp ↗</a></div>
+    </div>
+    <div class="w-media">
+        <img src="media/aethercover.png" alt="re:natura #04 Æther cover">
+    </div>
+</div>
+
+<div class="gap"></div>
+<div class="yrmark">2023</div>
+
+<div class="work">
+    <div>
+        <div class="w-title">Dominant Wavelength 600 nm</div>
+        <div class="w-meta">
+            <span>April 2023 — premiered at COMMUTE #5 festival, Tallinn</span>
+            <span>creative coding (SuperCollider) and modular synthesisers, live</span>
+        </div>
+        <p class="w-body">A performance with the SuperCollider programming platform and synthesisers. The "dominant wavelength 600 nm" symbolises the orange colour and the increase of the consciousness of the Sacred Chakra. Its aim is to allow our emotions to flow freely and restore balance by evoking their expression and physical reactivity in an experimental meditative sound practice.</p>
+        <div class="w-links"><a href="https://youtu.be/Bx15dRLitn4" target="_blank">video ↗</a></div>
+    </div>
+    <div class="w-media pair">
+        <img src="portfolio/dominant-wavelength-1.jpg" alt="Dominant Wavelength 600 nm performance">
+        <img src="portfolio/dominant-wavelength-2.jpg" alt="Dominant Wavelength 600 nm — modular setup">
+    </div>
+</div>
+
+<div class="gap-s"></div>
+<ul class="list">
+    <li><span class="yr">11.2023</span><span class="body"><span class="t"><a href="https://youtu.be/HWtrWQipKmk" target="_blank">Skin of a Mandarin ↗</a></span><span class="d">original film score for short film, dir. Jaanika Arum — international premiere at PÖFF Shorts, Tallinn</span></span></li>
+    <li><span class="yr">11.2023</span><span class="body"><span class="t"><a href="https://solafestival.fi/Sofia-Zaiceva" target="_blank">Objects in Mirror Are Closer Then They Appear ↗</a></span><span class="d">live performance at Sola Festival, Helsinki</span></span></li>
+    <li><span class="yr">09.2023</span><span class="body"><span class="t"><a href="https://flowerpower333.bandcamp.com/track/live-at-ska-u-me-s" target="_blank">Autumn Fairies — duo Flowerpower ↗</a></span><span class="d">live at Skaņu Mežs Festival, Latvia — with sound artist Agita Reķe</span></span></li>
+</ul>
+
+<div class="gap"></div>
+<div class="yrmark">2022</div>
+<div class="gap-s"></div>
+<ul class="list">
+    <li><span class="yr">12.2022</span><span class="body"><span class="t"><a href="https://youtu.be/-phmJ0v-5dI" target="_blank">Memoria Navis ↗</a></span><span class="d">original soundtrack for computer game — <a href="https://wout-de-bolster.itch.io/memoria-navis" target="_blank">download ↗</a></span></span></li>
+    <li><span class="yr">12.2022</span><span class="body"><span class="t"><a href="https://youtu.be/tFpiDowrP0k" target="_blank">Place, Where I Look for Myself ↗</a></span><span class="d">created for the <a href="https://citiesandmemory.com/polar-sounds/" target="_blank">Polar Sounds project ↗</a> — underwater recordings with synthesised sound</span></span></li>
+    <li><span class="yr">06.2022</span><span class="body"><span class="t"><a href="https://youtu.be/TRbW2KfuTkk" target="_blank">Naked Eye ↗</a></span><span class="d">3D sound composition — performed at ENVELOPE Festival and Conference, Denmark</span></span></li>
+    <li><span class="yr">05.2022</span><span class="body"><span class="t"><a href="https://youtu.be/wun8AF6uxh0" target="_blank">NATRIX ↗</a></span><span class="d">electronic composition based on a Latvian folk fairytale — Helsinki Music Centre blackbox</span></span></li>
+    <li><span class="yr">05.2022</span><span class="body"><span class="t"><a href="https://youtu.be/t_KLg-rAdLI" target="_blank">Natural Domain ↗</a></span><span class="d">live SuperCollider and flute processing — Estonian Academy of Music and Theatre</span></span></li>
+</ul>
+
+<div class="gap"></div>
+<div class="yrmark">2021</div>
+<div class="gap-s"></div>
+<ul class="list">
+    <li><span class="yr">11.2021</span><span class="body"><span class="t"><a href="https://youtu.be/16vA8MLqlSQ" target="_blank">I Could Feel the Mirage ↗</a></span><span class="d">improvisational performance for organ and electronics</span></span></li>
+    <li><span class="yr">10.2021</span><span class="body"><span class="t"><a href="https://youtu.be/46veO2sh1_M" target="_blank">Musical Chairs ↗</a></span><span class="d">performance piece for 6 narrators, viola, clarinet and live electronics</span></span></li>
+    <li><span class="yr">07.2021</span><span class="body"><span class="t"><a href="https://flowerpower333.bandcamp.com/album/margery-the-medium" target="_blank">Margery the Medium — duo Flowerpower ↗</a></span><span class="d">album, collaboration with Agita Reķe</span></span></li>
+    <li><span class="yr">03.2021</span><span class="body"><span class="t"><a href="https://youtu.be/EyiGSeb7veU" target="_blank">The Lady Vanishes ↗</a></span><span class="d">electronic audiovisual piece with field recordings from Iceland</span></span></li>
+</ul>
+
+</div>
+</body>
+</html>
