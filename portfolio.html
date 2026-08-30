@@ -187,6 +187,21 @@ body::before {
 }
 .w-media img.still { display: none; }
 
+/* bandcamp player — art scales with width, controls add a fixed strip */
+.bc {
+    position: relative;
+    width: 100%;
+    padding-top: calc(100% + 122px);
+}
+.bc iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+}
+
 .tracks { list-style: none; margin-top: 14px; }
 .tracks li {
     padding: 7px 0;
@@ -248,7 +263,7 @@ ul.list a:hover { color: var(--pink); }
     .w-title { font-size: 11.5pt; }
     .w-body { font-size: 9pt; line-height: 1.55; max-width: none; }
     .w-media img { max-height: 78mm; width: auto; max-width: 100%; }
-    .vid { display: none; }
+    .vid, .bc { display: none; }
     .w-media img.still { display: block; }
     .w-media.pair img { max-height: 52mm; }
     ul.list li { padding: 4.5pt 0; page-break-inside: avoid; }
@@ -262,6 +277,7 @@ ul.list a:hover { color: var(--pink); }
 <nav class="pnav">
     <a href="cv.html">cv</a>
     <a href="portfolio.html" class="here">portfolio</a>
+    <a href="#" onclick="window.print();return false;">pdf</a>
     <a href="index.html">site</a>
 </nav>
 
@@ -273,7 +289,6 @@ ul.list a:hover { color: var(--pink); }
     <p class="bio">
         Selected works 2021–2026 — albums, commissioned compositions, sound installations and live audio-visual performances. Practice moves between creative coding in SuperCollider, spatial and ambisonic sound, modular synthesis and improvisation.
     </p>
-    <img class="cover-img" src="portfolio/sofi-portrait.jpg" alt="sofi">
 </header>
 
 <div class="gap"></div>
@@ -291,7 +306,8 @@ ul.list a:hover { color: var(--pink); }
         <div class="w-links"><a href="https://mappa.bandcamp.com/album/synthetic-water-music" target="_blank">bandcamp ↗</a></div>
     </div>
     <div class="w-media">
-        <img src="https://f4.bcbits.com/img/a2000102701_5.jpg" alt="Synthetic Water Music cover" onerror="this.style.display='none'">
+        <div class="bc"><iframe src="https://bandcamp.com/EmbeddedPlayer/album=1878880625/size=large/bgcol=ffffff/linkcol=ff1493/artwork=big/tracklist=false/transparent=true/t=30/" title="Synthetic Water Music on Bandcamp" loading="lazy" seamless><a href="https://mappa.bandcamp.com/album/synthetic-water-music">Synthetic Water Music</a></iframe></div>
+        <img class="still" src="https://f4.bcbits.com/img/a2000102701_5.jpg" alt="Synthetic Water Music cover" onerror="this.style.display='none'">
     </div>
 </div>
 
@@ -307,7 +323,8 @@ ul.list a:hover { color: var(--pink); }
         <div class="w-links"><a href="https://superpang.bandcamp.com/album/superpang-world-tour-vol-1" target="_blank">bandcamp ↗</a></div>
     </div>
     <div class="w-media">
-        <img src="https://f4.bcbits.com/img/a1420838306_5.jpg" alt="Superpang World Tour Vol.1 cover" onerror="this.style.display='none'">
+        <div class="bc"><iframe src="https://bandcamp.com/EmbeddedPlayer/album=314015690/size=large/bgcol=ffffff/linkcol=ff1493/artwork=big/tracklist=false/transparent=true/t=18/" title="Superpang: World Tour Vol.1 on Bandcamp" loading="lazy" seamless><a href="https://superpang.bandcamp.com/album/superpang-world-tour-vol-1">Superpang: World Tour Vol.1</a></iframe></div>
+        <img class="still" src="https://f4.bcbits.com/img/a1420838306_5.jpg" alt="Superpang World Tour Vol.1 cover" onerror="this.style.display='none'">
     </div>
 </div>
 
@@ -331,7 +348,7 @@ ul.list a:hover { color: var(--pink); }
     </div>
 </div>
 
-<div class="work solo">
+<div class="work">
     <div>
         <div class="w-title">Live audio-visual performance at Nonagon Festival</div>
         <div class="w-meta">
@@ -339,7 +356,14 @@ ul.list a:hover { color: var(--pink); }
             <span>in collaboration with Ľubomír Slovinský</span>
         </div>
         <p class="w-body">A return to the decommissioned oil cisterns on Svanö in Ådalen, following the 2025 residency and performance in the same structures.</p>
-        <div class="w-links"><a href="https://nonagonfestival.se/en/festivalen" target="_blank">nonagonfestival.se ↗</a></div>
+        <div class="w-links">
+            <a href="https://vimeo.com/1222386877" target="_blank">vimeo ↗</a>
+            <a href="https://nonagonfestival.se/en/festivalen" target="_blank">nonagonfestival.se ↗</a>
+        </div>
+    </div>
+    <div class="w-media">
+        <div class="vid"><iframe src="https://player.vimeo.com/video/1222386877?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" title="Live audio-visual performance at Nonagon Festival" loading="lazy" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+        <img class="still" src="portfolio/nonagon-svano.jpg" alt="Nonagon Festival — audio-visual performance in the oil cisterns">
     </div>
 </div>
 
@@ -373,7 +397,8 @@ ul.list a:hover { color: var(--pink); }
         <div class="w-links"><a href="https://sovnrecords.bandcamp.com/album/she-has-candy" target="_blank">bandcamp ↗</a></div>
     </div>
     <div class="w-media">
-        <img src="media/catpurse.jpg" alt="SHE HAS CANDY artwork">
+        <div class="bc"><iframe src="https://bandcamp.com/EmbeddedPlayer/album=1828225882/size=large/bgcol=ffffff/linkcol=ff1493/artwork=big/tracklist=false/transparent=true/" title="SHE HAS CANDY on Bandcamp" loading="lazy" seamless><a href="https://sovnrecords.bandcamp.com/album/she-has-candy">SHE HAS CANDY</a></iframe></div>
+        <img class="still" src="media/catpurse.jpg" alt="SHE HAS CANDY artwork">
     </div>
 </div>
 
@@ -394,7 +419,8 @@ ul.list a:hover { color: var(--pink); }
         </div>
     </div>
     <div class="w-media">
-        <img src="media/Hypergloss_art.jpg" alt="hypergloss artwork">
+        <div class="bc"><iframe src="https://bandcamp.com/EmbeddedPlayer/album=3076848033/size=large/bgcol=ffffff/linkcol=ff1493/artwork=big/tracklist=false/transparent=true/" title="hypergloss on Bandcamp" loading="lazy" seamless><a href="https://sofi.bandcamp.com/album/hypergloss">hypergloss</a></iframe></div>
+        <img class="still" src="media/Hypergloss_art.jpg" alt="hypergloss artwork">
     </div>
 </div>
 
@@ -514,7 +540,8 @@ ul.list a:hover { color: var(--pink); }
         <div class="w-links"><a href="https://riforma.bandcamp.com/album/aze" target="_blank">bandcamp ↗</a></div>
     </div>
     <div class="w-media">
-        <img src="media/artwork.jpg" alt="aze artwork">
+        <div class="bc"><iframe src="https://bandcamp.com/EmbeddedPlayer/album=2640124460/size=large/bgcol=ffffff/linkcol=ff1493/artwork=big/tracklist=false/transparent=true/" title="aze on Bandcamp" loading="lazy" seamless><a href="https://riforma.bandcamp.com/album/aze">aze</a></iframe></div>
+        <img class="still" src="media/artwork.jpg" alt="aze artwork">
     </div>
 </div>
 
@@ -563,7 +590,8 @@ ul.list a:hover { color: var(--pink); }
         <div class="w-links"><a href="https://sofi.bandcamp.com/album/naked-eye" target="_blank">bandcamp ↗</a></div>
     </div>
     <div class="w-media">
-        <img src="media/nakedeye.png" alt="naked eye artwork">
+        <div class="bc"><iframe src="https://bandcamp.com/EmbeddedPlayer/album=1199643290/size=large/bgcol=ffffff/linkcol=ff1493/artwork=big/tracklist=false/transparent=true/" title="naked eye on Bandcamp" loading="lazy" seamless><a href="https://sofi.bandcamp.com/album/naked-eye">naked eye</a></iframe></div>
+        <img class="still" src="media/nakedeye.png" alt="naked eye artwork">
     </div>
 </div>
 
@@ -577,7 +605,8 @@ ul.list a:hover { color: var(--pink); }
         <div class="w-links"><a href="https://renatura.bandcamp.com/album/re-natura-04-ther" target="_blank">bandcamp ↗</a></div>
     </div>
     <div class="w-media">
-        <img src="media/aethercover.png" alt="re:natura #04 Æther cover">
+        <div class="bc"><iframe src="https://bandcamp.com/EmbeddedPlayer/album=835292736/size=large/bgcol=ffffff/linkcol=ff1493/artwork=big/tracklist=false/transparent=true/t=9/" title="re:natura #04 — Æther on Bandcamp" loading="lazy" seamless><a href="https://renatura.bandcamp.com/album/re-natura-04-ther">re:natura #04 — Æther</a></iframe></div>
+        <img class="still" src="media/aethercover.png" alt="re:natura #04 Æther cover">
     </div>
 </div>
 

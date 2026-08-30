@@ -100,15 +100,19 @@ body::before {
 }
 
 .meta {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 4px 40px;
     margin-top: 40px;
-    padding-top: 20px;
-    border-top: .5px solid var(--line);
+    padding-top: 4px;
+    max-width: 620px;
 }
-.meta div { padding: 6px 0; display: flex; gap: 14px; align-items: baseline; }
-.meta .k { color: var(--dim); min-width: 84px; flex-shrink: 0; letter-spacing: .12em; }
+.meta div {
+    padding: 9px 0;
+    display: flex;
+    gap: 18px;
+    align-items: baseline;
+    border-bottom: .5px solid var(--line);
+}
+.meta div:first-child { border-top: .5px solid var(--line); }
+.meta .k { color: var(--dim); min-width: 96px; flex-shrink: 0; letter-spacing: .12em; }
 .meta a { border-bottom: .5px solid var(--line); }
 .meta a:hover { color: var(--pink); }
 
@@ -174,6 +178,8 @@ ul.list a:hover { color: var(--pink); }
     .head { padding: 0; }
     .pname { font-size: 34pt; }
     .portrait { width: 36mm; max-width: 36mm; }
+    .meta { max-width: none; }
+    .meta div { padding: 3.5pt 0; }
     .bio { font-size: 9.4pt; line-height: 1.6; max-width: none; }
     .gap { height: 20pt; }
     .gap-s { height: 8pt; }
@@ -189,6 +195,7 @@ ul.list a:hover { color: var(--pink); }
 <nav class="pnav">
     <a href="cv.html" class="here">cv</a>
     <a href="portfolio.html">portfolio</a>
+    <a href="#" onclick="window.print();return false;">pdf</a>
     <a href="index.html">site</a>
 </nav>
 
@@ -206,7 +213,7 @@ ul.list a:hover { color: var(--pink); }
     <div class="meta">
         <div><span class="k">born</span><span>01.01.1999</span></div>
         <div><span class="k">citizenship</span><span>Latvia</span></div>
-        <div><span class="k">based in</span><span>Brussels, Belgium</span></div>
+        <div><span class="k">based in</span><span>Riga, Latvia</span></div>
         <div><span class="k">email</span><a href="mailto:sofijazaiceva7@gmail.com">sofijazaiceva7@gmail.com</a></div>
         <div><span class="k">web</span><a href="https://www.sofiazaiceva.xyz" target="_blank">sofiazaiceva.xyz</a></div>
         <div><span class="k">bandcamp</span><a href="https://sofi.bandcamp.com" target="_blank">sofi.bandcamp.com</a></div>
@@ -216,7 +223,7 @@ ul.list a:hover { color: var(--pink); }
     </div>
 
     <p class="bio">
-        I'm a Latvian sound artist and performer, currently based in Brussels, Belgium. I have a background spanning from classical piano training and electroacoustic composition to live coding and DJ scene. Through my practice I've developed a distinctive approach to experimental electronic music that prioritises open-source tools. Through contemplation on digital obsession, creative coding, spatial sound design, and improvisational practice, I excavate the relational qualities of sonic environments, to reveal how digital processes can articulate deeply human experiences.
+        I'm a Latvian sound artist and performer, currently based in Riga, Latvia. I have a background spanning from classical piano training and electroacoustic composition to live coding and DJ scene. Through my practice I've developed a distinctive approach to experimental electronic music that prioritises open-source tools. Through contemplation on digital obsession, creative coding, spatial sound design, and improvisational practice, I excavate the relational qualities of sonic environments, to reveal how digital processes can articulate deeply human experiences.
     </p>
 </header>
 
