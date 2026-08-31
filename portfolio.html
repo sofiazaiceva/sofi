@@ -213,6 +213,22 @@ body::before {
     display: block;
 }
 
+/* instagram post — media area plus the card's header and caption strip */
+.ig {
+    position: relative;
+    width: 70%;
+    padding-top: calc(87.5% + 200px);
+    background: #fff;
+}
+.ig iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+}
+
 .tracks { list-style: none; margin-top: 14px; }
 .tracks li {
     padding: 7px 0;
@@ -275,7 +291,7 @@ ul.list a:hover { color: var(--pink); }
     .w-up { border-color: #000; color: #000; padding: 1.5pt 4pt; margin-bottom: 4pt; }
     .w-body { font-size: 9pt; line-height: 1.55; max-width: none; }
     .w-media img { max-height: 78mm; width: auto; max-width: 100%; }
-    .vid, .bc { display: none; }
+    .vid, .bc, .ig { display: none; }
     .w-media img.still { display: block; }
     .w-media.pair img { max-height: 52mm; }
     ul.list li { padding: 4.5pt 0; page-break-inside: avoid; }
@@ -508,10 +524,12 @@ ul.list a:hover { color: var(--pink); }
         <div class="w-links">
             <a href="https://soundcloud.com/radiofantasia" target="_blank">soundcloud ↗</a>
             <a href="https://thequietus.com/news/shape-artist-sofi-shares-recording-captured-during-residency-at-pragues-meetfactory/" target="_blank">the quietus ↗</a>
+            <a href="https://www.instagram.com/p/DKboCwHMzJT/" target="_blank">instagram ↗</a>
         </div>
     </div>
     <div class="w-media">
         <img src="portfolio/meetfactory-residency.jpg" alt="MeetFactory residency">
+        <div class="ig"><iframe src="https://www.instagram.com/p/DKboCwHMzJT/embed/captioned/?img_index=4" title="MeetFactory residency — Instagram post" loading="lazy" scrolling="no" allowtransparency="true"></iframe></div>
     </div>
 </div>
 
