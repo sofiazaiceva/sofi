@@ -319,7 +319,14 @@ ul.list a:hover { color: var(--pink); }
     .w-media.pair img { max-height: 52mm; }
     ul.list li { padding: 4.5pt 0; page-break-inside: avoid; }
     ul.list li:hover { opacity: 1; }
+    /* links stay visible — and clickable — in the exported pdf */
     a { border: none !important; }
+    a[href^="http"], a[href^="mailto"] {
+        text-decoration: underline;
+        text-decoration-thickness: .4pt;
+        text-underline-offset: 2pt;
+        text-decoration-color: rgba(0,0,0,.45);
+    }
 }
 </style>
 </head>
