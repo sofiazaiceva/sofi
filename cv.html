@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -168,12 +168,32 @@ ul.list a:hover { color: var(--pink); }
 }
 
 /* ── print / pdf ──────────────────────────── */
+/* ── language layer ───────────────────────── */
+[data-lang="en"] [lang="lv"] { display: none !important; }
+[data-lang="lv"] [lang="en"] { display: none !important; }
+.lang { display: flex; gap: 6px; }
+.lang button {
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    font-family: var(--f);
+    font-size: var(--xs);
+    letter-spacing: .2em;
+    text-transform: lowercase;
+    color: var(--dim);
+    transition: color .14s;
+}
+.lang button:hover { color: var(--ink); }
+.lang button[aria-pressed="true"] { color: var(--pink); }
+.lang span { color: var(--line); }
+
 @media print {
     @page { size: A4; margin: 16mm 14mm; }
     :root { --dim: #55534d; --line: rgba(0,0,0,.22); }
     body { background: #fff; color: #000; font-size: 9.2pt; letter-spacing: .01em; }
     body::before { display: none; }
-    .pnav { display: none; }
+    .pnav, .lang { display: none; }
     .wrap { padding: 0; max-width: none; }
     .head { padding: 0; }
     .pname { font-size: 34pt; }
@@ -196,7 +216,8 @@ ul.list a:hover { color: var(--pink); }
     <a href="cv.html" class="here">cv</a>
     <a href="portfolio.html">portfolio</a>
     <a href="#" onclick="window.print();return false;">pdf</a>
-    <a href="index.html">site</a>
+    <a href="index.html"><span lang="en">site</span><span lang="lv">vietne</span></a>
+    <span class="lang"><button type="button" data-l="en">en</button><span>/</span><button type="button" data-l="lv">lv</button></span>
 </nav>
 
 <div class="wrap">
@@ -205,103 +226,123 @@ ul.list a:hover { color: var(--pink); }
     <div class="head-top">
         <div>
             <h1 class="pname">sofia<br>zaiceva</h1>
-            <div class="ptag">sound artist &amp; performer — aka <em style="font-style:normal;color:var(--pink)">sofi</em></div>
+            <div class="ptag" lang="en">sound artist &amp; performer — aka <em style="font-style:normal;color:var(--pink)">sofi</em></div><div class="ptag" lang="lv">skaņu māksliniece un performances māksliniece — jeb <em style="font-style:normal;color:var(--pink)">sofi</em></div>
         </div>
         <img class="portrait" src="portfolio/sofi-portrait-crop.jpg" alt="sofia zaiceva">
     </div>
 
     <div class="meta">
-        <div><span class="k">born</span><span>01.01.1999</span></div>
-        <div><span class="k">citizenship</span><span>Latvia</span></div>
-        <div><span class="k">based in</span><span>Riga, Latvia</span></div>
-        <div><span class="k">email</span><a href="mailto:sofijazaiceva7@gmail.com">sofijazaiceva7@gmail.com</a></div>
-        <div><span class="k">web</span><a href="https://www.sofiazaiceva.xyz" target="_blank">sofiazaiceva.xyz</a></div>
-        <div><span class="k">bandcamp</span><a href="https://sofi.bandcamp.com" target="_blank">sofi.bandcamp.com</a></div>
-        <div><span class="k">youtube</span><a href="https://youtube.com/@sofiazaiceva" target="_blank">@sofiazaiceva</a></div>
-        <div><span class="k">soundcloud</span><a href="https://on.soundcloud.com/e9jja" target="_blank">on.soundcloud.com/e9jja</a></div>
-        <div><span class="k">instagram</span><a href="https://www.instagram.com/sofizaiceva/" target="_blank">@sofizaiceva</a></div>
+        <div><span class="k" lang="en">born</span><span class="k" lang="lv">dzimusi</span><span>01.01.1999</span></div>
+        <div><span class="k" lang="en">citizenship</span><span class="k" lang="lv">pilsonība</span><span lang="en">Latvia</span><span lang="lv">Latvija</span></div>
+        <div><span class="k" lang="en">based in</span><span class="k" lang="lv">dzīvesvieta</span><span lang="en">Riga, Latvia</span><span lang="lv">Rīga, Latvija</span></div>
+        <div><span class="k" lang="en">email</span><span class="k" lang="lv">e-pasts</span><a href="mailto:sofijazaiceva7@gmail.com">sofijazaiceva7@gmail.com</a></div>
+        <div><span class="k" lang="en">web</span><span class="k" lang="lv">vietne</span><a href="https://www.sofiazaiceva.xyz" target="_blank">sofiazaiceva.xyz</a></div>
+        <div><span class="k" lang="en">bandcamp</span><span class="k" lang="lv">bandcamp</span><a href="https://sofi.bandcamp.com" target="_blank">sofi.bandcamp.com</a></div>
+        <div><span class="k" lang="en">youtube</span><span class="k" lang="lv">youtube</span><a href="https://youtube.com/@sofiazaiceva" target="_blank">@sofiazaiceva</a></div>
+        <div><span class="k" lang="en">soundcloud</span><span class="k" lang="lv">soundcloud</span><a href="https://on.soundcloud.com/e9jja" target="_blank">on.soundcloud.com/e9jja</a></div>
+        <div><span class="k" lang="en">instagram</span><span class="k" lang="lv">instagram</span><a href="https://www.instagram.com/sofizaiceva/" target="_blank">@sofizaiceva</a></div>
     </div>
 
-    <p class="bio">
+    <p class="bio" lang="en">
         I'm a Latvian sound artist and performer, currently based in Riga, Latvia. I have a background spanning from classical piano training and electroacoustic composition to live coding and DJ scene. Through my practice I've developed a distinctive approach to experimental electronic music that prioritises open-source tools. Through contemplation on digital obsession, creative coding, spatial sound design, and improvisational practice, I excavate the relational qualities of sonic environments, to reveal how digital processes can articulate deeply human experiences.
-    </p>
+    </p><p class="bio" lang="lv">Esmu latviešu skaņu māksliniece un performances māksliniece, šobrīd dzīvoju Rīgā. Mans pamats stiepjas no klasiskās klavierspēles un elektroakustiskās kompozīcijas līdz dzīvajai kodēšanai un didžeja praksei. Savā darbā esmu izveidojusi savu pieeju eksperimentālajai elektroniskajai mūzikai, kuras pamatā ir atvērtā pirmkoda rīki. Domājot par digitālo apsēstību, radošo kodēšanu, telpisko skaņas dizainu un improvizāciju, es rokos pēc skaņas vižu attiecību īpašībām, lai parādītu, kā digitāli procesi spēj izteikt dziļi cilvēcisku pieredzi.</p>
 </header>
 
 <div class="gap"></div>
-<div class="mark">education</div>
+<div class="mark" lang="en">education</div><div class="mark" lang="lv">izglītība</div>
 <div class="gap-s"></div>
 <ul class="list">
-    <li><span class="yr">2023–2025</span><span class="body"><span class="t"><a href="https://www.uniarts.fi/en/" target="_blank">Sibelius Academy / Uniarts Helsinki ↗</a></span><span class="d">MA in Music Technology — Creative Electronic Music Practices</span></span><span class="pl">Helsinki, FI</span></li>
-    <li><span class="yr">2022–2023</span><span class="body"><span class="t"><a href="http://www.ap-arts.be" target="_blank">Royal Conservatory Antwerp ↗</a></span><span class="d">Erasmus+ — Composition &amp; Music Technology (prof. Wim Henderickx)</span></span><span class="pl">Antwerp, BE</span></li>
-    <li><span class="yr">2020–2023</span><span class="body"><span class="t"><a href="https://eamt.ee/en/" target="_blank">Estonian Academy of Music and Theatre ↗</a></span><span class="d">BA in Electroacoustic Composition — Composition &amp; Music Technology</span></span><span class="pl">Tallinn, EE</span></li>
-    <li><span class="yr">2018–2022</span><span class="body"><span class="t"><a href="https://www.jvlma.lv" target="_blank">Jāzeps Vītols Latvian Music Academy ↗</a></span><span class="d">Professional BA in Piano Performance — 5th level of professional qualification</span></span><span class="pl">Riga, LV</span></li>
+    <li><span class="yr">2023–2025</span><span class="body"><span class="t"><a href="https://www.uniarts.fi/en/" target="_blank">Sibelius Academy / Uniarts Helsinki ↗</a></span><span class="d" lang="en">MA in Music Technology — Creative Electronic Music Practices</span><span class="d" lang="lv">maģistra grāds mūzikas tehnoloģijās — radošās elektroniskās mūzikas prakses</span></span><span class="pl" lang="en">Helsinki, FI</span><span class="pl" lang="lv">Helsinki, Somija</span></li>
+    <li><span class="yr">2022–2023</span><span class="body"><span class="t"><a href="http://www.ap-arts.be" target="_blank">Royal Conservatory Antwerp ↗</a></span><span class="d" lang="en">Erasmus+ — Composition &amp; Music Technology (prof. Wim Henderickx)</span><span class="d" lang="lv">Erasmus+ — kompozīcija un mūzikas tehnoloģijas (prof. Vims Henderikss)</span></span><span class="pl" lang="en">Antwerp, BE</span><span class="pl" lang="lv">Antverpene, Beļģija</span></li>
+    <li><span class="yr">2020–2023</span><span class="body"><span class="t"><a href="https://eamt.ee/en/" target="_blank">Estonian Academy of Music and Theatre ↗</a></span><span class="d" lang="en">BA in Electroacoustic Composition — Composition &amp; Music Technology</span><span class="d" lang="lv">bakalaura grāds elektroakustiskajā kompozīcijā — kompozīcija un mūzikas tehnoloģijas</span></span><span class="pl" lang="en">Tallinn, EE</span><span class="pl" lang="lv">Tallina, Igaunija</span></li>
+    <li><span class="yr">2018–2022</span><span class="body"><span class="t"><a href="https://www.jvlma.lv" target="_blank">Jāzeps Vītols Latvian Music Academy ↗</a></span><span class="d" lang="en">Professional BA in Piano Performance — 5th level of professional qualification</span><span class="d" lang="lv">profesionālais bakalaura grāds klavierspēlē — 5. profesionālās kvalifikācijas līmenis</span></span><span class="pl" lang="en">Riga, LV</span><span class="pl" lang="lv">Rīga, Latvija</span></li>
 </ul>
 
 <div class="gap"></div>
-<div class="mark">other</div>
+<div class="mark" lang="en">other</div><div class="mark" lang="lv">cits</div>
 <div class="gap-s"></div>
 <ul class="list">
-    <li><span class="yr">2024/2025</span><span class="body"><a href="https://shapeplatform.eu/artist/sofi/" target="_blank">SHAPE+ Platform — selected artist / alumni ↗</a></span><span class="pl">EU</span></li>
-    <li><span class="yr">2026</span><span class="body"><a href="https://unsoundlab.com/about/" target="_blank">Unsound Lab Summer School — participant ↗</a></span><span class="pl">Sokołowsko, PL</span></li>
+    <li><span class="yr">2024/2025</span><span class="body"><a href="https://shapeplatform.eu/artist/sofi/" target="_blank">SHAPE+ Platform — selected artist / alumni ↗</a></span><span class="pl" lang="en">EU</span><span class="pl" lang="lv">ES</span></li>
+    <li><span class="yr">2026</span><span class="body"><a href="https://unsoundlab.com/about/" target="_blank">Unsound Lab Summer School — participant ↗</a></span><span class="pl" lang="en">Sokołowsko, PL</span><span class="pl" lang="lv">Sokoluvsko, Polija</span></li>
 </ul>
 
 <div class="gap"></div>
-<div class="mark">selected works</div>
+<div class="mark" lang="en">selected works</div><div class="mark" lang="lv">darbu izlase</div>
 <div class="gap-s"></div>
 <ul class="list">
-    <li><span class="yr">2026</span><span class="body"><span class="t"><a href="https://forumwallis.ch/programm-2026arselectronicaforumwallis.htm" target="_blank">“Hyphae” by Riccardo Tesorini ↗</a></span><span class="d">co-composer / contributor, Ars Electronica Forum Wallis — alongside Daniele Carcassi, Andrea Laudante, Paolo Montella, Mattia Parisse, Jonatan Snapir</span></span></li>
-    <li><span class="yr">07.2025</span><span class="body"><span class="t"><a href="https://sofi.bandcamp.com/album/hypergloss" target="_blank">“hypergloss” ↗</a></span><span class="d">album on label “Superpang”</span></span></li>
-    <li><span class="yr">06.2025</span><span class="body"><span class="t"><a href="https://sovnrecords.bandcamp.com/album/she-has-candy" target="_blank">“SHE HAS CANDY” by duo CATPURSE ↗</a></span><span class="d">album on label “SØVN Records”</span></span></li>
-    <li><span class="yr">11.2024</span><span class="body"><span class="t"><a href="https://riforma.bandcamp.com/album/aze" target="_blank">“aze” ↗</a></span><span class="d">album on label “Riforma”</span></span></li>
-    <li><span class="yr">10.2024</span><span class="body"><span class="t"><a href="https://musikprotokoll.orf.at/en/2024/project/periphery-oneness" target="_blank">“periphery of oneness” ↗</a></span><span class="d">commissioned live ambisonics composition, ORF musikprotokoll</span></span></li>
-    <li><span class="yr">06.2024</span><span class="body"><span class="t"><a href="https://sofi.bandcamp.com/track/objects-in-mirror-installation-at-soundmanor360" target="_blank">“objects in mirror” ↗</a></span><span class="d">sound installation in “Sound Manor 360”, Ropaži</span></span></li>
-    <li><span class="yr">2021–2024</span><span class="body"><span class="t"><a href="https://sofi.bandcamp.com/album/naked-eye" target="_blank">“naked eye” ↗</a></span><span class="d">album</span></span></li>
-    <li><span class="yr">11.2023</span><span class="body"><span class="t"><a href="https://letterboxd.com/film/skin-of-a-mandarin/crew/" target="_blank">“Skin of a Mandarin” ↗</a></span><span class="d">original film score for short film, dir. Jaanika Arum — <a href="https://youtu.be/HWtrWQipKmk" target="_blank">excerpts ↗</a></span></span></li>
+    <li><span class="yr">2026</span><span class="body"><span class="t"><a href="https://forumwallis.ch/programm-2026arselectronicaforumwallis.htm" target="_blank">“Hyphae” by Riccardo Tesorini ↗</a></span><span class="d" lang="en">co-composer / contributor, Ars Electronica Forum Wallis — alongside Daniele Carcassi, Andrea Laudante, Paolo Montella, Mattia Parisse, Jonatan Snapir</span><span class="d" lang="lv">līdzkomponiste, Ars Electronica Forum Wallis — kopā ar Danjeli Karkasi, Andreu Laudanti, Paolo Montellu, Matiju Parisi, Jonatanu Snapiru</span></span></li>
+    <li><span class="yr">07.2025</span><span class="body"><span class="t"><a href="https://sofi.bandcamp.com/album/hypergloss" target="_blank">“hypergloss” ↗</a></span><span class="d" lang="en">album on label “Superpang”</span><span class="d" lang="lv">albums izdevniecībā “Superpang”</span></span></li>
+    <li><span class="yr">06.2025</span><span class="body"><span class="t"><a href="https://sovnrecords.bandcamp.com/album/she-has-candy" target="_blank">“SHE HAS CANDY” by duo CATPURSE ↗</a></span><span class="d" lang="en">album on label “SØVN Records”</span><span class="d" lang="lv">albums izdevniecībā “SØVN Records”</span></span></li>
+    <li><span class="yr">11.2024</span><span class="body"><span class="t"><a href="https://riforma.bandcamp.com/album/aze" target="_blank">“aze” ↗</a></span><span class="d" lang="en">album on label “Riforma”</span><span class="d" lang="lv">albums izdevniecībā “Riforma”</span></span></li>
+    <li><span class="yr">10.2024</span><span class="body"><span class="t"><a href="https://musikprotokoll.orf.at/en/2024/project/periphery-oneness" target="_blank">“periphery of oneness” ↗</a></span><span class="d" lang="en">commissioned live ambisonics composition, ORF musikprotokoll</span><span class="d" lang="lv">pasūtījuma kompozīcija dzīvai ambisoniskai atskaņošanai, ORF musikprotokoll</span></span></li>
+    <li><span class="yr">06.2024</span><span class="body"><span class="t"><a href="https://sofi.bandcamp.com/track/objects-in-mirror-installation-at-soundmanor360" target="_blank">“objects in mirror” ↗</a></span><span class="d" lang="en">sound installation in “Sound Manor 360”, Ropaži</span><span class="d" lang="lv">skaņas instalācija “Sound Manor 360”, Ropaži</span></span></li>
+    <li><span class="yr">2021–2024</span><span class="body"><span class="t"><a href="https://sofi.bandcamp.com/album/naked-eye" target="_blank">“naked eye” ↗</a></span><span class="d" lang="en">album</span><span class="d" lang="lv">albums</span></span></li>
+    <li><span class="yr">11.2023</span><span class="body"><span class="t"><a href="https://letterboxd.com/film/skin-of-a-mandarin/crew/" target="_blank">“Skin of a Mandarin” ↗</a></span><span class="d" lang="en">original film score for short film, dir. Jaanika Arum — <a href="https://youtu.be/HWtrWQipKmk" target="_blank">excerpts ↗</a></span><span class="d" lang="lv">oriģinālmūzika īsfilmai, rež. Jānika Aruma — <a href="https://youtu.be/HWtrWQipKmk" target="_blank">fragmenti ↗</a></span></span></li>
 </ul>
 
 <div class="gap"></div>
-<div class="mark">selected live performances</div>
+<div class="mark" lang="en">selected live performances</div><div class="mark" lang="lv">koncertu izlase</div>
 <div class="gap-s"></div>
 <ul class="list">
-    <li><span class="yr">07.2026</span><span class="body"><span class="t"><a href="https://nonagonfestival.se/en/festivalen" target="_blank">Nonagon Festival ↗</a></span><span class="d">audio-visual live w/ Ľubomír Slovinský, in the oil cisterns of Svanö</span></span><span class="pl">Svanö, SE</span></li>
-    <li><span class="yr">10.2025</span><span class="body"><span class="t"><a href="https://youtu.be/0FjNSU0hQgc" target="_blank">SWIM @ ZiMMT ↗</a></span><span class="d">live SuperCollider and laser light control, 26-channel ambisonics</span></span><span class="pl">Leipzig, DE</span></li>
-    <li><span class="yr">06.2025</span><span class="body"><span class="t"><a href="https://vimeo.com/1128668567" target="_blank">Musiikkitalo Blackbox ↗</a></span><span class="d">48-channel loudspeaker orchestra</span></span><span class="pl">Helsinki, FI</span></li>
-    <li><span class="yr">06.2025</span><span class="body"><span class="t"><a href="https://soundcloud.com/radiofantasia/110-sofia-zaiceva-sorbitol-drops-antonin-zavodny-and-natalie-plevakova-shape-at-meetfactory" target="_blank">Live at MeetFactory ↗</a></span><span class="d">trio w/ Sorbitol Drops &amp; Natálie Pleváková</span></span><span class="pl">Prague, CZ</span></li>
+    <li><span class="yr">07.2026</span><span class="body"><span class="t"><a href="https://nonagonfestival.se/en/festivalen" target="_blank">Nonagon Festival ↗</a></span><span class="d" lang="en">audio-visual live w/ Ľubomír Slovinský, in the oil cisterns of Svanö</span><span class="d" lang="lv">audiovizuāls koncerts ar Ļubomīru Slovinski, Svanē naftas cisternās</span></span><span class="pl" lang="en">Svanö, SE</span><span class="pl" lang="lv">Svanē, Zviedrija</span></li>
+    <li><span class="yr">10.2025</span><span class="body"><span class="t"><a href="https://youtu.be/0FjNSU0hQgc" target="_blank">SWIM @ ZiMMT ↗</a></span><span class="d" lang="en">live SuperCollider and laser light control, 26-channel ambisonics</span><span class="d" lang="lv">dzīvā SuperCollider spēle un lāzergaismas vadība, 26 kanālu ambisonika</span></span><span class="pl" lang="en">Leipzig, DE</span><span class="pl" lang="lv">Leipciga, Vācija</span></li>
+    <li><span class="yr">06.2025</span><span class="body"><span class="t"><a href="https://vimeo.com/1128668567" target="_blank">Musiikkitalo Blackbox ↗</a></span><span class="d" lang="en">48-channel loudspeaker orchestra</span><span class="d" lang="lv">48 skaļruņu orķestris</span></span><span class="pl" lang="en">Helsinki, FI</span><span class="pl" lang="lv">Helsinki, Somija</span></li>
+    <li><span class="yr">06.2025</span><span class="body"><span class="t" lang="en"><a href="https://soundcloud.com/radiofantasia/110-sofia-zaiceva-sorbitol-drops-antonin-zavodny-and-natalie-plevakova-shape-at-meetfactory" target="_blank">Live at MeetFactory ↗</a></span><span class="t" lang="lv"><a href="https://soundcloud.com/radiofantasia/110-sofia-zaiceva-sorbitol-drops-antonin-zavodny-and-natalie-plevakova-shape-at-meetfactory" target="_blank">Koncerts MeetFactory ↗</a></span><span class="d" lang="en">trio w/ Sorbitol Drops &amp; Natálie Pleváková</span><span class="d" lang="lv">trio ar Sorbitol Drops un Natāliju Plevākovu</span></span><span class="pl" lang="en">Prague, CZ</span><span class="pl" lang="lv">Prāga, Čehija</span></li>
 </ul>
 
 <div class="gap"></div>
-<div class="mark">grants &amp; support</div>
+<div class="mark" lang="en">grants &amp; support</div><div class="mark" lang="lv">finansējums un atbalsts</div>
 <div class="gap-s"></div>
 <ul class="list">
-    <li><span class="yr">2026</span><span class="body"><span class="t">International mobility — Nonagon Festival, Svanö</span><span class="d">State Culture Capital Foundation of Latvia (VKKF)</span></span><span class="pl">Sweden</span></li>
-    <li><span class="yr">2025</span><span class="body"><span class="t">Concert project — Baltic Analog Lab, Riga and Retrito Smarsas, Vilnius</span><span class="d">State Culture Capital Foundation of Latvia (VKKF)</span></span><span class="pl">LV / LT</span></li>
-    <li><span class="yr">2025</span><span class="body"><span class="t">Creative residency — EMS Studios, Stockholm</span><span class="d">State Culture Capital Foundation of Latvia (VKKF)</span></span><span class="pl">Sweden</span></li>
-    <li><span class="yr">2024–2025</span><span class="body"><span class="t">Study scholarship — Sibelius Academy, awarded twice</span><span class="d">State Culture Capital Foundation of Latvia (VKKF)</span></span><span class="pl">Finland</span></li>
+    <li><span class="yr">2026</span><span class="body"><span class="t" lang="en">International mobility — Nonagon Festival, Svanö</span><span class="t" lang="lv">Starptautiskā mobilitāte — Nonagon festivāls, Svanē</span><span class="d" lang="en">State Culture Capital Foundation of Latvia (VKKF)</span><span class="d" lang="lv">Valsts kultūrkapitāla fonds (VKKF)</span></span><span class="pl" lang="en">Sweden</span><span class="pl" lang="lv">Zviedrija</span></li>
+    <li><span class="yr">2025</span><span class="body"><span class="t" lang="en">Concert project — Baltic Analog Lab, Riga and Retrito Smarsas, Vilnius</span><span class="t" lang="lv">Koncertprojekts — Baltic Analog Lab, Rīga un Retrito Smarsas, Viļņa</span><span class="d" lang="en">State Culture Capital Foundation of Latvia (VKKF)</span><span class="d" lang="lv">Valsts kultūrkapitāla fonds (VKKF)</span></span><span class="pl">LV / LT</span></li>
+    <li><span class="yr">2025</span><span class="body"><span class="t" lang="en">Creative residency — EMS Studios, Stockholm</span><span class="t" lang="lv">Radošā rezidence — EMS studijas, Stokholma</span><span class="d" lang="en">State Culture Capital Foundation of Latvia (VKKF)</span><span class="d" lang="lv">Valsts kultūrkapitāla fonds (VKKF)</span></span><span class="pl" lang="en">Sweden</span><span class="pl" lang="lv">Zviedrija</span></li>
+    <li><span class="yr">2024–2025</span><span class="body"><span class="t" lang="en">Study scholarship — Sibelius Academy, awarded twice</span><span class="t" lang="lv">Mācību stipendija — Sibēliusa akadēmija, piešķirta divreiz</span><span class="d" lang="en">State Culture Capital Foundation of Latvia (VKKF)</span><span class="d" lang="lv">Valsts kultūrkapitāla fonds (VKKF)</span></span><span class="pl" lang="en">Finland</span><span class="pl" lang="lv">Somija</span></li>
 </ul>
 
 <div class="gap"></div>
-<div class="mark">residency</div>
+<div class="mark" lang="en">residency</div><div class="mark" lang="lv">rezidences</div>
 <div class="gap-s"></div>
 <ul class="list">
-    <li><span class="yr">09.2026</span><span class="body"><a href="https://www.balticanaloglab.lv/" target="_blank">Baltic Analog Lab ↗</a></span><span class="pl">Riga, LV</span></li>
-    <li><span class="yr">10.2026</span><span class="body"><span class="t"><a href="https://dda.lv" target="_blank">DDA, Laidi Palace ↗</a></span><span class="d">w/ Andreas Trobollowitsch — closing concert &amp; artist talk</span></span><span class="pl">Laidi, LV</span></li>
-    <li><span class="yr">09.2025</span><span class="body"><a href="https://elektronmusikstudion.se/en/guest-composers" target="_blank">EMS Studios — guest composer ↗</a></span><span class="pl">Stockholm, SE</span></li>
-    <li><span class="yr">07.2025</span><span class="body"><a href="https://nonagonfestival.se/en/events/nonagon-residency-showcase" target="_blank">Nonagon Festival ↗</a></span><span class="pl">Svanö, SE</span></li>
-    <li><span class="yr">06.2025</span><span class="body"><a href="https://meetfactory.cz/en/program/detail/shape-dali-muru-the-polyphonic-swarm-donna-haringwey-sofi-sorbitol-drops-natalie-plevakova-tonota" target="_blank">MeetFactory — SHAPE+ residency ↗</a></span><span class="pl">Prague, CZ</span></li>
+    <li><span class="yr">09.2026</span><span class="body"><a href="https://www.balticanaloglab.lv/" target="_blank">Baltic Analog Lab ↗</a></span><span class="pl" lang="en">Riga, LV</span><span class="pl" lang="lv">Rīga, Latvija</span></li>
+    <li><span class="yr">10.2026</span><span class="body"><span class="t" lang="en"><a href="https://dda.lv" target="_blank">DDA, Laidi Palace ↗</a></span><span class="t" lang="lv"><a href="https://dda.lv" target="_blank">DDA, Laidu pils ↗</a></span><span class="d" lang="en">w/ Andreas Trobollowitsch — closing concert &amp; artist talk</span><span class="d" lang="lv">ar Andreasu Troboloviču — noslēguma koncerts un mākslinieku saruna</span></span><span class="pl" lang="en">Laidi, LV</span><span class="pl" lang="lv">Laidi, Latvija</span></li>
+    <li><span class="yr">09.2025</span><span class="body"><a href="https://elektronmusikstudion.se/en/guest-composers" target="_blank">EMS Studios — guest composer ↗</a></span><span class="pl" lang="en">Stockholm, SE</span><span class="pl" lang="lv">Stokholma, Zviedrija</span></li>
+    <li><span class="yr">07.2025</span><span class="body"><a href="https://nonagonfestival.se/en/events/nonagon-residency-showcase" target="_blank">Nonagon Festival ↗</a></span><span class="pl" lang="en">Svanö, SE</span><span class="pl" lang="lv">Svanē, Zviedrija</span></li>
+    <li><span class="yr">06.2025</span><span class="body"><a href="https://meetfactory.cz/en/program/detail/shape-dali-muru-the-polyphonic-swarm-donna-haringwey-sofi-sorbitol-drops-natalie-plevakova-tonota" target="_blank">MeetFactory — SHAPE+ residency ↗</a></span><span class="pl" lang="en">Prague, CZ</span><span class="pl" lang="lv">Prāga, Čehija</span></li>
 </ul>
 
 
 <div class="gap"></div>
-<div class="mark">press</div>
+<div class="mark" lang="en">press</div><div class="mark" lang="lv">prese</div>
 <div class="gap-s"></div>
 <ul class="list">
-    <li><span class="yr">2026</span><span class="body"><span class="t"><a href="https://thequietus.com/quietus-reviews/quietus-international/inner-ear-latvian-music-for-june-by-jakub-knera/" target="_blank">The Quietus — Inner Ear: Latvian Music, by Jakub Knera ↗</a></span><span class="d">column</span></span></li>
-    <li><span class="yr">2025</span><span class="body"><span class="t"><a href="https://www.radioaktiv.it/catpurse-she-has-candy/" target="_blank">Radioaktiv.it — Catpurse: She Has Candy ↗</a></span><span class="d">review</span></span></li>
-    <li><span class="yr">2025</span><span class="body"><span class="t"><a href="https://www.shapeplatform.eu/2025/i-noticed-myself-imagining-new-sounds-and-algorithms-even-while-performing-other-works-an-interview-with-sofi/" target="_blank">SHAPE+ Platform — “I noticed myself imagining new sounds and algorithms even while performing other works” ↗</a></span><span class="d">interview</span></span></li>
-    <li><span class="yr">2025</span><span class="body"><span class="t"><a href="https://klasika.lsm.lv/lv/raksts/vakara-autorprogramma/elektroniskas-muzikas-komponiste-sofija-zaiceva.-rakstit-muziku-.a210731/" target="_blank">LSM Klasika — Elektroniskās mūzikas komponiste Sofija Zaiceva ↗</a></span><span class="d">interview, Latvian national public media</span></span></li>
-    <li><span class="yr">2025</span><span class="body"><span class="t"><a href="https://thequietus.com/news/shape-artist-sofi-shares-recording-captured-during-residency-at-pragues-meetfactory/" target="_blank">The Quietus — recording from the MeetFactory residency ↗</a></span><span class="d">feature</span></span></li>
+    <li><span class="yr">2026</span><span class="body"><span class="t"><a href="https://thequietus.com/quietus-reviews/quietus-international/inner-ear-latvian-music-for-june-by-jakub-knera/" target="_blank">The Quietus — Inner Ear: Latvian Music, by Jakub Knera ↗</a></span><span class="d" lang="en">column</span><span class="d" lang="lv">sleja</span></span></li>
+    <li><span class="yr">2025</span><span class="body"><span class="t"><a href="https://www.radioaktiv.it/catpurse-she-has-candy/" target="_blank">Radioaktiv.it — Catpurse: She Has Candy ↗</a></span><span class="d" lang="en">review</span><span class="d" lang="lv">recenzija</span></span></li>
+    <li><span class="yr">2025</span><span class="body"><span class="t"><a href="https://www.shapeplatform.eu/2025/i-noticed-myself-imagining-new-sounds-and-algorithms-even-while-performing-other-works-an-interview-with-sofi/" target="_blank">SHAPE+ Platform — “I noticed myself imagining new sounds and algorithms even while performing other works” ↗</a></span><span class="d" lang="en">interview</span><span class="d" lang="lv">intervija</span></span></li>
+    <li><span class="yr">2025</span><span class="body"><span class="t"><a href="https://klasika.lsm.lv/lv/raksts/vakara-autorprogramma/elektroniskas-muzikas-komponiste-sofija-zaiceva.-rakstit-muziku-.a210731/" target="_blank">LSM Klasika — Elektroniskās mūzikas komponiste Sofija Zaiceva ↗</a></span><span class="d" lang="en">interview, Latvian national public media</span><span class="d" lang="lv">intervija, Latvijas sabiedriskie mediji</span></span></li>
+    <li><span class="yr">2025</span><span class="body"><span class="t" lang="en"><a href="https://thequietus.com/news/shape-artist-sofi-shares-recording-captured-during-residency-at-pragues-meetfactory/" target="_blank">The Quietus — recording from the MeetFactory residency ↗</a></span><span class="t" lang="lv"><a href="https://thequietus.com/news/shape-artist-sofi-shares-recording-captured-during-residency-at-pragues-meetfactory/" target="_blank">The Quietus — ieraksts no MeetFactory rezidences ↗</a></span><span class="d" lang="en">feature</span><span class="d" lang="lv">raksts</span></span></li>
 </ul>
 
 </div>
+
+<script>
+(function () {
+    var root = document.documentElement;
+    function set(l, save) {
+        root.setAttribute('data-lang', l);
+        root.setAttribute('lang', l);
+        document.querySelectorAll('.lang button').forEach(function (b) {
+            b.setAttribute('aria-pressed', String(b.dataset.l === l));
+        });
+        if (save) { try { localStorage.setItem('sz-lang', l); } catch (e) {} }
+    }
+    var saved = null;
+    try { saved = localStorage.getItem('sz-lang'); } catch (e) {}
+    set(saved === 'lv' ? 'lv' : 'en', false);
+    document.querySelectorAll('.lang button').forEach(function (b) {
+        b.addEventListener('click', function () { set(b.dataset.l, true); });
+    });
+})();
+</script>
 </body>
 </html>
