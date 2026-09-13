@@ -211,25 +211,52 @@ a.row, .row.clickable { cursor: pointer; }
 }
 
 @media (max-width: 860px) {
-    :root { --pad: 16px; --col: calc(100vw - 32px); }
-    .ui { flex-direction: column; align-items: flex-start; gap: 16px; bottom: 22px; }
-    .ui-r nav { padding-bottom: 8px; }
-    .mark { font-size: 44px; }
-    .stage { height: calc(100svh - 300px); }
-    .reel-win { width: 86vw; }
-    .cell img { height: 42vh; }
-    .lead-space { width: 60vw; }
-    .vcell { width: 86vw; }
+    :root { --pad: 16px; }
+
+    /* one flowing column: video, then whichever section is open, then the bar */
     .ghost { font-size: 80vw; }
-    body.bio-open .stage { right: 0; }
-    .bio-col { position: static; width: auto; max-height: none; overflow: visible;
-               padding: 0 var(--pad) 26px; margin-top: calc(100svh - 300px); }
-    .reel-win { position: static; margin: 0 var(--pad); }
+
+    .reel-win { position: static; width: auto; margin: 0 var(--pad); }
+    .reel-win.gone { display: none; }
     .grip { display: none; }
     .reel-win .frame { cursor: default; }
-    .list.live { width: auto; }
-    .list.live .row { grid-template-columns: 1fr; gap: 2px; }
+
+    .stage { position: static; height: auto; padding-top: 30px; pointer-events: auto; }
+    .panel {
+        position: static; display: none; opacity: 1;
+        pointer-events: auto; max-height: none;
+    }
+    .panel.on { display: block; }
+    .strip { max-height: none; padding-left: var(--pad); }
+    .lead-space { display: none; }
+    .cell img { height: 46vh; }
+    .vcell { width: 86vw; }
+
+    .lists { pointer-events: auto; }
+    .list { width: auto; padding: 30px var(--pad) 0; }
+    .list.live .row, .list.live .row.tech { grid-template-columns: 1fr; gap: 2px; }
     .row { padding: 7px 0; }
+    .tech-block { position: static; width: auto; margin-top: 34px; }
+
+    .bio-col {
+        position: static; width: auto; max-height: none; overflow: visible;
+        padding: 30px var(--pad) 0;
+        display: none; opacity: 1; pointer-events: auto;
+    }
+    .bio-col.on { display: block; }
+
+    /* the nav stays reachable; the page is padded so nothing hides under it */
+    body { padding-bottom: 186px; }
+    .ui {
+        bottom: 0; left: 0; right: 0;
+        flex-direction: column; align-items: flex-start; gap: 9px;
+        padding: 11px var(--pad) 13px;
+        background: #fff;
+        border-top: .5px solid rgba(0,0,0,.14);
+    }
+    .ui::before { display: none; }
+    .mark { font-size: 26px; padding: 0; }
+    .ui-r nav { padding-bottom: 6px; flex-wrap: wrap; gap: 8px 18px; }
 }
 </style>
 </head>
