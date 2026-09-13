@@ -1,0 +1,8 @@
+# macOS
+.DS_Store
+
+# the full-size master copy of the landing video — the web version ships instead
+media/hero.mp4
+
+# photo archive, not linked from the page
+photos/press/*.zip
