@@ -216,6 +216,54 @@ a.row, .row.clickable { cursor: pointer; }
     .tech-block { position: static; width: auto; margin-top: 40px; }
 }
 
+
+/* ══ print sheet ═══════════════════════════════════════════════ */
+.sheet { display: none; }
+
+@media print {
+    @page { size: A4; margin: 15mm 14mm; }
+
+    .ghost, .reel-win, .stage, .lists, .bio-col, .ui { display: none !important; }
+    html, body { background: #fff; }
+    body { padding: 0 !important; }
+
+    .sheet {
+        display: block;
+        font: 400 9pt/1.4 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        color: #222; letter-spacing: .01em;
+    }
+    .sheet a { color: #222; text-decoration: none; }
+
+    .sheet header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12mm; }
+    .sheet h1 { font: 400 40pt/.86 Times, 'Times New Roman', serif; color: #000; margin: 0; letter-spacing: -.01em; }
+    .s-meta { color: #7d7d7d; padding-top: 4mm; }
+    .s-pic { width: 62mm; height: auto; display: block; }
+
+    .s-cols { display: flex; gap: 10mm; padding-top: 6mm; }
+    .s-main { flex: 1 1 auto; }
+    .s-side { flex: 0 0 62mm; }
+
+    .s-quote { font: 400 11.5pt/1.28 Times, 'Times New Roman', serif; color: #000; }
+    .s-quote .src { display: block; font: 400 7.6pt/1.4 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                    color: #7d7d7d; letter-spacing: .06em; padding-top: 2.5mm; }
+    .s-bio { padding-top: 6mm; }
+    .s-bio p { margin: 0 0 2.2mm; }
+
+    .s-side .hd { color: #7d7d7d; padding-bottom: 2mm; }
+    .s-side .trow { display: grid; grid-template-columns: 22mm 1fr; gap: 0 2mm; padding: .9mm 0; }
+    .s-side .trow p { margin: 0; }
+    .s-side .trow p:first-child { color: #7d7d7d; }
+
+    .s-links { columns: 3; column-gap: 9mm; padding-top: 5mm; }
+    .s-block { break-inside: avoid; margin-bottom: 6mm; }
+    .s-hd { color: #7d7d7d; padding-bottom: 2mm; }
+    .s-links a { display: block; padding: 0 0 1.7mm; break-inside: avoid; }
+    .s-links a em { display: block; font-style: normal; color: #7d7d7d; word-break: break-word; }
+    .s-links b { font-weight: 400; }
+
+    .s-foot { border-top: .4pt solid #cfcfcf; margin-top: 2mm; padding-top: 2.2mm; color: #7d7d7d; }
+}
+
 @media (max-width: 860px) {
     :root { --pad: 16px; }
 
@@ -473,6 +521,63 @@ a.row, .row.clickable { cursor: pointer; }
     <a class="pr" href="https://thequietus.com/news/shape-artist-sofi-shares-recording-captured-during-residency-at-pragues-meetfactory/" target="_blank"><b>The Quietus</b> — MeetFactory residency recording, 2025</a>
 </div>
 
+
+<!-- ══ print sheet ══════════════════════════════ -->
+<div class="sheet" id="sheet">
+    <header>
+        <div>
+            <h1>sofi</h1>
+            <div class="s-meta">Sofia Zaiceva &#183; sound artist &amp; performer, Riga<br>sofiazaiceva.xyz/presskit.html</div>
+        </div>
+        <img class="s-pic" src="photos/press/web/sofi-01-escalator.jpg" alt="">
+    </header>
+
+    <div class="s-cols">
+        <div class="s-main">
+            <div class="s-quote" id="sQuote"></div>
+            <div class="s-bio" id="sBio"></div>
+        </div>
+        <aside class="s-side" id="sTech"></aside>
+    </div>
+
+    <div class="s-links">
+        <div class="s-block">
+            <div class="s-hd">Listen</div>
+            <a href="https://sofi.bandcamp.com/album/hypergloss"><span><b>hypergloss</b> &#8212; Superpang, 2025</span><em>sofi.bandcamp.com/album/hypergloss</em></a>
+            <a href="https://riforma.bandcamp.com/album/aze"><span><b>aze</b> &#8212; Riforma, 2024</span><em>riforma.bandcamp.com/album/aze</em></a>
+            <a href="https://mappa.bandcamp.com/album/synthetic-water-music"><span><b>glitter ice</b> &#8212; Synthetic Water Music, mappa, 2026</span><em>mappa.bandcamp.com/album/synthetic-water-music</em></a>
+            <a href="https://superpang.bandcamp.com/album/superpang-world-tour-vol-1"><span><b>..pearly..</b> &#8212; Superpang: World Tour Vol.1, 2026</span><em>superpang.bandcamp.com/album/superpang-world-tour-vol-1</em></a>
+            <a href="https://sovnrecords.bandcamp.com/album/she-has-candy"><span><b>SHE HAS CANDY</b> &#8212; CATPURSE, S&#216;VN Records, 2025</span><em>sovnrecords.bandcamp.com/album/she-has-candy</em></a>
+        </div>
+
+        <div class="s-block">
+            <div class="s-hd">Watch</div>
+            <a href="https://youtu.be/0FjNSU0hQgc?t=898"><span>SWIM @ ZiMMT, Leipzig &#8212; 26-channel ambisonics, live laser control</span><em>youtu.be/0FjNSU0hQgc?t=898</em></a>
+            <a href="https://youtu.be/-pq8iA8X8BI"><span>live</span><em>youtu.be/-pq8iA8X8BI</em></a>
+            <a href="https://youtu.be/vb0oe1zzq-g"><span>Branches &amp; Bytes &#8212; musikprotokoll, Dom im Berg, Graz</span><em>youtu.be/vb0oe1zzq-g</em></a>
+            <a href="https://vimeo.com/1222386877"><span>audiovisual live w/ &#317;ubom&#237;r Slovinsk&#253;</span><em>vimeo.com/1222386877</em></a>
+            <a href="https://vimeo.com/1128668567"><span>Musiikkitalo Blackbox, Helsinki &#8212; 48-channel loudspeaker orchestra</span><em>vimeo.com/1128668567</em></a>
+        </div>
+
+        <div class="s-block">
+            <div class="s-hd">Press</div>
+            <a href="https://www.shapeplatform.eu/2025/i-noticed-myself-imagining-new-sounds-and-algorithms-even-while-performing-other-works-an-interview-with-sofi/"><span><b>SHAPE+ Platform</b> &#8212; Interview, 2025</span><em>shapeplatform.eu</em></a>
+            <a href="https://www.radioaktiv.it/catpurse-she-has-candy/"><span><b>Radioaktiv</b> &#8212; Catpurse: She Has Candy, 2025</span><em>radioaktiv.it/catpurse-she-has-candy</em></a>
+            <a href="https://klasika.lsm.lv/lv/raksts/vakara-autorprogramma/elektroniskas-muzikas-komponiste-sofija-zaiceva.-rakstit-muziku-.a210731/"><span><b>LSM Klasika</b> &#8212; Interview, 2025</span><em>klasika.lsm.lv</em></a>
+            <a href="https://thequietus.com/news/shape-artist-sofi-shares-recording-captured-during-residency-at-pragues-meetfactory/"><span><b>The Quietus</b> &#8212; MeetFactory residency recording, 2025</span><em>thequietus.com</em></a>
+        </div>
+
+    </div>
+
+    <div class="s-foot">
+        Booking: <a href="mailto:sofijazaiceva7@gmail.com">sofijazaiceva7@gmail.com</a>
+        &#183; <a href="https://sofi.bandcamp.com">sofi.bandcamp.com</a>
+        &#183; <a href="https://www.instagram.com/sofizaiceva/">instagram.com/sofizaiceva</a><br>
+        Hi-res photos, full live history and videos: <a href="https://sofiazaiceva.xyz/presskit.html">sofiazaiceva.xyz/presskit.html</a>
+        &#183; &#169; 2026
+    </div>
+</div>
+
 <!-- ══ UI ═══════════════════════════════════════ -->
 <div class="ui">
     <div class="ui-l">
@@ -492,7 +597,8 @@ a.row, .row.clickable { cursor: pointer; }
             Booking: <a href="mailto:sofijazaiceva7@gmail.com">sofijazaiceva7@gmail.com</a><br>
             <a href="https://sofi.bandcamp.com" target="_blank">Bandcamp</a> &nbsp;
             <a href="https://www.instagram.com/sofizaiceva/" target="_blank">Instagram</a> &nbsp;
-            <a href="https://www.sofiazaiceva.xyz" target="_blank">Site</a>
+            <a href="https://www.sofiazaiceva.xyz" target="_blank">Site</a> &nbsp;
+            <a href="#" id="printBtn">PDF</a>
         </div>
     </div>
 </div>
@@ -590,6 +696,9 @@ a.row, .row.clickable { cursor: pointer; }
             e.preventDefault();
             if (list === a.dataset.list) home(); else openList(a.dataset.list);
         });
+    });
+    document.getElementById('printBtn').addEventListener('click', function (e) {
+        e.preventDefault(); window.print();
     });
     document.getElementById('home').addEventListener('click', home);
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') home(); });
@@ -822,6 +931,22 @@ a.row, .row.clickable { cursor: pointer; }
     }
     setInterval(sample, 180);
     v.addEventListener('loadeddata', sample);
+
+    /* the print sheet reads from the same bio and technical block */
+    (function () {
+        var q = document.querySelector('.bio-col .q'),
+            src = document.querySelector('.bio-col .src'),
+            tech = document.querySelector('.tech-block');
+        if (q) {
+            document.getElementById('sQuote').innerHTML =
+                q.innerHTML + '<span class="src">' + (src ? src.textContent : '') + '</span>';
+        }
+        var bio = document.getElementById('sBio');
+        document.querySelectorAll('.bio-col p.t').forEach(function (el) {
+            var c = el.cloneNode(true); c.className = ''; bio.appendChild(c);
+        });
+        if (tech) document.getElementById('sTech').innerHTML = tech.innerHTML;
+    })();
 
     setBio(true);
 })();
