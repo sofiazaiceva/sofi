@@ -218,7 +218,7 @@ a.row, .row.clickable { cursor: pointer; }
 
 
 /* ══ print sheet ═══════════════════════════════════════════════ */
-.sheet { display: none; }
+/* .sheet { display: none; }
 
 @media print {
     @page { size: A4; margin: 15mm 14mm; }
@@ -262,6 +262,68 @@ a.row, .row.clickable { cursor: pointer; }
     .s-links b { font-weight: 400; }
 
     .s-foot { border-top: .4pt solid #cfcfcf; margin-top: 2mm; padding-top: 2.2mm; color: #7d7d7d; }
+} */
+ /* ══ print sheet ═══════════════════════════════════════════════ */
+.sheet { display: none; }
+
+@media print {
+    /* 1. Tighten margins slightly to fit everything */
+    @page { size: A4; margin: 10mm 12mm; }
+
+    /* 2. FIX 10-SECOND DELAY: Explicitly hide all iframes and videos so the print spooler doesn't try to load them */
+    .ghost, .reel-win, .stage, .lists, .bio-col, .ui, iframe, video { display: none !important; }
+    
+    html, body { 
+        background: #fff; 
+        height: 100%; 
+        margin: 0 !important; 
+        padding: 0 !important; 
+    }
+
+    /* 3. FIX PAGE CUTTING: Force exactly 1 page height (98vh) and flex layout */
+    .sheet {
+        display: flex;
+        flex-direction: column;
+        height: 98vh; 
+        box-sizing: border-box;
+        overflow: hidden; 
+        page-break-inside: avoid;
+        font: 400 9pt/1.4 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        color: #222; letter-spacing: .01em;
+    }
+    .sheet a { color: #222; text-decoration: none; }
+
+    .sheet header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12mm; }
+    .sheet h1 { font: 400 40pt/.86 Times, 'Times New Roman', serif; color: #000; margin: 0; letter-spacing: -.01em; }
+    .s-meta { color: #7d7d7d; padding-top: 4mm; }
+    
+    /* 4. Constrain image so it doesn't push text down */
+    .s-pic { width: 55mm; max-height: 140px; object-fit: cover; display: block; }
+
+    .s-cols { display: flex; gap: 10mm; padding-top: 5mm; }
+    .s-main { flex: 1 1 auto; }
+    .s-side { flex: 0 0 62mm; }
+
+    .s-quote { font: 400 11.5pt/1.28 Times, 'Times New Roman', serif; color: #000; }
+    .s-quote .src { display: block; font: 400 7.6pt/1.4 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                    color: #7d7d7d; letter-spacing: .06em; padding-top: 2.5mm; }
+    .s-bio { padding-top: 4mm; }
+    .s-bio p { margin: 0 0 2mm; }
+
+    .s-side .hd { color: #7d7d7d; padding-bottom: 2mm; }
+    .s-side .trow { display: grid; grid-template-columns: 22mm 1fr; gap: 0 2mm; padding: .9mm 0; }
+    .s-side .trow p { margin: 0; }
+    .s-side .trow p:first-child { color: #7d7d7d; }
+
+    .s-links { columns: 3; column-gap: 9mm; padding-top: 3mm; }
+    .s-block { break-inside: avoid; margin-bottom: 6mm; }
+    .s-hd { color: #7d7d7d; padding-bottom: 2mm; }
+    .s-links a { display: block; padding: 0 0 1.7mm; break-inside: avoid; }
+    .s-links a em { display: block; font-style: normal; color: #7d7d7d; word-break: break-word; }
+    .s-links b { font-weight: 400; }
+
+    /* Push the footer strictly to the bottom of the page */
+    .s-foot { margin-top: auto; border-top: .4pt solid #cfcfcf; padding-top: 2.2mm; color: #7d7d7d; }
 }
 
 @media (max-width: 860px) {
