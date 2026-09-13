@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>sofi</title>
+<style>
+:root {
+    --grey: #7d7d7d;
+    --ink:  #000;
+    --ui:   11px;
+    --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --serif: Times, "Times New Roman", serif;
+    --pad:  26px;
+    --col:  500px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    min-height: 100svh;
+    background: #fff; color: var(--ink);
+    font-family: var(--sans); font-size: var(--ui); line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+img, video { display: block; }
+
+/* ── ghost mark ─────────────────────────────── */
+.ghost {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-size: 46vw; line-height: 1;
+    color: rgba(0,0,0,.032);
+    user-select: none; pointer-events: none; z-index: -2;
+}
+
+/* ── media layer — pinned to the top edge ───── */
+.stage {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: calc(100svh - 210px);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* the reel — drag it anywhere, pull the corner to scale it */
+.reel-win {
+    position: fixed; top: 0; left: 0; z-index: 0;
+    width: min(720px, 62vw);
+    user-select: none; -webkit-user-select: none;
+}
+.reel-win .frame { position: relative; width: 100%; padding-top: 56.25%; background: #000; cursor: move; }
+.reel-win video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.reel-win .foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.grip { position: absolute; right: 0; bottom: 0; width: 18px; height: 18px; cursor: nwse-resize; }
+.grip::after {
+    content: ''; position: absolute; right: 3px; bottom: 3px; width: 10px; height: 10px;
+    border-right: 1px solid rgba(255,255,255,.8); border-bottom: 1px solid rgba(255,255,255,.8);
+}
+.reel-win.busy { opacity: .9; }
+.reel-win { transition: opacity .3s ease; }
+.reel-win.gone { opacity: 0; pointer-events: none; }
+.panel {
+    position: absolute; top: 0; left: 0; right: 0;
+    max-height: 100%;
+    opacity: 0; pointer-events: none;
+    transition: opacity .3s ease;
+}
+.panel.on { opacity: 1; pointer-events: auto; }
+
+.strip {
+    display: flex; align-items: flex-start; gap: 2px;
+    overflow-x: auto; overflow-y: hidden;
+    max-height: 100%; cursor: grab; scrollbar-width: none;
+}
+.strip::-webkit-scrollbar { display: none; }
+.strip.drag { cursor: grabbing; }
+.strip > * { flex: 0 0 auto; }
+.cap { color: var(--grey); padding: 5px 0 0 1px; }
+.cap b { color: var(--ink); font-weight: 400; }
+
+
+.sound {
+    display: flex; align-items: center; gap: 7px;
+    background: none; border: 0; padding: 5px 0 0; cursor: pointer;
+    font-family: var(--sans); font-size: var(--ui);
+    color: var(--grey); transition: color .14s; white-space: nowrap;
+}
+.sound:hover { color: var(--ink); }
+.sound svg { display: block; overflow: visible; }
+.sound .wave { opacity: 0; transition: opacity .2s; }
+.sound .cross { opacity: 1; transition: opacity .2s; }
+.sound.on .wave { opacity: 1; }
+.sound.on .cross { opacity: 0; }
+
+.cell { width: auto; }
+.cell img {
+    height: min(520px, calc(100svh - 330px));
+    width: auto; max-width: none; display: block;
+}
+.cell .cap a { border-bottom: .5px solid rgba(0,0,0,.25); }
+.cell .cap a:hover { color: var(--ink); }
+.lead-space { width: 230px; height: 1px; }
+
+.vcell { width: 520px; }
+.vcell .frame { position: relative; width: 100%; padding-top: 56.25%; background: #000; }
+.vcell iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+.bcell { width: 250px; }
+.bcell iframe { width: 250px; height: 250px; border: 0; display: block; }
+
+/* ── bio column — pinned top-right, open on load ── */
+.bio-col {
+    position: fixed; top: 0; right: var(--pad); z-index: 3;
+    width: 420px;
+    max-height: calc(100svh - 210px);
+    padding-bottom: 24px;
+    overflow-y: auto; scrollbar-width: none;
+    opacity: 0; pointer-events: none; transition: opacity .3s ease;
+}
+.bio-col::-webkit-scrollbar { display: none; }
+.bio-col.on { opacity: 1; pointer-events: auto; }
+.bio-col .q { font-family: var(--serif); font-size: 17px; line-height: 1.32; color: var(--ink); }
+.bio-col .src { color: var(--grey); padding-top: 10px; letter-spacing: .06em; }
+.bio-col .src a:hover { color: var(--ink); }
+.bio-col p.t { font-size: 12px; line-height: 1.65; color: #222; }
+.bio-col p.t + p.t { padding-top: 11px; }
+.bio-col .rule { height: 1px; background: rgba(0,0,0,.12); margin: 22px 0 14px; }
+.bio-col .hd { color: rgba(0,0,0,.35); padding-bottom: 9px; }
+.bio-col .pr { display: block; color: var(--grey); padding: 4px 0; line-height: 13px; transition: color .12s; }
+.bio-col .pr:hover { color: var(--ink); }
+.bio-col .pr b { color: #333; font-weight: 400; }
+
+/* ── list layer — scrolls up from below the fold ── */
+.lists { position: relative; z-index: 2; pointer-events: none; }
+.list {
+    display: none;
+    pointer-events: none;
+    width: var(--col); margin: 0 auto;
+    padding-top: 82.5vh; padding-bottom: 22vh;
+}
+.list.on { display: block; }
+.list > * { pointer-events: auto; }
+
+.row {
+    display: grid; gap: 0 30px;
+    color: var(--grey);
+    padding: 4px 0;
+    line-height: 12px;
+    transition: color .12s;
+}
+a.row, .row.clickable { cursor: pointer; }
+.row:hover { color: var(--ink); }
+.list.live { width: 640px; }
+.list.live .row { grid-template-columns: 108px 268px 108px 56px; }
+
+/* technical — parked to the right of the dates, stays put while they scroll */
+.tech-block {
+    position: fixed; top: 24vh;
+    left: calc(50% + 356px); width: 300px;
+}
+.tech-block .trow {
+    display: grid; grid-template-columns: 86px 1fr; gap: 0 14px;
+    color: var(--grey); padding: 4px 0; line-height: 13px;
+}
+.tech-block .trow p { margin: 0; }
+.row p { margin: 0; }
+
+.list .hd { color: rgba(0,0,0,.35); padding: 0 0 12px; }
+.list .gap { height: 34px; }
+.list .note { color: rgba(0,0,0,.3); padding-top: 12px; }
+
+
+/* text sitting over the video — haloed, and inverted where it is dark */
+[data-inv] { transition: color .25s ease, text-shadow .25s ease; }
+.over { text-shadow: 0 0 5px rgba(255,255,255,.92), 0 0 2px rgba(255,255,255,.92); }
+.over.on-dark {
+    color: rgba(255,255,255,.82) !important;
+    text-shadow: 0 0 6px rgba(0,0,0,.65), 0 0 2px rgba(0,0,0,.65);
+}
+.over.on-dark b, .over.on-dark p, .over.on-dark .q { color: #fff !important; }
+.over.on-dark a { color: rgba(255,255,255,.82) !important; }
+.over.on-dark:hover, .over.on-dark a:hover { color: #fff !important; }
+
+/* ── UI band ────────────────────────────────── */
+.ui {
+    position: fixed; left: 0; right: 0; bottom: 56px; z-index: 4;
+    display: flex; align-items: flex-end; justify-content: space-between;
+    gap: 30px; padding: 0 var(--pad);
+}
+.ui::before {
+    content: ''; position: absolute; left: 0; right: 0; bottom: -56px; top: -26px;
+    background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #fff 26%);
+    z-index: -1; pointer-events: none;
+}
+.lab { color: var(--grey); display: inline-block; transition: color .12s; cursor: pointer; }
+.lab:hover, .lab.on { color: var(--ink); }
+
+.mark {
+    font-family: var(--serif); font-size: 62px; font-weight: 400;
+    line-height: .96; letter-spacing: -.01em; padding: 2px 0 4px; cursor: pointer;
+}
+.meta { color: var(--grey); }
+.meta a:hover { color: var(--ink); }
+
+
+.ui-r nav { display: flex; gap: 26px; padding-bottom: 14px; }
+
+@media (max-width: 1140px) {
+    .tech-block { position: static; width: auto; margin-top: 40px; }
+}
+
+@media (max-width: 860px) {
+    :root { --pad: 16px; --col: calc(100vw - 32px); }
+    .ui { flex-direction: column; align-items: flex-start; gap: 16px; bottom: 22px; }
+    .ui-r nav { padding-bottom: 8px; }
+    .mark { font-size: 44px; }
+    .stage { height: calc(100svh - 300px); }
+    .reel-win { width: 86vw; }
+    .cell img { height: 42vh; }
+    .lead-space { width: 60vw; }
+    .vcell { width: 86vw; }
+    .ghost { font-size: 80vw; }
+    body.bio-open .stage { right: 0; }
+    .bio-col { position: static; width: auto; max-height: none; overflow: visible;
+               padding: 0 var(--pad) 26px; margin-top: calc(100svh - 300px); }
+    .reel-win { position: static; margin: 0 var(--pad); }
+    .grip { display: none; }
+    .reel-win .frame { cursor: default; }
+    .list.live { width: auto; }
+    .list.live .row { grid-template-columns: 1fr; gap: 2px; }
+    .row { padding: 7px 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="ghost">sofi</div>
+
+<!-- ══ media ════════════════════════════════════ -->
+<div class="reel-win" id="reel">
+    <div class="frame">
+        <video id="v" autoplay muted loop playsinline poster="media/hero-poster.jpg">
+            <source src="media/hero-web.mp4" type="video/mp4">
+        </video>
+        <div class="grip" id="grip"></div>
+    </div>
+    <div class="foot">
+        <div class="cap"><span>sofi — live</span></div>
+        <button class="sound" id="soundBtn" aria-label="Toggle sound">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 9.2v5.6h3.6L12.6 19V5l-5 4.2H4z"/>
+                <g class="wave"><path d="M16.2 8.9a4.4 4.4 0 0 1 0 6.2"/><path d="M18.9 6.2a8.2 8.2 0 0 1 0 11.6"/></g>
+                <g class="cross"><path d="M16.4 9.6l5 4.8"/><path d="M21.4 9.6l-5 4.8"/></g>
+            </svg>
+            <span id="soundLab">Sound off</span>
+        </button>
+    </div>
+</div>
+
+<div class="stage">
+
+    <div class="panel" id="m-photos">
+        <div class="strip">
+            <span class="lead-space" aria-hidden="true"></span>
+            <figure class="cell"><img src="photos/press/web/sofi-01-escalator.jpg" alt="" loading="lazy"><div class="cap"><span>01 &nbsp;<a href="photos/press/sofi-01-escalator.jpg" download>hi-res ↓</a></span></div></figure>
+            <figure class="cell"><img src="photos/press/web/sofi-02-steps.jpg" alt="" loading="lazy"><div class="cap"><span>02 &nbsp;<a href="photos/press/sofi-02-steps.jpg" download>hi-res ↓</a></span></div></figure>
+            <figure class="cell"><img src="photos/press/web/sofi-03-lift.jpg" alt="" loading="lazy"><div class="cap"><span>03 &nbsp;<a href="photos/press/sofi-03-lift.jpg" download>hi-res ↓</a></span></div></figure>
+            <figure class="cell"><img src="photos/press/web/sofi-04-code.jpg" alt="" loading="lazy"><div class="cap"><span>04 &nbsp;<a href="photos/press/sofi-04-code.jpg" download>hi-res ↓</a></span></div></figure>
+            <figure class="cell"><img src="photos/press/web/sofi-05-light.jpg" alt="" loading="lazy"><div class="cap"><span>05 &nbsp;<a href="photos/press/sofi-05-light.jpg" download>hi-res ↓</a></span></div></figure>
+            <figure class="cell"><img src="photos/press/web/sofi-06-supercollider.jpg" alt="" loading="lazy"><div class="cap"><span>06 &nbsp;<a href="photos/press/sofi-06-supercollider.jpg" download>hi-res ↓</a></span></div></figure>
+        </div>
+    </div>
+
+    <div class="panel" id="m-listen">
+        <div class="strip">
+            <div class="bcell">
+                <iframe src="https://bandcamp.com/EmbeddedPlayer/album=3076848033/size=large/bgcol=ffffff/linkcol=000000/minimal=true/transparent=true/" seamless loading="lazy"></iframe>
+                <div class="cap"><span><b>hypergloss</b> — Superpang, 2025</span></div>
+            </div>
+            <div class="bcell">
+                <iframe src="https://bandcamp.com/EmbeddedPlayer/album=2640124460/size=large/bgcol=ffffff/linkcol=000000/minimal=true/transparent=true/" seamless loading="lazy"></iframe>
+                <div class="cap"><span><b>aze</b> — Riforma, 2024</span></div>
+            </div>
+            <div class="bcell">
+                <iframe src="https://bandcamp.com/EmbeddedPlayer/album=1878880625/size=large/bgcol=ffffff/linkcol=000000/minimal=true/transparent=true/t=30/" seamless loading="lazy"></iframe>
+                <div class="cap"><span><b>glitter ice</b> — Synthetic Water Music, mappa, 2026</span></div>
+            </div>
+            <div class="bcell">
+                <iframe src="https://bandcamp.com/EmbeddedPlayer/album=314015690/size=large/bgcol=ffffff/linkcol=000000/minimal=true/transparent=true/t=18/" seamless loading="lazy"></iframe>
+                <div class="cap"><span><b>..pearly..</b> — Superpang: World Tour Vol.1, 2026</span></div>
+            </div>
+            <div class="bcell">
+                <iframe src="https://bandcamp.com/EmbeddedPlayer/album=1828225882/size=large/bgcol=ffffff/linkcol=000000/minimal=true/transparent=true/" seamless loading="lazy"></iframe>
+                <div class="cap"><span><b>SHE HAS CANDY</b> — CATPURSE, SØVN Records, 2025</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel" id="m-watch">
+        <div class="strip">
+            <div class="vcell">
+                <div class="frame"><iframe src="https://www.youtube.com/embed/0FjNSU0hQgc?start=898" title="SWIM @ ZiMMT" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div>
+                <div class="cap"><span>SWIM @ ZiMMT, Leipzig — 26-channel ambisonics, live laser control</span></div>
+            </div>
+            <div class="vcell">
+                <div class="frame"><iframe src="https://www.youtube.com/embed/-pq8iA8X8BI" title="live" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div>
+                <div class="cap"><span>live</span></div>
+            </div>
+            <div class="vcell">
+                <div class="frame"><iframe src="https://www.youtube.com/embed/vb0oe1zzq-g" title="Branches and Bytes" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div>
+                <div class="cap"><span>Branches &amp; Bytes — musikprotokoll, Dom im Berg, Graz</span></div>
+            </div>
+            <div class="vcell">
+                <div class="frame"><iframe src="https://player.vimeo.com/video/1222386877" title="audiovisual live duo" allow="fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+                <div class="cap"><span>audiovisual live w/ Ľubomír Slovinský</span></div>
+            </div>
+            <div class="vcell">
+                <div class="frame"><iframe src="https://player.vimeo.com/video/1128668567" title="Musiikkitalo Blackbox" allow="fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+                <div class="cap"><span>Musiikkitalo Blackbox, Helsinki — 48-channel loudspeaker orchestra</span></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ══ lists ════════════════════════════════════ -->
+<div class="lists">
+
+    <div class="list live" id="l-live">
+        <div class="hd">2026</div>
+        <div class="row"><p>13.11.2026</p><p>TBA</p><p>Oulu, FI</p><p>live</p></div>
+        <a class="row" href="https://www.progettobao.com/bao-sound-experience/" target="_blank"><p>17.10.2026</p><p>BAO Sound Experience 2026</p><p>Brescia, IT</p><p>live</p></a>
+        <a class="row" href="https://www.skanumezs.lv/en/festival2026/sofi/" target="_blank"><p>09.10.2026</p><p>Skaņu Mežs</p><p>Riga, LV</p><p>live</p></a>
+        <a class="row" href="https://musikprotokoll.orf.at/2026/projekt/branches-bytes" target="_blank"><p>08.10.2026</p><p>musikprotokoll — Branches &amp; Bytes @ Dom im Berg</p><p>Graz, AT</p><p>live</p></a>
+        <a class="row" href="https://dda.lv" target="_blank"><p>04.10.2026</p><p>DDA — concert &amp; artist talk w/ Andreas Trobollowitsch</p><p>Laidi Palace, LV</p><p>live</p></a>
+        <a class="row" href="https://dda.lv" target="_blank"><p>30.09–04.10.2026</p><p>DDA</p><p>Laidi Palace, LV</p><p>residency</p></a>
+        <div class="row"><p>24.09.2026</p><p>TBA</p><p>Vilnius, LT</p><p>live</p></div>
+        <a class="row" href="https://www.baltanakts.lv/2026/lv/program/?article_id=328&amp;amp;controller=program&amp;amp;action=index" target="_blank"><p>05.09.2026</p><p>Baltā nakts</p><p>Riga, LV</p><p>live</p></a>
+        <a class="row" href="https://www.balticanaloglab.lv/" target="_blank"><p>01–30.09.2026</p><p>Baltic Analog Lab</p><p>Riga, LV</p><p>residency</p></a>
+        <a class="row" href="https://unsoundlab.com/about/" target="_blank"><p>02–05.08.2026</p><p>Unsound Lab Summer School</p><p>Sokołowsko, PL</p><p>participant</p></a>
+        <a class="row" href="https://nonagonfestival.se/en/festivalen" target="_blank"><p>17.07.2026</p><p>Nonagon Festival — w/ Ľubomír Slovinský</p><p>Svanö, SE</p><p>live audiovisual</p></a>
+        <div class="gap"></div>
+        <div class="hd">2025</div>
+        <a class="row" href="https://www.cityofmediaarts.de/en/events/nan-festival/" target="_blank"><p>21.11.2025</p><p>NAN Computer Music Festival</p><p>Karlsruhe, DE</p><p>live</p></a>
+        <a class="row" href="https://www.instagram.com/p/DRDBegMjlyP/?hl=en" target="_blank"><p>21.11.2025</p><p>Spin Foam @ Retrito Smarsas</p><p>Vilnius, LT</p><p>live</p></a>
+        <a class="row" href="https://www.balticanaloglab.lv/events/baltic-analog-lab-9" target="_blank"><p>15.11.2025</p><p>Baltic Analog Lab 9</p><p>Riga, LV</p><p>live</p></a>
+        <a class="row" href="http://www.bachfestriga.com/programma/" target="_blank"><p>10.11.2025</p><p>Bach Chamber Music Festival</p><p>Riga, LV</p><p>live</p></a>
+        <a class="row" href="https://www.facebook.com/events/636677222850303" target="_blank"><p>25.10.2025</p><p>Trať off the rails #5</p><p>Prague, CZ</p><p>live</p></a>
+        <a class="row" href="https://punctum.cz/event/andy-loebs-orange-milk-sofi-ursula-sereghy-sonitus" target="_blank"><p>22.10.2025</p><p>Sonitus @ Punctum</p><p>Prague, CZ</p><p>live</p></a>
+        <a class="row" href="https://ra.co/events/2275629" target="_blank"><p>21.10.2025</p><p>scribble.mp3 × Holy Matrimony</p><p>Berlin, DE</p><p>live</p></a>
+        <a class="row" href="https://www.dda.lv/events" target="_blank"><p>18.10.2025</p><p>DDA Ambisonics Weekend @ Vagonu Hall</p><p>Riga, LV</p><p>live</p></a>
+        <a class="row" href="https://zimmt.net/swim-2025/" target="_blank"><p>09–11.10.2025</p><p>SWIM @ ZiMMT</p><p>Leipzig, DE</p><p>live</p></a>
+        <a class="row" href="https://elektronmusikstudion.se/en/guest-composers/guest-composers-2025/sofia-zaiceva/" target="_blank"><p>15–28.09.2025</p><p>EMS Studios Guest Composer</p><p>Stockholm, SE</p><p>residency</p></a>
+        <div class="row"><p>20.09.2025</p><p>Nya Perspektiv</p><p>Västerås, SE</p><p>live</p></div>
+        <div class="row"><p>17.08.2025</p><p>TBA</p><p>Helsinki, FI</p><p>live</p></div>
+        <a class="row" href="https://nonagonfestival.se/en/events/nonagon-residency-showcase" target="_blank"><p>07–20.07.2025</p><p>Nonagon Festival Residency & Concert</p><p>Svanö, SE</p><p>live audiovisual</p></a>
+        <a class="row" href="https://www.uniarts.fi/tapahtumat/masters-degree-concert-sofija-zaiceva/" target="_blank"><p>07.06.2025</p><p>Musiikkitalo — Loudspeaker Orchestra</p><p>Helsinki, FI</p><p>live</p></a>
+        <a class="row" href="https://meetfactory.cz/en/program/detail/shape-dali-muru-the-polyphonic-swarm-donna-haringwey-sofi-sorbitol-drops-natalie-plevakova-tonota" target="_blank"><p>23.05–04.06.2025</p><p>MeetFactory (w/ Sorbitol Drops + Natálie Pleváková)</p><p>Prague, CZ</p><p>residency + live</p></a>
+        <a class="row" href="https://www.caisa.fi/en/events/event/91615898C92EED0CC83D76B68D0A65DD/Object_Permanence_2025" target="_blank"><p>17.05.2025</p><p>Object Permanence</p><p>Helsinki, FI</p><p>live</p></a>
+        <a class="row" href="https://www.madhousehelsinki.fi/en/ohjelmisto/bugbath-questing-questing" target="_blank"><p>03.05.2025</p><p>Bugbath: Questing – Questing</p><p>Helsinki, FI</p><p>live</p></a>
+        <a class="row" href="https://sound.mplab.lv/en/programme/" target="_blank"><p>25.04.2025</p><p>Sound Days × Algorave Liepāja</p><p>Liepāja, LV</p><p>live</p></a>
+        <a class="row" href="https://pro.tmw.ee/speakers/sofia-zaiceva" target="_blank"><p>05.04.2025</p><p>TMW Conference</p><p>Tallinn, EE</p><p>speaker</p></a>
+        <div class="gap"></div>
+        <div class="hd">2024</div>
+        <a class="row" href="https://madameclaude.de/event/outro-sofi-dj-offcourse/" target="_blank"><p>02.12.2024</p><p>Madame Claude × Renatura</p><p>Berlin, DE</p><p>live</p></a>
+        <a class="row" href="https://ra.co/events/2044938" target="_blank"><p>28.11.2024</p><p>Algomystica × Riforma</p><p>Berlin, DE</p><p>live</p></a>
+        <a class="row" href="https://ule-heli.ee" target="_blank"><p>18.10.2024</p><p>Üle Heli Festival</p><p>Tallinn, EE</p><p>live</p></a>
+        <div class="row"><p>17.10.2024</p><p>Free Improv @ Rahina</p><p>Helsinki, FI</p><p>live</p></div>
+        <a class="row" href="https://www.altparty.org" target="_blank"><p>11.10.2024</p><p>Alternative Party</p><p>Helsinki, FI</p><p>live</p></a>
+        <a class="row" href="https://musikprotokoll.orf.at/en/2024/project/periphery-oneness" target="_blank"><p>03.10.2024</p><p>Musikprotokoll Festival</p><p>Graz, AT</p><p>live ambisonics</p></a>
+        <a class="row" href="https://shapeplatform.eu/events/event/shape-prague-artist-meetup-event/" target="_blank"><p>28.08.2024</p><p>SHAPE+ Meetup</p><p>Prague, CZ</p><p>live</p></a>
+        <a class="row" href="https://tartu2024.ee/programm/valga-glow/?event=83614" target="_blank"><p>28.06.2024</p><p>Valga Glow Festival</p><p>Valga, EE</p><p>dj</p></a>
+        <a class="row" href="https://elektron.art/projects/ruum/kristall" target="_blank"><p>11.05.2024</p><p>Kristallofoonia Vol 4 @ Elektron.Art</p><p>Tallinn, EE</p><p>live ambisonics</p></a>
+        <a class="row" href="https://tmw.ee/events/ule-heli-kristallofonia" target="_blank"><p>05.04.2024</p><p>Tallinn Music Week @ Üle Heli</p><p>Tallinn, EE</p><p>live ambisonics</p></a>
+        <a class="row" href="https://ra.co/events/1826020" target="_blank"><p>21.01.2024</p><p>Morevi & Coppi @ About Blank</p><p>Berlin, DE</p><p>dj</p></a>
+        <div class="gap"></div>
+        <div class="hd">2023</div>
+        <a class="row" href="https://www.uniarts.fi/tapahtumat/nyky-ensemble-morphing-musicianship/" target="_blank"><p>08.12.2023</p><p>Nyky Ensemble: Morphing Musicianship</p><p>Helsinki, FI</p><p>performance</p></a>
+        <a class="row" href="https://fb.me/e/1F8aVcdW7" target="_blank"><p>18.11.2023</p><p>S-27 Spinnitre @ Muovitehdas</p><p>Tampere, FI</p><p>dj</p></a>
+        <div class="row"><p>17.11.2023</p><p>Sonic Impact @ Hall Techno Club</p><p>Tallinn, EE</p><p>dj</p></div>
+        <div class="row"><p>03.11.2023</p><p>Sola Festival @ WHS Teatteri Union</p><p>Helsinki, FI</p><p>live</p></div>
+        <div class="row"><p>20.10.2023</p><p>Üle Heli Festival</p><p>Tallinn, EE</p><p>fixed piece</p></div>
+        <a class="row" href="https://fb.me/e/1m0Nys8ep" target="_blank"><p>06.10.2023</p><p>Skaņu Mežs @ Tu Jau Zini Kur</p><p>Riga, LV</p><p>live</p></a>
+        <div class="row"><p>16.04.2023</p><p>COMMUTE#5 @ EAMT Blackbox</p><p>Riga, LV</p><p>live</p></div>
+        <div class="tech-block">
+            <div class="hd">Technical</div>
+            <div class="trow"><p>Formats</p><p>solo · duo &#8220;branches&amp;bytes&#8221; · audiovisual</p></div>
+            <div class="trow"><p>Set</p><p>40–60 min</p></div>
+            <div class="trow"><p>Audio</p><p>stereo · multichannel · ambisonics</p></div>
+            <div class="trow"><p>Travels from</p><p>Riga, Latvia</p></div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- ══ bio + press — open on load ═══════════════ -->
+<div class="bio-col on" id="bioCol">
+    <div class="q">“A journey through computer music marbled with fleeting, iridescent melodies, curious harmonic resonance, and a mix of sublime and fractious impulses... the music treated as living matter, coding serving as a form of live improvisation.”</div>
+    <div class="src"><a href="https://thequietus.com/quietus-reviews/quietus-international/inner-ear-latvian-music-for-june-by-jakub-knera/" target="_blank">THE QUIETUS — 2026</a></div>
+
+    <div class="rule"></div>
+
+    <p class="t">Sofi (Sofia Zaiceva) is a Latvia-born sound artist and performer who approaches sound as a process of controlled instability, using code to deconstruct and redirect the digital signal into an aesthetically fluid and compositionally shifting post-club sound. Trained as a classical pianist before moving into electronics, she works with open source software, mainly SuperCollider, writing algorithms that shift and respond as she plays them.</p>
+    <p class="t">Data hijacking and digital archaeology are central to the practice. She works with obsolete devices, dead operating systems and the residue left on them by whoever used them last, intercepting what they still emit. The devices carry traces of the people who owned them, and they shape the piece as much as she does.</p>
+    <p class="t">She has played Skaņu Mežs in Riga, ORF musikprotokoll in Graz, ZiMMT in Leipzig, Musiikkitalo in Helsinki, MeetFactory in Prague and Nonagon Festival in Sweden. Recent collaborations include an audiovisual duo with Ľubomír Slovinský and Branches &amp; Bytes with Andreas Trobollowitsch. Her music comes out on Superpang, SØVN Records, Riforma and mappa, and she was selected for the SHAPE+ platform in 2024/25.</p>
+
+    <div class="rule"></div>
+    <div class="hd">Press</div>
+    <a class="pr" href="https://www.shapeplatform.eu/2025/i-noticed-myself-imagining-new-sounds-and-algorithms-even-while-performing-other-works-an-interview-with-sofi/" target="_blank"><b>SHAPE+ Platform</b> — Interview, 2025</a>
+    <a class="pr" href="https://www.radioaktiv.it/catpurse-she-has-candy/" target="_blank"><b>Radioaktiv</b> — Catpurse: She Has Candy, 2025</a>
+    <a class="pr" href="https://klasika.lsm.lv/lv/raksts/vakara-autorprogramma/elektroniskas-muzikas-komponiste-sofija-zaiceva.-rakstit-muziku-.a210731/" target="_blank"><b>LSM Klasika</b> — Interview, 2025</a>
+    <a class="pr" href="https://thequietus.com/news/shape-artist-sofi-shares-recording-captured-during-residency-at-pragues-meetfactory/" target="_blank"><b>The Quietus</b> — MeetFactory residency recording, 2025</a>
+</div>
+
+<!-- ══ UI ═══════════════════════════════════════ -->
+<div class="ui">
+    <div class="ui-l">
+        <a class="lab on" id="bioBtn">Bio</a>
+        <h1 class="mark" id="home">sofi</h1>
+        <div class="meta">Sofia Zaiceva · sound artist &amp; performer, Riga<br>© 2026</div>
+    </div>
+
+    <div class="ui-r">
+        <nav>
+            <a class="lab" data-media="listen">Listen</a>
+            <a class="lab" data-media="watch">Watch</a>
+            <a class="lab" data-media="photos">Photos</a>
+            <a class="lab" data-list="live">Live &amp; technical</a>
+        </nav>
+        <div class="meta">
+            Booking: <a href="mailto:sofijazaiceva7@gmail.com">sofijazaiceva7@gmail.com</a><br>
+            <a href="https://sofi.bandcamp.com" target="_blank">Bandcamp</a> &nbsp;
+            <a href="https://www.instagram.com/sofizaiceva/" target="_blank">Instagram</a> &nbsp;
+            <a href="https://www.sofiazaiceva.xyz" target="_blank">Site</a>
+        </div>
+    </div>
+</div>
+
+<script>
+(function () {
+    var strip = null, list = null, bioOn = true,
+        bioCol = document.getElementById('bioCol'),
+        bioBtn = document.getElementById('bioBtn'),
+        v   = document.getElementById('v'),
+        btn = document.getElementById('soundBtn'),
+        lab = document.getElementById('soundLab');
+
+    /* ══ eased scrolling ══════════════════════════ */
+    var rolling = null;
+    function rollTo(y, ms, done) {
+        var y0 = window.scrollY, d = y - y0, t0 = performance.now(), id = {};
+        rolling = id;
+        if (Math.abs(d) < 2) { rolling = null; if (done) done(); return; }
+        (function step(t) {
+            if (rolling !== id) return;
+            var k = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - k, 3);
+            window.scrollTo(0, y0 + d * e);
+            if (k < 1) requestAnimationFrame(step);
+            else { rolling = null; if (done) done(); }
+        })(performance.now());
+    }
+
+    /* ══ hierarchy — one surface at a time ════════ */
+    function setBio(on) {
+        bioOn = on;
+        bioCol.classList.toggle('on', on);
+        bioBtn.classList.toggle('on', on);
+    }
+    var reelEl = document.getElementById('reel');
+    function showReel(on) {
+        reelEl.classList.toggle('gone', !on);
+        var vid = document.getElementById('v');
+        if (on) { var q = vid.play(); if (q && q.catch) q.catch(function () {}); }
+        else vid.pause();
+    }
+
+    function hideStrip() {
+        if (strip) document.getElementById('m-' + strip).classList.remove('on');
+        document.querySelectorAll('[data-media]').forEach(function (a) { a.classList.remove('on'); });
+        strip = null;
+    }
+    function hideList(then) {
+        if (!list) { if (then) then(); return; }
+        var el = document.getElementById('l-' + list);
+        document.querySelectorAll('[data-list]').forEach(function (a) { a.classList.remove('on'); });
+        list = null;
+        rollTo(0, 420, function () { el.classList.remove('on'); if (then) then(); });
+    }
+
+    function openStrip(name) {
+        hideList(function () {
+            hideStrip(); setBio(false);
+            showReel(name !== 'listen' && name !== 'watch' && name !== 'photos');
+            strip = name;
+            document.getElementById('m-' + name).classList.add('on');
+            document.querySelectorAll('[data-media="' + name + '"]').forEach(function (a) { a.classList.add('on'); });
+        });
+    }
+    function openList(name) {
+        hideStrip(); setBio(false); showReel(true);
+        if (list) document.getElementById('l-' + list).classList.remove('on');
+        document.querySelectorAll('[data-list]').forEach(function (a) { a.classList.remove('on'); });
+        list = name;
+        var el = document.getElementById('l-' + name);
+        el.classList.add('on');
+        document.querySelectorAll('[data-list="' + name + '"]').forEach(function (a) { a.classList.add('on'); });
+        window.scrollTo(0, 0);
+        /* roll it up into view */
+        requestAnimationFrame(function () {
+            var first = el.querySelector('.row') || el;
+            var y = window.scrollY + first.getBoundingClientRect().top - innerHeight * 0.30;
+            rollTo(Math.max(0, y), 1000);
+        });
+    }
+    function home() { hideList(function () { hideStrip(); showReel(true); setBio(true); }); }
+
+    bioBtn.addEventListener('click', function () {
+        if (bioOn) setBio(false);
+        else home();
+    });
+    document.querySelectorAll('[data-media]').forEach(function (a) {
+        a.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (strip === a.dataset.media) home(); else openStrip(a.dataset.media);
+        });
+    });
+    document.querySelectorAll('[data-list]').forEach(function (a) {
+        a.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (list === a.dataset.list) home(); else openList(a.dataset.list);
+        });
+    });
+    document.getElementById('home').addEventListener('click', home);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') home(); });
+
+    /* ══ sound ════════════════════════════════════ */
+    btn.addEventListener('click', function () {
+        v.muted = !v.muted;
+        btn.classList.toggle('on', !v.muted);
+        lab.textContent = v.muted ? 'Sound off' : 'Sound on';
+        var q = v.play(); if (q && q.catch) q.catch(function () {});
+    });
+    var pr = v.play(); if (pr && pr.catch) pr.catch(function () {});
+
+    /* ══ move + scale the reel ════════════════════ */
+    var reel = document.getElementById('reel'),
+        grip = document.getElementById('grip'),
+        frame = reel.querySelector('.frame'),
+        MIN = 240, drag = null;
+
+    function clamp(n, lo, hi) { return Math.max(lo, Math.min(hi, n)); }
+    function place(x, y) {
+        var w = reel.offsetWidth, h = reel.offsetHeight;
+        reel.style.left = clamp(x, 12 - w * 0.7, innerWidth - w * 0.3) + 'px';
+        reel.style.top  = clamp(y, 0, Math.max(0, innerHeight - h * 0.4)) + 'px';
+    }
+    frame.addEventListener('mousedown', function (e) {
+        if (e.target === grip) return;
+        var r = reel.getBoundingClientRect();
+        drag = { mode: 'move', dx: e.clientX - r.left, dy: e.clientY - r.top };
+        reel.classList.add('busy'); e.preventDefault();
+    });
+    grip.addEventListener('mousedown', function (e) {
+        drag = { mode: 'size', x0: e.clientX, w0: reel.getBoundingClientRect().width };
+        reel.classList.add('busy'); e.preventDefault(); e.stopPropagation();
+    });
+    window.addEventListener('mousemove', function (e) {
+        if (!drag) return;
+        if (drag.mode === 'move') place(e.clientX - drag.dx, e.clientY - drag.dy);
+        else reel.style.width = clamp(drag.w0 + (e.clientX - drag.x0), MIN, innerWidth * 0.92) + 'px';
+    });
+    window.addEventListener('mouseup', function () {
+        if (drag) { drag = null; reel.classList.remove('busy'); }
+    });
+
+    /* ══ drag / wheel the strips sideways ══════════ */
+    document.querySelectorAll('.strip').forEach(function (st) {
+        var down = false, x0 = 0, l0 = 0, moved = false;
+        st.addEventListener('mousedown', function (e) {
+            if (e.target.closest('iframe')) return;
+            down = true; moved = false; x0 = e.pageX; l0 = st.scrollLeft;
+            st.classList.add('drag'); e.preventDefault();
+        });
+        window.addEventListener('mouseup', function () { down = false; st.classList.remove('drag'); });
+        window.addEventListener('mousemove', function (e) {
+            if (!down) return;
+            var d = e.pageX - x0;
+            if (Math.abs(d) > 4) moved = true;
+            st.scrollLeft = l0 - d;
+        });
+        st.addEventListener('click', function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); } }, true);
+        st.addEventListener('wheel', function (e) {
+            var d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+            if (!d) return;
+            st.scrollLeft += d;
+            e.preventDefault();
+        }, { passive: false });
+    });
+
+    /* ══ invert text that sits on a dark part of the video ══ */
+    var CW = 48, CH = 27,
+        cvs = document.createElement('canvas'),
+        ctx = cvs.getContext('2d', { willReadFrequently: true }),
+        targets = [];
+    cvs.width = CW; cvs.height = CH;
+
+    ['.cap span', '.row p', '.trow p', '.tech-block .hd', '.sound', '.mark', '.ui-l .lab', '.ui-l .meta',
+     '.ui-r nav a', '.ui-r .meta',
+     '.bio-col .q', '.bio-col .src', '.bio-col p.t', '.bio-col .hd',
+     '.bio-col .pr'].forEach(function (sel) {
+        document.querySelectorAll(sel).forEach(function (el) {
+            el.setAttribute('data-inv', ''); targets.push(el);
+        });
+    });
+
+    function sample() {
+        if (reelEl.classList.contains('gone')) {
+            for (var j = 0; j < targets.length; j++) {
+                targets[j].classList.remove('over');
+                targets[j].classList.remove('on-dark');
+            }
+            return;
+        }
+        if (v.readyState < 2 || !v.videoWidth) return;
+        var f = frame.getBoundingClientRect(), data;
+        try { ctx.drawImage(v, 0, 0, CW, CH); data = ctx.getImageData(0, 0, CW, CH).data; }
+        catch (err) { return; }
+
+        for (var i = 0; i < targets.length; i++) {
+            var el = targets[i];
+
+            /* skip anything in a closed panel or list */
+            var host = el.closest('.panel, .list, .bio-col');
+            if (host && !host.classList.contains('on')) {
+                el.classList.remove('over'); el.classList.remove('on-dark'); continue;
+            }
+
+            var r = el.getBoundingClientRect();
+            if (!r.width || !r.height) { el.classList.remove('over'); el.classList.remove('on-dark'); continue; }
+
+            var ox = Math.max(r.left, f.left), oy = Math.max(r.top, f.top),
+                ox2 = Math.min(r.right, f.right), oy2 = Math.min(r.bottom, f.bottom),
+                ow = ox2 - ox, oh = oy2 - oy;
+
+            if (ow <= 0 || oh <= 0 || (ow * oh) / (r.width * r.height) < 0.25) {
+                el.classList.remove('over'); el.classList.remove('on-dark'); continue;
+            }
+            el.classList.add('over');
+
+            var x0 = Math.max(0, Math.floor((ox - f.left) / f.width * CW)),
+                x1 = Math.min(CW, Math.ceil((ox2 - f.left) / f.width * CW)),
+                y0 = Math.max(0, Math.floor((oy - f.top) / f.height * CH)),
+                y1 = Math.min(CH, Math.ceil((oy2 - f.top) / f.height * CH)),
+                lums = [];
+            for (var y = y0; y < y1; y++) {
+                for (var x = x0; x < x1; x++) {
+                    var k = (y * CW + x) * 4;
+                    lums.push(0.2126 * data[k] + 0.7152 * data[k + 1] + 0.0722 * data[k + 2]);
+                }
+            }
+            if (!lums.length) { el.classList.remove('on-dark'); continue; }
+            /* 70th percentile — bright patches inside the block veto the inversion */
+            lums.sort(function (a, b) { return a - b; });
+            var p70 = lums[Math.min(lums.length - 1, Math.floor(lums.length * 0.7))];
+            el.classList.toggle('on-dark', p70 < 112);
+        }
+    }
+    setInterval(sample, 180);
+    v.addEventListener('loadeddata', sample);
+
+    setBio(true);
+})();
+</script>
+</body>
+</html>
