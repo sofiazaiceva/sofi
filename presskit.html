@@ -6,6 +6,7 @@
 <meta name="robots" content="noindex, nofollow, noarchive">
 <title>sofi</title>
 <style>
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 :root {
     --grey: #7d7d7d;
     --ink:  #000;
@@ -217,12 +218,12 @@ a.row, .row.clickable { cursor: pointer; }
     /* one flowing column: video, then whichever section is open, then the bar */
     .ghost { font-size: 80vw; }
 
-    .reel-win { position: static; width: auto; margin: 0 var(--pad); }
+    .reel-win { position: static; width: auto; margin: 14px var(--pad) 0; }
     .reel-win.gone { display: none; }
     .grip { display: none; }
     .reel-win .frame { cursor: default; }
 
-    .stage { position: static; height: auto; padding-top: 30px; pointer-events: auto; }
+    .stage { position: static; height: auto; padding-top: 46px; pointer-events: auto; }
     .panel {
         position: static; display: none; opacity: 1;
         pointer-events: auto; max-height: none;
@@ -234,14 +235,15 @@ a.row, .row.clickable { cursor: pointer; }
     .vcell { width: 86vw; }
 
     .lists { pointer-events: auto; }
-    .list { width: auto; padding: 30px var(--pad) 0; }
+    .list { width: auto; padding: 46px var(--pad) 0; }
+    .list.live, .list.live.on { width: auto; }
     .list.live .row, .list.live .row.tech { grid-template-columns: 1fr; gap: 2px; }
     .row { padding: 7px 0; }
     .tech-block { position: static; width: auto; margin-top: 34px; }
 
     .bio-col {
         position: static; width: auto; max-height: none; overflow: visible;
-        padding: 30px var(--pad) 0;
+        padding: 46px var(--pad) 0;
         display: none; opacity: 1; pointer-events: auto;
     }
     .bio-col.on { display: block; }
@@ -249,11 +251,17 @@ a.row, .row.clickable { cursor: pointer; }
 
     /* technical reads before the dates on a phone */
     .list.live.on { display: flex; flex-direction: column; }
-    .tech-block { order: -1; margin-top: 0; margin-bottom: 30px; }
+    .tech-block { order: -1; margin-top: 0; margin-bottom: 40px; }
 
     /* dragged with a finger, the video floats and the text runs over it */
     .stage, .lists, .bio-col { position: relative; z-index: 1; }
     .reel-win .frame { touch-action: none; }
+
+    /* once it floats, only links take the touch, so the video stays catchable */
+    body.floated .stage, body.floated .lists, body.floated .bio-col,
+    body.floated .list > *, body.floated .bio-col > * { pointer-events: none; }
+    body.floated .list a, body.floated .bio-col a,
+    body.floated .panel.on, body.floated .panel.on * { pointer-events: auto; }
 
     /* the nav stays reachable; the page is padded so nothing hides under it */
     body { padding-bottom: 208px; }
@@ -619,7 +627,7 @@ a.row, .row.clickable { cursor: pointer; }
     frame.addEventListener('touchstart', function (e) {
         if (e.touches.length !== 1) { tg = null; return; }
         var t = e.touches[0], r = reel.getBoundingClientRect();
-        tg = { x0: t.clientX, y0: t.clientY, l: r.left, t: r.top, w: r.width, live: false };
+        tg = { x0: t.clientX, y0: t.clientY, l: r.left, t: r.top, w: r.width, h: r.height, live: false };
     }, { passive: true });
     frame.addEventListener('touchmove', function (e) {
         if (!tg || e.touches.length !== 1) return;
@@ -629,6 +637,8 @@ a.row, .row.clickable { cursor: pointer; }
             tg.live = true;
             reel.style.width = tg.w + 'px';
             reel.classList.add('floating', 'busy');
+            document.body.classList.add('floated');
+            document.body.style.paddingTop = Math.round(tg.h + 14) + 'px';
             place(tg.l, tg.t);
         }
         e.preventDefault();
@@ -637,6 +647,15 @@ a.row, .row.clickable { cursor: pointer; }
     function touchDone() { if (tg) { reel.classList.remove('busy'); tg = null; } }
     frame.addEventListener('touchend', touchDone);
     frame.addEventListener('touchcancel', touchDone);
+
+    window.addEventListener('resize', function () {
+        if (innerWidth > 860 && document.body.classList.contains('floated')) {
+            document.body.classList.remove('floated');
+            document.body.style.paddingTop = '';
+            reel.classList.remove('floating');
+            reel.style.width = '';
+        }
+    });
 
     /* ══ drag / wheel the strips sideways ══════════ */
     document.querySelectorAll('.strip').forEach(function (st) {
