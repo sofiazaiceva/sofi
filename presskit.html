@@ -264,66 +264,67 @@ a.row, .row.clickable { cursor: pointer; }
     .s-foot { border-top: .4pt solid #cfcfcf; margin-top: 2mm; padding-top: 2.2mm; color: #7d7d7d; }
 } */
  /* ══ print sheet ═══════════════════════════════════════════════ */
+
 .sheet { display: none; }
 
 @media print {
-    /* 1. Tighten margins slightly to fit everything */
-    @page { size: A4; margin: 10mm 12mm; }
+    /* 1. Maximize the printable area on the A4 page */
+    @page { size: A4; margin: 10mm; }
 
-    /* 2. FIX 10-SECOND DELAY: Explicitly hide all iframes and videos so the print spooler doesn't try to load them */
+    /* 2. KEEP 10-SECOND FIX: Hides iframes/videos so print dialog opens instantly */
     .ghost, .reel-win, .stage, .lists, .bio-col, .ui, iframe, video { display: none !important; }
     
     html, body { 
         background: #fff; 
-        height: 100%; 
         margin: 0 !important; 
         padding: 0 !important; 
     }
 
-    /* 3. FIX PAGE CUTTING: Force exactly 1 page height (98vh) and flex layout */
+    /* 3. Let it flow naturally, but slightly smaller font so EVERYTHING fits */
     .sheet {
-        display: flex;
-        flex-direction: column;
-        height: 98vh; 
-        box-sizing: border-box;
-        overflow: hidden; 
-        page-break-inside: avoid;
-        font: 400 9pt/1.4 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        display: block; 
+        /* Reduced from 9pt to 8pt, tighter line-height */
+        font: 400 8pt/1.35 'Helvetica Neue', Helvetica, Arial, sans-serif;
         color: #222; letter-spacing: .01em;
     }
     .sheet a { color: #222; text-decoration: none; }
 
-    .sheet header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12mm; }
-    .sheet h1 { font: 400 40pt/.86 Times, 'Times New Roman', serif; color: #000; margin: 0; letter-spacing: -.01em; }
-    .s-meta { color: #7d7d7d; padding-top: 4mm; }
+    /* --- HEADER --- */
+    .sheet header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8mm; }
+    .sheet h1 { font: 400 36pt/.86 Times, 'Times New Roman', serif; color: #000; margin: 0; letter-spacing: -.01em; }
+    .s-meta { color: #7d7d7d; padding-top: 3mm; }
     
-    /* 4. Constrain image so it doesn't push text down */
-    .s-pic { width: 55mm; max-height: 140px; object-fit: cover; display: block; }
+    /* Slightly smaller image to save vertical space */
+    .s-pic { width: 50mm; height: auto; max-height: 120px; object-fit: cover; display: block; }
 
-    .s-cols { display: flex; gap: 10mm; padding-top: 5mm; }
+    /* --- BIO & TECH COLS --- */
+    .s-cols { display: flex; gap: 8mm; padding-top: 5mm; }
     .s-main { flex: 1 1 auto; }
-    .s-side { flex: 0 0 62mm; }
+    .s-side { flex: 0 0 55mm; }
 
-    .s-quote { font: 400 11.5pt/1.28 Times, 'Times New Roman', serif; color: #000; }
-    .s-quote .src { display: block; font: 400 7.6pt/1.4 'Helvetica Neue', Helvetica, Arial, sans-serif;
-                    color: #7d7d7d; letter-spacing: .06em; padding-top: 2.5mm; }
-    .s-bio { padding-top: 4mm; }
+    /* Quote slightly smaller */
+    .s-quote { font: 400 10.5pt/1.25 Times, 'Times New Roman', serif; color: #000; }
+    .s-quote .src { display: block; font: 400 7pt/1.3 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                    color: #7d7d7d; letter-spacing: .06em; padding-top: 2mm; }
+    
+    .s-bio { padding-top: 3mm; }
     .s-bio p { margin: 0 0 2mm; }
 
     .s-side .hd { color: #7d7d7d; padding-bottom: 2mm; }
-    .s-side .trow { display: grid; grid-template-columns: 22mm 1fr; gap: 0 2mm; padding: .9mm 0; }
+    .s-side .trow { display: grid; grid-template-columns: 20mm 1fr; gap: 0 2mm; padding: 1mm 0; }
     .s-side .trow p { margin: 0; }
     .s-side .trow p:first-child { color: #7d7d7d; }
 
-    .s-links { columns: 3; column-gap: 9mm; padding-top: 3mm; }
-    .s-block { break-inside: avoid; margin-bottom: 6mm; }
-    .s-hd { color: #7d7d7d; padding-bottom: 2mm; }
-    .s-links a { display: block; padding: 0 0 1.7mm; break-inside: avoid; }
-    .s-links a em { display: block; font-style: normal; color: #7d7d7d; word-break: break-word; }
-    .s-links b { font-weight: 400; }
+    /* --- LINKS --- */
+    .s-links { columns: 3; column-gap: 6mm; padding-top: 4mm; }
+    .s-block { break-inside: avoid; margin-bottom: 5mm; }
+    .s-hd { color: #7d7d7d; padding-bottom: 1.5mm; }
+    .s-links a { display: block; padding: 0 0 1.5mm; break-inside: avoid; }
+    .s-links a em { display: block; font-style: normal; color: #7d7d7d; font-size: 7.5pt; word-break: break-word; }
+    .s-links b { font-weight: 400; color: #000; }
 
-    /* Push the footer strictly to the bottom of the page */
-    .s-foot { margin-top: auto; border-top: .4pt solid #cfcfcf; padding-top: 2.2mm; color: #7d7d7d; }
+    /* --- FOOTER --- */
+    .s-foot { margin-top: 4mm; border-top: .4pt solid #cfcfcf; padding-top: 2mm; color: #7d7d7d; }
 }
 
 @media (max-width: 860px) {
