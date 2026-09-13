@@ -332,57 +332,7 @@ a.row, .row.clickable { cursor: pointer; }
     .ui::before { display: none; }
     .mark { font-size: 26px; padding: 0; }
     .ui-r nav { padding-bottom: 6px; flex-wrap: wrap; gap: 8px 18px; }
-    @media print {
-    /* 1. Set the page size and minimize default browser margins */
-    @page {
-        size: A4 portrait; /* You can change to 'letter portrait' if needed */
-        margin: 10mm; /* Keep margins small to maximize usable space */
-    }
-
-    /* 2. Reset body heights and prevent overflow */
-    html, body {
-        height: 100%;
-        margin: 0 !important;
-        padding: 0 !important;
-        background: #fff;
-        /* Slightly reduce base font size to ensure all text fits */
-        font-size: 11pt; 
-    }
-
-    /* 3. Force the main sheet to act as a single unbreakable page */
-    .sheet {
-        width: 100%;
-        height: 98vh; /* Keep strictly under 100 to avoid triggering a second blank page */
-        display: flex;
-        flex-direction: column;
-        /* Distributes spacing naturally so it fills the page without overflowing */
-        justify-content: space-between; 
-        box-sizing: border-box;
-        page-break-after: avoid;
-        page-break-inside: avoid;
-        break-inside: avoid;
-    }
-
-    /* 4. Stop "weird cutting" by preventing page breaks inside these containers */
-    .s-cols, .s-links, .s-block, header {
-        page-break-inside: avoid;
-        break-inside: avoid;
-    }
-
-    /* 5. Constrain image heights so they don't force text onto page 2 */
-    .s-pic {
-        max-height: 150px; /* Adjust this value depending on your header layout */
-        width: auto;
-        object-fit: cover;
-    }
-
-    /* 6. (Optional) Make sure link URLs don't break layout */
-    .s-links a {
-        display: block;
-        page-break-inside: avoid;
-        break-inside: avoid;
-    }
-}
+    
 }
 </style>
 </head>
