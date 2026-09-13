@@ -176,15 +176,7 @@ a.row, .row.clickable { cursor: pointer; }
 .list .gap { height: 34px; }
 .list .note { color: rgba(0,0,0,.3); padding-top: 12px; }
 
-/* Notice message styling */
-.s-loading-notice {
-        font-size: 7.5pt;
-        color: #7d7d7d;
-        font-style: italic;
-        margin-bottom: 3mm;
-        border-bottom: 0.4pt solid #eee;
-        padding-bottom: 1mm;
-    }
+
 
 
 /* text sitting over the video — haloed, and inverted where it is dark */
@@ -287,7 +279,17 @@ a.row, .row.clickable { cursor: pointer; }
         background: #fff; 
         margin: 0 !important; 
         padding: 0 !important; 
+        /* Notice message styling */
+    .s-loading-notice {
+        font-size: 7.5pt;
+        color: #7d7d7d;
+        font-style: italic;
+        margin-bottom: 3mm;
+        border-bottom: 0.4pt solid #eee;
+        padding-bottom: 1mm;
     }
+    }
+    
 
     /* Locked to a safe 290mm height so the trailing page ghost disappears */
     .sheet {
