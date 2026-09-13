@@ -176,6 +176,16 @@ a.row, .row.clickable { cursor: pointer; }
 .list .gap { height: 34px; }
 .list .note { color: rgba(0,0,0,.3); padding-top: 12px; }
 
+/* Notice message styling */
+.s-loading-notice {
+        font-size: 7.5pt;
+        color: #7d7d7d;
+        font-style: italic;
+        margin-bottom: 3mm;
+        border-bottom: 0.4pt solid #eee;
+        padding-bottom: 1mm;
+    }
+
 
 /* text sitting over the video — haloed, and inverted where it is dark */
 [data-inv] { transition: color .25s ease, text-shadow .25s ease; }
@@ -267,13 +277,10 @@ a.row, .row.clickable { cursor: pointer; }
 .sheet { display: none; }
 
 @media print {
-    /* 1. Remove browser margins so it can't accidentally spawn a second page */
     @page { size: A4; margin: 0; }
 
-    /* 2. Hide everything except the print sheet */
     body > *:not(.sheet) { display: none !important; }
 
-    /* 3. Kill the 100svh height */
     html, body { 
         min-height: 0 !important; 
         height: 100% !important; 
@@ -282,52 +289,54 @@ a.row, .row.clickable { cursor: pointer; }
         padding: 0 !important; 
     }
 
-    /* 4. The Sheet Layout - Locked to exactly 1 A4 page with inside padding */
+    /* Locked to a safe 290mm height so the trailing page ghost disappears */
     .sheet {
         display: block !important; 
         width: 210mm;
-        height: 297mm; /* Exact A4 height */
+        height: 290mm; 
         box-sizing: border-box;
-        padding: 12mm; /* The margins are now inside the sheet */
-        font: 400 8pt/1.35 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        padding: 10mm 12mm; 
+        font: 400 8pt/1.32 'Helvetica Neue', Helvetica, Arial, sans-serif;
         color: #222; letter-spacing: .01em;
+        page-break-after: avoid;
+        break-after: avoid;
     }
     
     .sheet a { color: #222; text-decoration: none; }
 
     /* Header */
     .sheet header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8mm; }
-    .sheet h1 { font: 400 34pt/.86 Times, 'Times New Roman', serif; color: #000; margin: 0; letter-spacing: -.01em; }
-    .s-meta { color: #7d7d7d; padding-top: 3mm; }
-    .s-pic { width: 50mm; height: auto; max-height: 130px; object-fit: cover; display: block; }
+    .sheet h1 { font: 400 32pt/.86 Times, 'Times New Roman', serif; color: #000; margin: 0; letter-spacing: -.01em; }
+    .s-meta { color: #7d7d7d; padding-top: 2.5mm; }
+    .s-pic { width: 48mm; height: auto; max-height: 120px; object-fit: cover; display: block; }
 
     /* Columns */
-    .s-cols { display: flex; gap: 8mm; padding-top: 5mm; }
+    .s-cols { display: flex; gap: 8mm; padding-top: 4mm; }
     .s-main { flex: 1 1 auto; }
-    .s-side { flex: 0 0 55mm; }
+    .s-side { flex: 0 0 52mm; }
 
     /* Typography */
-    .s-quote { font: 400 10.5pt/1.25 Times, 'Times New Roman', serif; color: #000; }
-    .s-quote .src { display: block; font: 400 7pt/1.3 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #7d7d7d; letter-spacing: .06em; padding-top: 2mm; }
-    .s-bio { padding-top: 4mm; }
-    .s-bio p { margin: 0 0 2mm; }
+    .s-quote { font: 400 10pt/1.22 Times, 'Times New Roman', serif; color: #000; }
+    .s-quote .src { display: block; font: 400 7pt/1.3 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #7d7d7d; letter-spacing: .06em; padding-top: 1.5mm; }
+    .s-bio { padding-top: 3mm; }
+    .s-bio p { margin: 0 0 1.5mm; }
 
     /* Side / Tech */
-    .s-side .hd { color: #7d7d7d; padding-bottom: 2mm; }
-    .s-side .trow { display: grid; grid-template-columns: 18mm 1fr; gap: 0 2mm; padding: 1mm 0; }
+    .s-side .hd { color: #7d7d7d; padding-bottom: 1.5mm; }
+    .s-side .trow { display: grid; grid-template-columns: 18mm 1fr; gap: 0 2mm; padding: .8mm 0; }
     .s-side .trow p { margin: 0; }
     .s-side .trow p:first-child { color: #7d7d7d; }
 
     /* Links Area */
-    .s-links { columns: 3; column-gap: 6mm; padding-top: 4mm; }
-    .s-block { break-inside: avoid; margin-bottom: 5mm; }
-    .s-hd { color: #7d7d7d; padding-bottom: 1.5mm; }
-    .s-links a { display: block; padding: 0 0 1.5mm; break-inside: avoid; }
-    .s-links a em { display: block; font-style: normal; color: #7d7d7d; font-size: 7.5pt; word-break: break-word; }
+    .s-links { columns: 3; column-gap: 5mm; padding-top: 3mm; }
+    .s-block { break-inside: avoid; margin-bottom: 4mm; }
+    .s-hd { color: #7d7d7d; padding-bottom: 1mm; }
+    .s-links a { display: block; padding: 0 0 1.2mm; break-inside: avoid; }
+    .s-links a em { display: block; font-style: normal; color: #7d7d7d; font-size: 7pt; word-break: break-word; }
     .s-links b { font-weight: 400; color: #000; }
 
     /* Footer */
-    .s-foot { margin-top: 4mm; border-top: .4pt solid #cfcfcf; padding-top: 2mm; color: #7d7d7d; font-size: 7.5pt; }
+    .s-foot { margin-top: 3mm; border-top: .4pt solid #cfcfcf; padding-top: 1.5mm; color: #7d7d7d; font-size: 7pt; }
 }
 
 @media (max-width: 860px) {
@@ -590,6 +599,15 @@ a.row, .row.clickable { cursor: pointer; }
 
 
 <!-- ══ print sheet ══════════════════════════════ -->
+<div class="sheet" id="printSheet">
+    <!-- Print notice for the user -->
+    <div class="s-loading-notice">preparing pdf, please wait a moment...</div>
+    
+    <header>
+        <!-- your existing header content -->
+    </header>
+    <!-- ... rest of your sheet ... -->
+</div>
 <div class="sheet" id="sheet">
     <header>
         <div>
