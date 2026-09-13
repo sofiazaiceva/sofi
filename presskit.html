@@ -58,6 +58,7 @@ img, video { display: block; }
     border-right: 1px solid rgba(255,255,255,.8); border-bottom: 1px solid rgba(255,255,255,.8);
 }
 .reel-win.busy { opacity: .9; }
+.reel-win.floating { position: fixed !important; margin: 0 !important; z-index: 0; }
 .reel-win { transition: opacity .3s ease; }
 .reel-win.gone { opacity: 0; pointer-events: none; }
 .panel {
@@ -246,15 +247,25 @@ a.row, .row.clickable { cursor: pointer; }
     .bio-col.on { display: block; }
     .bio-col .q { font-size: 15px; line-height: 1.38; }
 
+    /* technical reads before the dates on a phone */
+    .list.live.on { display: flex; flex-direction: column; }
+    .tech-block { order: -1; margin-top: 0; margin-bottom: 30px; }
+
+    /* dragged with a finger, the video floats and the text runs over it */
+    .stage, .lists, .bio-col { position: relative; z-index: 1; }
+    .reel-win .frame { touch-action: none; }
+
     /* the nav stays reachable; the page is padded so nothing hides under it */
-    body { padding-bottom: 186px; }
+    body { padding-bottom: 208px; }
     .ui {
         bottom: 0; left: 0; right: 0;
         flex-direction: column; align-items: flex-start; gap: 9px;
         padding: 11px var(--pad) 13px;
         background: #fff;
         border-top: .5px solid rgba(0,0,0,.14);
+        font-size: 13px;
     }
+    .ui .lab, .ui .meta, .ui-r nav a { font-size: 13px; }
     .ui::before { display: none; }
     .mark { font-size: 26px; padding: 0; }
     .ui-r nav { padding-bottom: 6px; flex-wrap: wrap; gap: 8px 18px; }
@@ -602,6 +613,30 @@ a.row, .row.clickable { cursor: pointer; }
     window.addEventListener('mouseup', function () {
         if (drag) { drag = null; reel.classList.remove('busy'); }
     });
+
+    /* the same move, with a finger */
+    var tg = null;
+    frame.addEventListener('touchstart', function (e) {
+        if (e.touches.length !== 1) { tg = null; return; }
+        var t = e.touches[0], r = reel.getBoundingClientRect();
+        tg = { x0: t.clientX, y0: t.clientY, l: r.left, t: r.top, w: r.width, live: false };
+    }, { passive: true });
+    frame.addEventListener('touchmove', function (e) {
+        if (!tg || e.touches.length !== 1) return;
+        var t = e.touches[0], dx = t.clientX - tg.x0, dy = t.clientY - tg.y0;
+        if (!tg.live) {
+            if (Math.abs(dx) + Math.abs(dy) < 10) return;
+            tg.live = true;
+            reel.style.width = tg.w + 'px';
+            reel.classList.add('floating', 'busy');
+            place(tg.l, tg.t);
+        }
+        e.preventDefault();
+        place(tg.l + dx, tg.t + dy);
+    }, { passive: false });
+    function touchDone() { if (tg) { reel.classList.remove('busy'); tg = null; } }
+    frame.addEventListener('touchend', touchDone);
+    frame.addEventListener('touchcancel', touchDone);
 
     /* ══ drag / wheel the strips sideways ══════════ */
     document.querySelectorAll('.strip').forEach(function (st) {
