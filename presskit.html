@@ -58,6 +58,10 @@ img, video { display: block; }
     content: ''; position: absolute; right: 3px; bottom: 3px; width: 10px; height: 10px;
     border-right: 1px solid rgba(255,255,255,.8); border-bottom: 1px solid rgba(255,255,255,.8);
 }
+.hint { display: none; align-items: center; gap: 6px; color: var(--grey); padding-top: 5px;
+        transition: opacity .5s ease; }
+.hint svg { display: block; }
+.hint.off { opacity: 0; }
 .reel-win.busy { opacity: .9; }
 .reel-win.floating { position: fixed !important; margin: 0 !important; z-index: 0; }
 .reel-win { transition: opacity .3s ease; }
@@ -220,7 +224,10 @@ a.row, .row.clickable { cursor: pointer; }
 
     .reel-win { position: static; width: auto; margin: 14px var(--pad) 0; }
     .reel-win.gone { display: none; }
-    .grip { display: none; }
+    .reel-win .cap { display: none; }
+    .hint { display: flex; }
+    .grip { display: block; width: 32px; height: 32px; touch-action: none; }
+    .grip::after { right: 7px; bottom: 7px; width: 14px; height: 14px; }
     .reel-win .frame { cursor: default; }
 
     .stage { position: static; height: auto; padding-top: 46px; pointer-events: auto; }
@@ -294,6 +301,11 @@ a.row, .row.clickable { cursor: pointer; }
     </div>
     <div class="foot">
         <div class="cap"><span>sofi — live</span></div>
+        <div class="hint" id="hint">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3"/>
+            </svg><span>drag to move</span>
+        </div>
         <button class="sound" id="soundBtn" aria-label="Toggle sound">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 9.2v5.6h3.6L12.6 19V5l-5 4.2H4z"/>
@@ -450,7 +462,7 @@ a.row, .row.clickable { cursor: pointer; }
     <div class="rule"></div>
 
     <p class="t">Sofi (Sofia Zaiceva) is a Latvia-born sound artist and performer who approaches sound as a process of controlled instability, using code to deconstruct and redirect the digital signal into an aesthetically fluid and compositionally shifting post-club sound. Trained as a classical pianist before moving into electronics, she works with open source software, mainly SuperCollider, writing algorithms that shift and respond as she plays them.</p>
-    <p class="t">Data hijacking and digital archaeology are central to the practice. She works with obsolete devices, dead operating systems and the residue left on them by whoever used them last, intercepting what they still emit. The devices carry traces of the people who owned them, and they shape the piece as much as she does.</p>
+    <p class="t">Data hijacking and digital archaeology are central to the practice. She works with obsolete devices, dead operating systems and the residue left on them by whoever used them last, intercepting what they still emit.</p>
     <p class="t">She has played Skaņu Mežs in Riga, ORF musikprotokoll in Graz, ZiMMT in Leipzig, Musiikkitalo in Helsinki, MeetFactory in Prague and Nonagon Festival in Sweden. Recent collaborations include an audiovisual duo with Ľubomír Slovinský and Branches &amp; Bytes with Andreas Trobollowitsch. Her music comes out on Superpang, SØVN Records, Riforma and mappa, and she was selected for the SHAPE+ platform in 2024/25.</p>
 
     <div class="rule"></div>
@@ -595,12 +607,17 @@ a.row, .row.clickable { cursor: pointer; }
     var reel = document.getElementById('reel'),
         grip = document.getElementById('grip'),
         frame = reel.querySelector('.frame'),
+        hint = document.getElementById('hint'),
+        phone = function () { return innerWidth <= 860; },
         MIN = 240, drag = null;
 
     function clamp(n, lo, hi) { return Math.max(lo, Math.min(hi, n)); }
     function place(x, y) {
-        var w = reel.offsetWidth, h = reel.offsetHeight;
-        reel.style.left = clamp(x, 12 - w * 0.7, innerWidth - w * 0.3) + 'px';
+        var w = reel.offsetWidth, h = reel.offsetHeight,
+            tight = phone() && w <= innerWidth,
+            lo = tight ? 0 : 12 - w * 0.7,
+            hi = tight ? innerWidth - w : innerWidth - w * 0.3;
+        reel.style.left = clamp(x, lo, hi) + 'px';
         reel.style.top  = clamp(y, 0, Math.max(0, innerHeight - h * 0.4)) + 'px';
     }
     frame.addEventListener('mousedown', function (e) {
@@ -616,7 +633,7 @@ a.row, .row.clickable { cursor: pointer; }
     window.addEventListener('mousemove', function (e) {
         if (!drag) return;
         if (drag.mode === 'move') place(e.clientX - drag.dx, e.clientY - drag.dy);
-        else reel.style.width = clamp(drag.w0 + (e.clientX - drag.x0), MIN, innerWidth * 0.92) + 'px';
+        else reel.style.width = clamp(drag.w0 + (e.clientX - drag.x0), phone() ? 130 : MIN, innerWidth * 0.92) + 'px';
     });
     window.addEventListener('mouseup', function () {
         if (drag) { drag = null; reel.classList.remove('busy'); }
@@ -624,27 +641,80 @@ a.row, .row.clickable { cursor: pointer; }
 
     /* the same move, with a finger */
     var tg = null;
+    var pinch = null;
+
+    function sizeTo(w) {
+        reel.style.width = clamp(w, phone() ? 130 : MIN, innerWidth * 0.92) + 'px';
+        if (reel.classList.contains('floating')) {
+            var r = reel.getBoundingClientRect();
+            place(r.left, r.top);
+        }
+    }
+    function span(e) {
+        var a = e.touches[0], b = e.touches[1];
+        return Math.hypot(b.clientX - a.clientX, b.clientY - a.clientY);
+    }
+    function floatIt(r) {
+        reel.style.width = r.width + 'px';
+        reel.classList.add('floating');
+        if (!document.body.classList.contains('floated')) {
+            document.body.classList.add('floated');
+            document.body.style.paddingTop = Math.round(r.height + 14) + 'px';
+        }
+        place(r.left, r.top);
+        hint.classList.add('off');
+    }
+
     frame.addEventListener('touchstart', function (e) {
+        if (e.target === grip) { tg = null; return; }
+        if (e.touches.length === 2) {
+            tg = null;
+            var r = reel.getBoundingClientRect();
+            floatIt(r);
+            pinch = { d0: span(e), w0: reel.getBoundingClientRect().width };
+            reel.classList.add('busy');
+            return;
+        }
+        pinch = null;
         if (e.touches.length !== 1) { tg = null; return; }
-        var t = e.touches[0], r = reel.getBoundingClientRect();
-        tg = { x0: t.clientX, y0: t.clientY, l: r.left, t: r.top, w: r.width, h: r.height, live: false };
+        var t = e.touches[0], q = reel.getBoundingClientRect();
+        tg = { x0: t.clientX, y0: t.clientY, l: q.left, t: q.top, w: q.width, h: q.height, live: false };
     }, { passive: true });
     frame.addEventListener('touchmove', function (e) {
+        if (pinch && e.touches.length === 2) {
+            e.preventDefault();
+            var d = span(e);
+            if (pinch.d0 > 0) sizeTo(pinch.w0 * (d / pinch.d0));
+            return;
+        }
         if (!tg || e.touches.length !== 1) return;
         var t = e.touches[0], dx = t.clientX - tg.x0, dy = t.clientY - tg.y0;
         if (!tg.live) {
             if (Math.abs(dx) + Math.abs(dy) < 10) return;
             tg.live = true;
-            reel.style.width = tg.w + 'px';
-            reel.classList.add('floating', 'busy');
-            document.body.classList.add('floated');
-            document.body.style.paddingTop = Math.round(tg.h + 14) + 'px';
-            place(tg.l, tg.t);
+            floatIt({ width: tg.w, height: tg.h, left: tg.l, top: tg.t });
+            reel.classList.add('busy');
         }
         e.preventDefault();
         place(tg.l + dx, tg.t + dy);
     }, { passive: false });
-    function touchDone() { if (tg) { reel.classList.remove('busy'); tg = null; } }
+    function touchDone() { pinch = null; reel.classList.remove('busy'); tg = null; }
+
+    /* the corner scales it with a finger too */
+    var gz = null;
+    grip.addEventListener('touchstart', function (e) {
+        if (e.touches.length !== 1) return;
+        gz = { x0: e.touches[0].clientX, w0: reel.getBoundingClientRect().width };
+        reel.classList.add('busy'); e.stopPropagation();
+    }, { passive: true });
+    grip.addEventListener('touchmove', function (e) {
+        if (!gz || e.touches.length !== 1) return;
+        e.preventDefault(); e.stopPropagation();
+        sizeTo(gz.w0 + (e.touches[0].clientX - gz.x0));
+    }, { passive: false });
+    function gripDone() { if (gz) { gz = null; reel.classList.remove('busy'); } }
+    grip.addEventListener('touchend', gripDone);
+    grip.addEventListener('touchcancel', gripDone);
     frame.addEventListener('touchend', touchDone);
     frame.addEventListener('touchcancel', touchDone);
 
@@ -654,6 +724,7 @@ a.row, .row.clickable { cursor: pointer; }
             document.body.style.paddingTop = '';
             reel.classList.remove('floating');
             reel.style.width = '';
+            hint.classList.remove('off');
         }
     });
 
@@ -688,7 +759,7 @@ a.row, .row.clickable { cursor: pointer; }
         targets = [];
     cvs.width = CW; cvs.height = CH;
 
-    ['.cap span', '.row p', '.trow p', '.tech-block .hd', '.sound', '.mark', '.ui-l .lab', '.ui-l .meta',
+    ['.cap span', '.hint span', '.row p', '.trow p', '.tech-block .hd', '.sound', '.mark', '.ui-l .lab', '.ui-l .meta',
      '.ui-r nav a', '.ui-r .meta',
      '.bio-col .q', '.bio-col .src', '.bio-col p.t', '.bio-col .hd',
      '.bio-col .pr'].forEach(function (sel) {
